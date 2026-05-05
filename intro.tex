@@ -1,0 +1,25 @@
+\chapter{Introduction}
+\label{cha:intro}
+% Appeal to reader TODO
+Graph theory is an important field in computer sciences, capable of modeling a vast number of problems. Some of these problems involve the cycles present in the graph. It is therefore an interesting question to ask what the upper bound is for what fraction of nodes of a graph need to be deleted to make sure there is a way to destroy all longest cycles of the graph.
+
+\section{Definitions}
+% Graph explanation
+A \textbf{graph} $G$ is a mathematical structure consisting of a set of \textbf{vertices} $V$ (singular: vertex) and a (multi-)set of \textbf{edges} $E$ which are pairs of vertices from $V$. A graph may be directed or undirected. It is undirected if edges with the same vertices but in different order are considered equivalent. A graph is called a simple graph if there are no duplicate edges, and no edge exists which holds the same vertex twice. In the rest of this paper, "graph" is used to refers to simple, undirected graphs.\cite{wiki:graph} % TODO: Citation graph def
+
+% Cycle explanation
+Vertices may be reachable from other vertices through a sequence of edges. Two definitions involving this concept are that of a path and a cycle.
+A \textbf{path} in a graph is a sequence of distinct edges which joins a sequence of vertices, where no vertex appears twice in the latter sequence.\cite{wiki:path} % TODO: Citation path def
+Similarly, a \textbf{cycle} in a graph is a sequence of distinct edges joining a sequence of vertices, in which only the first and last vertex are equal. The length of a cycle is equal to the amount of vertices in the cycle. The circumference of a graph is equal to the length of the longest cycle in the graph. Note that there may be multiple distinct longest cycles.\cite{wiki:cycle} % TODO: Citation cycle def
+
+% k-connected
+A graph may or may not be \textbf{connected}. A graph is connected if there exists a path between every two vertices. A graph which is not connected is called disconnected. This concept can be further generalized: a connected graph is \textbf{$k$-vertex-connected} (or simply $k$-connected) if the graph has more than $k$ vertices, and removing any $k$ vertices guarantees the resulting graph remains connected.\cite{wiki:connectivity} % TODO: Citation connectivity def
+This is equivalent to claiming that for every two vertices $u, v$ of the graph, there must exist $k$ paths with internally distinct vertices between $u$ and $v$.\cite{k-paths} % TODO: Citation k-conectivity <=> k paths
+This concept should not be confused with the connectivity of a graph. The connectivity of a graph is the largest value $k$ for which the the graph is $k$-connected.\cite{wiki:connectivity}
+
+\section{Lorem Ipsum 6--7}
+
+
+% TODO: Cite before period
+% TODO: Use standard book graph theory (van Aardt et al)
+% TODO: TikZ image (maybe use Claude)
