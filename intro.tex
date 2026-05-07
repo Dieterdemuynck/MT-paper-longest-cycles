@@ -1,25 +1,94 @@
 \chapter{Introduction}
 \label{cha:intro}
 % Appeal to reader TODO
-Graph theory is an important field in computer sciences, capable of modeling a vast number of problems. Some of these problems involve the cycles present in the graph. It is therefore an interesting question to ask what the upper bound is for what fraction of nodes of a graph need to be deleted to make sure there is a way to destroy all longest cycles of the graph.
+Graph theory is an important field in computer sciences, capable of modeling a vast number of problems. Some of these problems involve the cycles present in the graph. It is therefore an interesting question to ask what the upper bound is for what fraction of nodes of a graph need to be deleted to make sure there is a way to destroy all longest cycles of the graph, as did Van Aardt et al. in their paper \textit{Destroying longest cycles in graphs and digraphs}\cite{paper:van-aardt}. TODO: Expand
 
+% Definitions v1
 \section{Definitions}
 % Graph explanation
-A \textbf{graph} $G$ is a mathematical structure consisting of a set of \textbf{vertices} $V$ (singular: vertex) and a (multi-)set of \textbf{edges} $E$ which are pairs of vertices from $V$. A graph may be directed or undirected. It is undirected if edges with the same vertices but in different order are considered equivalent. A graph is called a simple graph if there are no duplicate edges, and no edge exists which holds the same vertex twice. In the rest of this paper, "graph" is used to refers to simple, undirected graphs.\cite{wiki:graph} % TODO: Citation graph def
+A \textbf{graph} $G$ is a mathematical structure represented by an ordered pair $(V(G), E(G))$ consisting of a set of vertices \textbf{vertices} $V(G)$ (singular: vertex) and a (multi-)set of \textbf{edges} $E(G)$ which are unordered pairs of vertices from $V(G)$. This definition is of an undirected graph; if the edges are ordered pairs instead, it would be a directed graph. Vertices are called adjacent if they share an edge. A graph is called a simple graph if there are no duplicate edges, and no edge exists which holds the same vertex twice. In the rest of this paper, "graph" is used to refers to simple, undirected graphs. Graphs are often represented graphically with circles representing vertices, and lines ending at circles to represent edges between two vertices, such as in figure \ref{fig:example-simple}\cite{definitions:book-bondy}.
+
+\begin{figure}
+    \centering
+    % --- Original graph ---
+    \begin{subfigure}{0.2\textwidth}
+    \centering
+    \resizebox{\linewidth}{!}{
+    \begin{tikzpicture}[every node/.style={circle, draw, fill=white, inner sep=2pt}]
+    \node (A) at (0,0)  {};
+    \node (B) at (2,0)  {};
+    \node (C) at (2,2)  {};
+    \node (D) at (0,2)  {};
+    \node (E) at (1,1)  {};
+
+    \draw (A) -- (B) -- (C) -- (D) -- (A);
+    \draw (A) -- (E);
+    \draw (B) -- (E);
+    \draw (C) -- (E);
+    \draw (D) -- (E);
+    \end{tikzpicture}
+    }
+
+    \caption{}
+    \label{fig:example-simple}
+    \end{subfigure}
+    \hfill
+    % --- Longest cycle ---
+    \begin{subfigure}{0.2\textwidth}
+    \centering
+    \resizebox{\linewidth}{!}{
+    \begin{tikzpicture}[every node/.style={circle, draw, fill=white, inner sep=2pt}]
+    \node (A) at (0,0)  {};
+    \node (B) at (2,0)  {};
+    \node (C) at (2,2)  {};
+    \node (D) at (0,2)  {};
+    \node (E) at (1,1)  {};
+
+    % Only the cycle highlighted
+    \draw (A) -- (B) -- (C) -- (E) -- (D) -- (A);
+    \end{tikzpicture}
+    }
+
+    \caption{}
+    \label{fig:example-cycle}
+    \end{subfigure}
+    \hfill
+    % --- Path ---
+    \begin{subfigure}{0.2\textwidth}
+    \centering
+    \resizebox{\linewidth}{!}{
+    \begin{tikzpicture}[every node/.style={circle, draw, fill=white, inner sep=2pt}]
+    \node (A) at (0,0)  {};
+    \node (C) at (2,2)  {};
+    \node (D) at (0,2)  {};
+    \node (E) at (1,1)  {};
+
+    % Example path
+    \draw (D) -- (A) -- (E) -- (C);
+    \end{tikzpicture}
+    }
+
+    \caption{}
+    \label{fig:example-path}
+    \end{subfigure}
+    \caption{(\subref*{fig:example-simple}) A simple graph, (\subref*{fig:example-cycle}) A cycle, (\subref*{fig:example-path}) A path}
+\end{figure}
+
+% Subgraph explanation
+A \textbf{subgraph} $F$ of a graph $G$ is a graph for which $V(F) \subset V(G)$ and $E(F) \subset E(G)$, and the edges $E(F)$ only contain vertices in $V(F)$. If the subgraph $F$ is the result of removing one vertex $v$ from $G$ (notation: $G - v$), then we say $F$ is a vertex-deleted subgraph of $G$. Figure \ref{fig:example-cycle} and \ref{fig:example-path} are both subgraphs of \ref{fig:example-simple}\cite{definitions:book-bondy}.
 
 % Cycle explanation
-Vertices may be reachable from other vertices through a sequence of edges. Two definitions involving this concept are that of a path and a cycle.
-A \textbf{path} in a graph is a sequence of distinct edges which joins a sequence of vertices, where no vertex appears twice in the latter sequence.\cite{wiki:path} % TODO: Citation path def
-Similarly, a \textbf{cycle} in a graph is a sequence of distinct edges joining a sequence of vertices, in which only the first and last vertex are equal. The length of a cycle is equal to the amount of vertices in the cycle. The circumference of a graph is equal to the length of the longest cycle in the graph. Note that there may be multiple distinct longest cycles.\cite{wiki:cycle} % TODO: Citation cycle def
+A \textbf{path} is a simple graph whose vertices can be arranged in a linear sequence such that two vertices are adjacent if and only if they are consecutive in the sequence, as shown in figure \ref{fig:example-path}. Similarly, a \textbf{cycle} in a graph is a simple graph whose vertices can be arranged in a linear sequence such that two vertices are adjacent if and only if they are consecutive in the sequence, or they are the first and last vertex in the sequence. The length of a path or cycle is equal to the amount of edges. The \textbf{circumference} of a graph is equal to the length of the longest cycle in the graph. Note that there may be multiple distinct longest cycles. Figure \ref{fig:example-cycle} shows one such longests cycle of the graph in figure \ref{fig:example-simple}\cite{definitions:book-bondy}.
 
 % k-connected
-A graph may or may not be \textbf{connected}. A graph is connected if there exists a path between every two vertices. A graph which is not connected is called disconnected. This concept can be further generalized: a connected graph is \textbf{$k$-vertex-connected} (or simply $k$-connected) if the graph has more than $k$ vertices, and removing any $k$ vertices guarantees the resulting graph remains connected.\cite{wiki:connectivity} % TODO: Citation connectivity def
-This is equivalent to claiming that for every two vertices $u, v$ of the graph, there must exist $k$ paths with internally distinct vertices between $u$ and $v$.\cite{k-paths} % TODO: Citation k-conectivity <=> k paths
-This concept should not be confused with the connectivity of a graph. The connectivity of a graph is the largest value $k$ for which the the graph is $k$-connected.\cite{wiki:connectivity}
+A graph may or may not be connected. A graph is \textbf{connected} if for every partition of vertices into non-empty sets $X, Y$ there exists an edge with one vertex in $X$ and another in $Y$. A graph which is not connected is called disconnected. This concept can be further generalized: a connected graph is \textbf{$k$-vertex-connected} (or simply $k$-connected) if for every pair of distinct vertices $u, v$ it holds that the maximum number of internally disjoint paths from $u$ to $v$ is at least $k$. This should not be confused with the connectivity of a graph, which is the largest value $k$ for which the graph is $k$-connected.
+This definition of $k$-connected is equivalent to claiming that a graph is $k$-connected if and only if deleting less than $k$ vertices cannot result in a disconnected graph.
+The graph in figure \ref{fig:example-simple} is 3-connected, but not 4-connected, as removing all three vertices on any diagonal would result in a disconnected graph. This graph thus has connectivity 3. Similarly, figure \ref{fig:example-cycle} shows a graph with connectivity 2, and figure \ref{fig:example-path} shows a graph with connectivity 1\cite{definitions:book-bondy}.
 
-\section{Lorem Ipsum 6--7}
+\section{First Research Question}
 
+TODO
 
-% TODO: Cite before period
-% TODO: Use standard book graph theory (van Aardt et al)
-% TODO: TikZ image (maybe use Claude)
+\section{Second Research Question}
+
+TODO
