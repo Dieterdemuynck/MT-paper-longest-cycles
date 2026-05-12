@@ -3,7 +3,7 @@
   title={Graphs and their cycle intersections}, % TODO: Correct title?
   author={Demuynck Dieter},
   promotor={Prof.\ J. Goedgebeur \and dr.\ J. Jooken \and Prof.\ C. Zamfirescu}, % TODO: Check titles
-  assessor={Ir.\,Kn. Owsmuch\and K. Nowsrest}, % TODO: Add Assessors when known
+  assessor={dr.\,J. Jooken\and P. Wu}, % TODO: Correctly written?
   assistant={Ir.\ An~Assistent \and A.~Friend}} % TODO: I don't think this is relevant?
 % Remove the "%" on the next line for generating the cover page
 %\setup{coverpageonly}
@@ -14,6 +14,20 @@
 % If you want to include other LaTeX packages, do it here.
 \usepackage{tikz}
 \usepackage{subcaption}
+
+% User-defined commands:
+% RQs
+\newcounter{rq}
+\renewcommand{\therq}{\arabic{rq}}
+\newenvironment{researchquestion}
+{
+    \refstepcounter{rq}
+    \begin{quotation}
+    \textbf{Research Question \therq.}
+}
+{
+    \end{quotation}
+}
 
 % Finally the hyperref package is used for pdf files.
 % This can be commented out for printed versions.
@@ -46,7 +60,7 @@ My family has also been very supportive, of course.
 \tableofcontents*
 
 \begin{abstract}
-  This \texttt{abstract} environment provides a summary of the work, which may or may not be extensive.
+  !!!TODO!!! This \texttt{abstract} environment provides a summary of the work, which may or may not be extensive.
 The intention is that this should be limited to 1 page.
 
   \lipsum[1]
@@ -86,7 +100,7 @@ The intention is that this should be limited to 1 page.
 \mainmatter
 
 \include{intro}
-\include{chapter-1}
+\include{chapter-1-methodology}
 \include{chapter-2}
 % ... and so on until
 \include{chapter-n}

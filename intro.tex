@@ -9,9 +9,10 @@ This last article also posed a new question.
 This paper aims to fully solve the question by van Aardt et al., and to provide insight into the question posed by Zamfirescu, by generating a large number of graphs, and computationally check their properties related to these questions. To explain what these questions are, we % TODO: we?
 first define the necessary concepts in the following section.
 
+% TODO: Too much bold? Cursive instead?
 \section{Definitions}
 % Graph explanation
-A \textbf{graph} $G$ is a mathematical structure represented by an ordered pair $(V(G), E(G))$ consisting of a set of vertices \textbf{vertices} $V(G)$ (singular: vertex) and a (multi-)set of \textbf{edges} $E(G)$ which are unordered pairs of vertices from $V(G)$. This definition is of an undirected graph; if the edges are ordered pairs instead, it would be a directed graph. Vertices are called adjacent if they share an edge. A graph is called a simple graph if there are no duplicate edges, and no edge exists which holds the same vertex twice. In the rest of this paper, "graph" is used to refers to simple, undirected graphs. Graphs are often represented graphically with circles representing vertices, and lines ending at circles to represent edges between two vertices, such as in figure \ref{fig:example-simple}\cite{book:bondy-definitions}.
+A \textbf{graph} $G$ is a mathematical structure represented by an ordered pair $(V(G), E(G))$ consisting of a set of vertices \textbf{vertices} $V(G)$ (singular: vertex) and a (multi-)set of \textbf{edges} $E(G)$ which are unordered pairs of vertices from $V(G)$. This definition is of an undirected graph; if the edges are ordered pairs instead, it would be a directed graph. Vertices are called adjacent if they share an edge. A graph is called a simple graph if there are no duplicate edges, and no edge exists which holds the same vertex twice. In the rest of this paper, "graph" is used to refers to simple, undirected graphs. Graphs are often represented graphically with circles representing vertices, and lines ending at circles to represent edges between two vertices, such as in figure \ref{fig:example-simple}\cite{book:bondy-definitions}. % TODO: Minimal degree
 
 A graph is called \textbf{planar} if it can be drawn in the plane such that edges do not cross other edges or nodes\cite{book:bondy-definitions}. The graph in figure \ref{fig:example-simple} is planar, while that in figure \ref{fig:example-non-planar} is not. % TODO: Fix non-planar graph drawing
 
@@ -59,8 +60,8 @@ A graph is called \textbf{planar} if it can be drawn in the plane such that edge
     \draw (C) -- (E);
     \draw (D) -- (E);
     % Curved outer edges
-    \draw[out=-45, in=-45, looseness=2] (A) to (C);
-    \draw[out=45, in=45, looseness=2] (B) to (D);
+    \draw[out=-30, in=-60, looseness=2] (A) to (C);
+    \draw[out=60, in=30, looseness=2] (B) to (D);
 
     \end{tikzpicture}
     }
@@ -101,7 +102,7 @@ A graph is called \textbf{planar} if it can be drawn in the plane such that edge
     \node (E) at (1,1)  {};
 
     % Example path
-    \draw (D) -- (A) -- (E) -- (C);
+    \draw (A) -- (D) -- (E) -- (C);
     \end{tikzpicture}
     }
 
@@ -109,20 +110,41 @@ A graph is called \textbf{planar} if it can be drawn in the plane such that edge
     \label{fig:example-path}
     \end{subfigure}
     \caption{(\subref*{fig:example-simple}) A simple graph, (\subref*{fig:example-non-planar}) A simple non-planar graph (\subref*{fig:example-cycle}) A cycle, (\subref*{fig:example-path}) A path}
+    \label{fig:example}
 \end{figure}
 
 % Subgraph explanation
-A \textbf{subgraph} $F$ of a graph $G$ is a graph for which $V(F) \subset V(G)$ and $E(F) \subset E(G)$, and the edges $E(F)$ only contain vertices in $V(F)$. If the subgraph $F$ is the result of removing one vertex $v$ from $G$ (notation: $G - v$), then we say $F$ is a vertex-deleted subgraph of $G$. Figure \ref{fig:example-cycle} and \ref{fig:example-path} are both subgraphs of \ref{fig:example-simple}\cite{book:bondy-definitions}.
+A \textbf{subgraph} $F$ of a graph $G$ is a graph for which $V(F) \subset V(G)$ and $E(F) \subset E(G)$, and the edges $E(F)$ only contain vertices in $V(F)$. If the subgraph $F$ is the result of removing one vertex $v$ from $G$ and its edges (notation: $G - v$), then we say $F$ is a vertex-deleted subgraph of $G$. Figure \ref{fig:example-cycle} and \ref{fig:example-path} are both subgraphs of \ref{fig:example-simple}, and figure \ref{fig:example-path} is a vertex-deleted subgraph of figure \ref{fig:example-cycle}. Every graph in figure \ref{fig:example} is a subgraph of the graph in figure \ref{fig:example-non-planar}\cite{book:bondy-definitions}.
 
 % Cycle explanation
-A \textbf{path} is a simple graph whose vertices can be arranged in a linear sequence such that two vertices are adjacent if and only if they are consecutive in the sequence, as shown in figure \ref{fig:example-path}. Similarly, a \textbf{cycle} in a graph is a simple graph whose vertices can be arranged in a linear sequence such that two vertices are adjacent if and only if they are consecutive in the sequence, or they are the first and last vertex in the sequence. The length of a path or cycle is equal to the amount of edges. The \textbf{circumference} of a graph is equal to the length of the longest cycle in the graph. Note that there may be multiple distinct longest cycles. Figure \ref{fig:example-cycle} shows one such longests cycle of the graph in figure \ref{fig:example-simple}\cite{book:bondy-definitions}.
+A \textbf{path} is a simple graph whose vertices can be arranged in a linear sequence such that two vertices are adjacent if and only if they are consecutive in the sequence, as shown in figure \ref{fig:example-path}. Similarly, a \textbf{cycle} in a graph is a simple graph whose vertices can be arranged in a linear sequence such that two vertices are adjacent if and only if they are consecutive in the sequence, or they are the first and last vertex in the sequence. The length of a path or cycle is equal to the amount of edges. The \textbf{circumference} of a graph is equal to the length of the longest cycle in the graph. Note that there may be multiple distinct longest cycles. Figure \ref{fig:example-cycle} shows one such longests cycle of the graph in figure \ref{fig:example-simple}. If a graph has a cycle which goes through every node in the graph, it is called hamiltonian. If a graph is not hamiltonian, but every vertex-deleted subgraph is, then it is called hypohamiltonian\cite{book:bondy-definitions}. % TODO: check (hypo)hamiltonian in source
 
 % k-connected
 A graph may or may not be connected. A graph is \textbf{connected} if for every partition of vertices into non-empty sets $X, Y$ there exists an edge with one vertex in $X$ and another in $Y$. A graph which is not connected is called disconnected. This concept can be further generalized: a connected graph is \textbf{$k$-vertex-connected} (or simply $k$-connected) if for every pair of distinct vertices $u, v$ it holds that the maximum number of internally disjoint paths from $u$ to $v$ is at least $k$. This should not be confused with the connectivity of a graph, which is the largest value $k$ for which the graph is $k$-connected.
 This definition of $k$-connected is equivalent to claiming that a graph is $k$-connected if and only if deleting less than $k$ vertices cannot result in a disconnected graph.
 The graph in figure \ref{fig:example-simple} is 3-connected, but not 4-connected, as removing all three vertices on any diagonal would result in a disconnected graph. This graph thus has connectivity 3. Similarly, figure \ref{fig:example-cycle} shows a graph with connectivity 2, and figure \ref{fig:example-path} shows a graph with connectivity 1\cite{book:bondy-definitions}.
 
+% TODO: Separate chapter?
 \section{Research Questions}
 \label{sec:rq}
 
-TODO
+With these definitions, we % TODO: we?
+can finally write down the open questions to be answered. The first open question to be answered is by van Aardt et al., namely \textit{"Does there exist for any $k \in \{10, 11, 13, 16\}$ a 2-connected graph with circumference $k$ that has no vertex meeting every $k$-cycle\cite{article:van-aardt}?"}
+This question was partially answered in the paper by C. Zamfirescu. There, he constructed a family of 2-connected graphs which provided solutions for the values $k \in \{10, 13, 16\}$\cite{article:zamfirescu}. This still leaves the following open question, that this paper attempts to answer: % TODO: paper correct term?
+
+\begin{researchquestion}
+\label{rq1}
+Does there exist a 2-connected graph with circumference 11
+that has no vertex meeting every 11-cycle?
+\cite{article:van-aardt}
+\end{researchquestion}
+
+In the latter paper Zamfirescu also asked the following more general question: 
+
+\begin{researchquestion}
+\label{rq2}
+For which values of $k$ is it true that if in a planar graph $G$ with minimum degree at least $4$ all vertex-deleted subgraphs contain a cycle of length $k$, then $G$ contains a cycle of length greater than $k$?
+\cite{article:zamfirescu}
+\end{researchquestion}
+
+Thomassen showed \cite{article:thomassen} that the aforementioned statement is true for $k = n - 1$, where $n$ is the order of $G$, and Zamfirescu showed using the same family of graphs mentioned before that it does not hold if $n = \ell p$ and $k = \ell (p - 1) + 1$, where $p \ge 5$ is odd and $\ell \ge 6$\cite{article:zamfirescu}.
