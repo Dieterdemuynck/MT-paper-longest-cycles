@@ -1,10 +1,11 @@
+% AIM FOR 70 PAGES
 \documentclass[master=ecws,masteroption=Computational Informatics]{kulemt}
 \setup{
-  title={Graphs and their cycle intersections}, % TODO: Correct title?
+  title={Graphs and their cycle intersections},
   author={Demuynck Dieter},
-  promotor={Prof.\ J. Goedgebeur \and dr.\ J. Jooken \and Prof.\ C. Zamfirescu}, % TODO: Check titles
-  assessor={dr.\,J. Jooken\and P. Wu}, % TODO: Correctly written?
-  assistant={Ir.\ An~Assistent \and A.~Friend}} % TODO: I don't think this is relevant?
+  promotor={Prof.\ J. Goedgebeur \and Dr.\ J. Jooken \and Prof.\ C. Zamfirescu}, % TODO: Check titles
+  assessor={Dr.\,J. Jooken\and Dr. P. Wu}, % TODO: Check title Wu
+  assistant={}} % TODO: Fix of non-optional "Assistant-supervisor"
 % Remove the "%" on the next line for generating the cover page
 %\setup{coverpageonly}
 % Remove the "%" before the next "\setup" to generate only the first pages
@@ -14,6 +15,12 @@
 % If you want to include other LaTeX packages, do it here.
 \usepackage{tikz}
 \usepackage{subcaption}
+\renewcommand\thesubfigure{(\alph{subfigure})}
+\captionsetup[subfigure]{
+    labelformat=simple,
+    labelfont=normalfont,
+    textfont=normalfont
+}
 
 % User-defined commands:
 % RQs
