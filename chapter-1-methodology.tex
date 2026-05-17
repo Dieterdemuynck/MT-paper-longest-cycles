@@ -1,30 +1,37 @@
 \chapter{Methodology}
 \label{cha:1}
-A chapter is a logical unit. It normally starts with an introduction, which
-you are reading now. The last topic of the chapter holds the conclusion.
+\todo{methodology introduction. To write in this chapter: literature study (including known structures), algorithms used, tests that have been written, language used and why, Makefile maybe?}
+% A chapter is a logical unit. It normally starts with an introduction, which you are reading now. The last topic of the chapter holds the conclusion.
+In this chapter, we explain in detail what graph generators we used, the algorithms written for the research, the relevant graphs from previous research, the programming language the algorithms were written in and why, and the tests performed to make sure the programs are correctly written.
 
-\section{The First Topic of the Chapter}
-First comes the introduction to this topic.
+\section{Graph Generators}
+\todo{citations graph generators}
 
-\lipsum[55]
+Efficient but exhaustive graph generation is a difficult problem to solve. Writing a specialized graph generator specifically for this problem is expected to take the work of an entire master thesis as is\todo{source?}. When a graph generator has to generate a large magnitude of graphs, we want to only generate each graph once. In a nutshell, if we can rearrange a graph without removing or adding vertices or edges to get another graph, we call those graphs isomorphic. If not much care is put into generating each graph once, the same graph can easily be generated multiple times as isomorphic graphs, where for example simply the order of the nodes is different.
 
-\subsection{An item}
-Please don't abuse enumerations: short enumerations shouldn't use
-``\verb|itemize|'' or ``\texttt{enumerate}'' environments.
-So \emph{never write}: 
-\begin{quote}
-  The Eiffel tower has three floors:
-  \begin{itemize}
-  \item the first one;
-  \item the second one;
-  \item the third one.
-  \end{itemize}
-\end{quote}
-But write:
-\begin{quote}
-  The Eiffel tower has three floors: the first one, the second one, and the
-  third one.
-\end{quote}
+Luckily, graph generation is an important field of research in computer sciences, and many graph generators have already been developed\todo{cite jj graph generators}, including some which we will use in this thesis. The \texttt{nauty} package\todo{cite}\cite{lib:nauty} for example has a graph generator \texttt{geng} which can ``generate non-ismorphic very quickly''\cite{lib:nauty}, including specifically 2-connected graphs. It can also output its graphs in the \texttt{graph6} format, which is a compact ASCII string representation of graphs\todo{citation?}. This creates a useful graph generator for RQ\ref{rq1}.
+
+During the year we realised that it is likely that most of the generated 2-connected graphs are likely hamiltonian. Since a hamiltonian graph has a cycle that goes through all vertices of the graph, this would mean that the intersection of all longest cycles would simply be all vertices. We would thus like to avoid hamiltonian graphs completely. This is why, for RQ\ref{rq1}, we instead opted to use the Uniquely Hamiltonian Graphs generator\todo{cite}\cite{lib:UHG}, which holds a program \texttt{GenerateUHG} that allows us to generate graphs with a specific amount of hamiltonian cycles, in the \texttt{graph6} format. By setting that amount to 0, we only get non-hamiltonian graphs, which we suspected to have a much lower quantity of graphs.
+
+Using this generator instead reintroduced the problem of making sure the graphs are 2-connected, since we could not add this condition to the generator's input. The \texttt{nauty} package luckily also contains the program \texttt{pickg}, which lets us filter the output of another program. It takes \texttt{graph6} strings as input, and only outputs those strings for which the graph is 2-connected, given the correct parameters. This program is very efficient compared to generation and the rest of the algorithm\todo{proof}, and therefore the use of \texttt{GenerateUHG} with \texttt{pickg} seems to be a good choice for the graph generation of RQ\ref{rq1}.
+
+%\subsection{An item}
+%Please don't abuse enumerations: short enumerations shouldn't use
+%``\verb|itemize|'' or ``\texttt{enumerate}'' environments.
+%So \emph{never write}: 
+%\begin{quote}
+%  The Eiffel tower has three floors:
+%  \begin{itemize}
+%  \item the first one;
+%  \item the second one;
+%  \item the third one.
+%  \end{itemize}
+%\end{quote}
+%But write:
+%\begin{quote}
+%  The Eiffel tower has three floors: the first one, the second one, and the
+%  third one.
+%\end{quote}
 
 \section{A Second Topic}
 First we start with equation~\ref{eq:1} after this paragraph.
