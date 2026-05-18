@@ -4,16 +4,30 @@
 % A chapter is a logical unit. It normally starts with an introduction, which you are reading now. The last topic of the chapter holds the conclusion.
 In this chapter, we explain in detail what graph generators we used, the algorithms written for the research, the relevant graphs from previous research, the programming language the algorithms were written in and why, and the tests performed to make sure the programs are correctly written.
 
+\section{General Structure}
+
+\todo{Pipelining, generators to algorithm (with language choice) to output}
+
+Since the goal of this thesis is to exhaustively check a large number of graphs, an efficient implementation is required. Since we'll also use other programs to solve part of the problem (see section \ref{sec:generators} on graph generators), we chose to use pipelining on Linux to efficiently pass output from one program as input to another. The implementation of the algorithms must also be efficient, and for that reason, \texttt{C++} was chosen as the programming language to implement all algorithms discussed in section \ref{sec:algorithms}. To make analysis of the results easier, the output for both programs is put in a CSV format, with header. % I don't think this was written very well...
+
 \section{Graph Generators}
-\todo{citations graph generators}
+\label{sec:generators}
 
-Efficient but exhaustive graph generation is a difficult problem to solve. Writing a specialized graph generator specifically for this problem is expected to take the work of an entire master thesis as is\todo{source?}. When a graph generator has to generate a large magnitude of graphs, we want to only generate each graph once. In a nutshell, if we can rearrange a graph without removing or adding vertices or edges to get another graph, we call those graphs isomorphic. If not much care is put into generating each graph once, the same graph can easily be generated multiple times as isomorphic graphs, where for example simply the order of the nodes is different.
+Efficient but exhaustive graph generation is a difficult problem to solve. Writing a specialized graph generator specifically for this problem is expected to take the work of an entire master thesis as is\todo{source?}. When a graph generator has to generate a large magnitude of graphs, we want to only generate each graph once. In a nutshell, if we can rearrange a graph without removing or adding vertices or edges to get another graph, we call those graphs isomorphic. If not much care is put into generating each graph once, the same graph can easily be generated multiple times as isomorphic graphs, where for example simply the order of the nodes is different. Luckily, graph generation is an important field of research in computer sciences, and many graph generators have already been developed\todo{cite}\cite{article:jorik-jooken}, including some which we will use in this thesis.
 
-Luckily, graph generation is an important field of research in computer sciences, and many graph generators have already been developed\todo{cite jj graph generators}, including some which we will use in this thesis. The \texttt{nauty} package\todo{cite}\cite{lib:nauty} for example has a graph generator \texttt{geng} which can ``generate non-ismorphic very quickly''\cite{lib:nauty}, including specifically 2-connected graphs. It can also output its graphs in the \texttt{graph6} format, which is a compact ASCII string representation of graphs\todo{citation?}. This creates a useful graph generator for RQ\ref{rq1}.
+\subsection{Nauty and GenerateUHG}
 
-During the year we realised that it is likely that most of the generated 2-connected graphs are likely hamiltonian. Since a hamiltonian graph has a cycle that goes through all vertices of the graph, this would mean that the intersection of all longest cycles would simply be all vertices. We would thus like to avoid hamiltonian graphs completely. This is why, for RQ\ref{rq1}, we instead opted to use the Uniquely Hamiltonian Graphs generator\todo{cite}\cite{lib:UHG}, which holds a program \texttt{GenerateUHG} that allows us to generate graphs with a specific amount of hamiltonian cycles, in the \texttt{graph6} format. By setting that amount to 0, we only get non-hamiltonian graphs, which we suspected to have a much lower quantity of graphs.
+The \texttt{Nauty} package\todo{cite}\cite{lib:nauty} for example has a graph generator \texttt{geng} which can ``generate non-ismorphic very quickly''\cite{lib:nauty}, including specifically 2-connected graphs. It can also output its graphs in the \texttt{graph6} format, which is a compact ASCII string representation of graphs\todo{citation?}. This creates a useful graph generator for RQ\ref{rq1}.
 
-Using this generator instead reintroduced the problem of making sure the graphs are 2-connected, since we could not add this condition to the generator's input. The \texttt{nauty} package luckily also contains the program \texttt{pickg}, which lets us filter the output of another program. It takes \texttt{graph6} strings as input, and only outputs those strings for which the graph is 2-connected, given the correct parameters. This program is very efficient compared to generation and the rest of the algorithm\todo{proof}, and therefore the use of \texttt{GenerateUHG} with \texttt{pickg} seems to be a good choice for the graph generation of RQ\ref{rq1}.
+During the year we realised that it is likely that most of the generated 2-connected graphs are hamiltonian. Since a hamiltonian graph has a cycle that goes through all vertices of the graph, this would mean that the intersection of all longest cycles would simply be all vertices. We would thus like to avoid hamiltonian graphs completely. This is why, for RQ\ref{rq1}, we instead opted to use the Uniquely Hamiltonian Graphs generator\todo{cite}\cite{lib:UHG}, which holds a program \texttt{GenerateUHG} that allows us to generate graphs with a specific amount of hamiltonian cycles, in the \texttt{graph6} format. By setting that amount to 0, we only get non-hamiltonian graphs, which we suspect to have a much lower quantity of graphs than simply 2-connected graphs.
+
+Using this generator instead reintroduced the problem of making sure the graphs are 2-connected, since we could not add this condition to the generator's input. The \texttt{Nauty} package luckily also contains the program \texttt{pickg}, which lets us filter the output of another program. It takes \texttt{graph6} strings as input, and only outputs those strings for which the graph is 2-connected, given the correct parameters \todo{include parameters}. This program is very efficient compared to generation and the rest of the algorithm\todo{proof}, and therefore the use of \texttt{GenerateUHG} with \texttt{pickg} seems to be a good choice for the graph generation of RQ\ref{rq1}.
+
+\subsection{plantri55}
+
+In the second research question RQ\ref{rq2}, only planar graphs are relevant, and as such, a planar graph generator seems to be the most interesting. The \texttt{plantri55} package\todo{cite}\cite{lib:plantri} includes a suitable generator \texttt{plantri} for this. With the correct parameters \todo{include parameters}, this package can generate 2-connected planar graphs with minimal degree 4. By default however, this generator generates non-isomorphic 3-connected graphs, and creates 2-connected graphs by deleting elements\todo{edges? Vertices?} from these 3-connected graphs. As a result, there may be duplicate 2-connected graphs. \todo{Add table planar vs 2-connected and explanation on why generating duplicate planar is better than generating 2-conn and checking planarity} 
+
+% This is awful. Why? I stupid.
 
 %\subsection{An item}
 %Please don't abuse enumerations: short enumerations shouldn't use
@@ -33,21 +47,51 @@ Using this generator instead reintroduced the problem of making sure the graphs 
 %  third one.
 %\end{quote}
 
-\section{A Second Topic}
-First we start with equation~\ref{eq:1} after this paragraph.
-\begin{equation}
-  \label{eq:1}
-  A = \pi r^2
-\end{equation}
+\section{Algorithms}
+\label{sec:algorithms}
+\todo{Algorithms}
 
-\lipsum[64]
-
-\subsection{Another item}
-\lipsum[56-57]
+%First we start with equation~\ref{eq:1} after this paragraph.
+%\begin{equation}
+%  \label{eq:1}
+%  A = \pi r^2
+%\end{equation}
+%
+%\lipsum[64]
+%
+%\subsection{Another item}
+%\lipsum[56-57]
 
 \section{Conclusion}
+\todo{Conclusion}
 The final section of the chapter gives an overview of the important results
 of this chapter. This implies that the introductory chapter and the
 concluding chapter don't need a conclusion.
 
-\lipsum[66]
+\begin{figure}
+  \centering
+  \label{fig:pipeline-1}
+  \begin{tikzpicture}[node distance=4cm, auto]
+  \node[draw, rectangle] (gen) {GenerateUHG};
+  \node[draw, rectangle, right of=gen] (filter) {pickg};
+  \node[draw, rectangle, right of=filter] (analysis) {van\_aardt\_intersect};
+
+  \draw[->] (gen) -- node {graph6} (filter);
+  \draw[->] (filter) -- node {graph6} (analysis);
+  \draw[->] (analysis) -- node {CSV} ++(3,0);
+  \end{tikzpicture}
+  \caption{The pipeline for RQ\ref{rq1}}
+\end{figure}
+
+\begin{figure}
+  \centering
+  \label{fig:pipeline-2}
+  \begin{tikzpicture}[node distance=4cm, auto]
+  \node[draw, rectangle] (gen) {plantri};
+  \node[draw, rectangle, right of=gen] (analysis) {k\_val\_check};
+
+  \draw[->] (gen) -- node {graph6} (analysis);
+  \draw[->] (analysis) -- node {CSV} ++(3,0);
+  \end{tikzpicture}
+  \caption{The pipeline for RQ\ref{rq2}}
+\end{figure}

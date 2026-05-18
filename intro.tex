@@ -1,18 +1,16 @@
-% TODO: This paper ==> This thesis
-
 % Version 0.3 16d/05m/26y 14:38
 \chapter{Introduction}
 \label{cha:intro}
 Graph theory is an important field in computer sciences, capable of modeling a vast number of problems. Some of these problems involve the cycles present in the graph.
-For example, there is the problem of solving deadlocks, where two or more processes are waiting on each other to allow them to use the same resources. % TODO: Examples useful? Citations? More examples? Try an LLM maybe for examples and possible sources?
-This has raised the question as to what the upper bound is for what fraction of nodes of a graph need to be deleted to make sure there is a way to destroy all longest cycles of the graph. This has been studied in the article \textit{Destroying longest cycles in graphs and digraphs}~\cite{article:van-aardt} by van Aardt et al. In this article remained a few open questions, one of which was on the existence of graphs with specific properties (discussed in section \ref{sec:rq}). This question was partially answered in the paper \textit{On a question of van Aardt et al. on destroying all longest cycles}~\cite{article:zamfirescu} by Prof. Carol Zamfirescu. This last article also posed a new question.
+For example, there is the problem of solving deadlocks, where two or more processes are waiting on each other to allow them to use the same resources. Or perhaps a communication system has large routing loops, where data may be sent on the same cycle indefinitely. \todo{citations?}
+The study of cycles in graphs has expanded to more abstract mathematical problems, such as the question as to what the upper bound is for what fraction of nodes of a graph need to be deleted to make sure there is a way to destroy all longest cycles of the graph. This has been studied in the article \textit{Destroying longest cycles in graphs and digraphs}~\cite{article:van-aardt} by van Aardt et al. In this article remained a few open questions, one of which was on the existence of graphs with specific properties (discussed in section \ref{sec:rq}). This question was partially answered in the paper \textit{On a question of van Aardt et al. on destroying all longest cycles}~\cite{article:zamfirescu} by Prof. Carol Zamfirescu. This last article also posed a new question.
 
 This thesis aims to fully solve the question by van Aardt et al., and to provide insight into the question posed by Zamfirescu, by generating a large number of graphs, and computationally check their properties related to these questions. To explain what these questions are, we first define the necessary concepts in the following section.
 
 % TODO: Too much bold? Cursive instead?
 \section{Definitions}
 % Graph explanation
-A \textbf{graph} $G$ is a mathematical structure represented by an ordered pair $(V(G), E(G))$ consisting of a set of vertices \textbf{vertices} $V(G)$ (singular: vertex) and a (multi-)set of \textbf{edges} $E(G)$ which are unordered pairs of vertices from $V(G)$. The \textbf{order} of a graph is its number of vertices. Vertices are called \textbf{adjacent} if they share an edge. A graph is called a \textbf{simple} graph if there are no duplicate edges, and no edge exists which holds the same vertex twice. In a simple graph, the \textbf{degree} of a vertex is the number of edges that are incident on the vertex. Similarly, the minimal (maximal) degree of a graph is the minimal (maximal) degree of all its vertices. In the rest of this paper, \emph{graph} is used to refer to simple graphs. Graphs are often represented graphically with circles representing vertices, and lines ending at circles to represent edges between two vertices, such as in figure \ref{fig:example-simple}\cite{book:bondy-definitions}.
+A \textbf{graph} $G$ is a mathematical structure represented by an ordered pair $(V(G), E(G))$ consisting of a set of vertices \textbf{vertices} $V(G)$ (singular: vertex) and a (multi-)set of \textbf{edges} $E(G)$ which are unordered pairs of vertices from $V(G)$. The \textbf{order} of a graph is its number of vertices. Vertices are called \textbf{adjacent} if they share an edge. A graph is called a \textbf{simple} graph if there are no duplicate edges, and no edge exists which holds the same vertex twice. In a simple graph, the \textbf{degree} of a vertex is the number of edges that are incident on the vertex. Similarly, the minimal (maximal) degree of a graph is the minimal (maximal) degree of all its vertices. In the rest of this thesis, \emph{graph} is used to refer to simple graphs. Graphs are often represented graphically with circles representing vertices, and lines ending at circles to represent edges between two vertices, such as in figure \ref{fig:example-simple}\cite{book:bondy-definitions}.
 
 A graph is called \textbf{planar} if it can be drawn in the plane such that edges do not cross other edges or nodes~\cite{book:bondy-definitions}. The graph in figure \ref{fig:example-simple} is planar, while that in figure \ref{fig:example-non-planar} is not.
 
@@ -128,7 +126,7 @@ The graph in figure \ref{fig:example-simple} is 3-connected, but not 4-connected
 \label{sec:rq}
 
 With these definitions, we can finally write down the open questions to be answered. The first open question to be answered is by van Aardt et al., namely \textit{"Does there exist for any $k \in \{10, 11, 13, 16\}$ a 2-connected graph with circumference $k$ that has no vertex meeting every $k$-cycle\cite{article:van-aardt}?"}
-This question was partially answered in the paper by C. Zamfirescu. There, he constructed a family of 2-connected graphs which provided solutions for the values $k \in \{10, 13, 16\}$~\cite{article:zamfirescu}. This still leaves the following open question, that this paper attempts to answer: % TODO: paper correct term?
+This question was partially answered in the paper by C. Zamfirescu. There, he constructed a family of 2-connected graphs which provided solutions for the values $k \in \{10, 13, 16\}$~\cite{article:zamfirescu}. This still leaves the following open question, that this thesis attempts to answer:
 
 \begin{researchquestion}
 \label{rq1}
