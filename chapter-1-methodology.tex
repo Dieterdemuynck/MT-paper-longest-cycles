@@ -1,3 +1,4 @@
+% Version 0.1 19d/05m/26y 11:52
 \chapter{Methodology}
 \label{cha:1}
 \todo{methodology introduction. To write in this chapter: literature study (including known structures), algorithms used, tests that have been written, language used and why, Makefile maybe?}
@@ -29,6 +30,8 @@ In the second research question RQ\ref{rq2}, only planar graphs are relevant, an
 
 % This is awful. Why? I stupid.
 
+\todo{Add section on use of database of graphs by J. Goedgebeur for RQ2}
+
 %\subsection{An item}
 %Please don't abuse enumerations: short enumerations shouldn't use
 %``\verb|itemize|'' or ``\texttt{enumerate}'' environments.
@@ -47,9 +50,112 @@ In the second research question RQ\ref{rq2}, only planar graphs are relevant, an
 %  third one.
 %\end{quote}
 
-\section{Algorithms}
+\section{Finding the Intersection of longest 11-cycles}
 \label{sec:algorithms}
-\todo{Algorithms}
+
+\subsection{Intersection of cycles}
+
+To know if a graph has circumference 11 and has no vertex meeting every 11-cycle for RQ\ref{rq1}, we need an algorithm that can find the length of the longest cycle (the circumference) of the graph, while also keeping track of the intersection of all 11-cycles. Finding the circumference is an NP-hard problem\todo{cite, proofcheck}\cite{to-do}, meaning there is no known polynomial algorithm for it and is a difficult problem to solve. In this thesis, the best solution we have is to simply enumerate all cycles and find the longest. This also already provides an easy method for finding the intersection of all 11-cycles: if we find a cycle of length 11 during enumeration of all cycles, we can simply use its vertices to compute the intersection with all previous 11-cycles. Thus, we need an algorithm for enumerating all cycles efficiently.
+
+\subsubsection{Enumeration of all cycles}
+
+\todo{proofread}
+The simplest approach to this problem is a depth-first search on the vertices. Simply take a starting vertex and set it as visited. Then take an unvisited edge for the last visited vertex (also setting this edge as visited), and consider the other vertex of that edge as a candidate next vertex. If this candidate is not yet visited, we simply add it to the currently visited vertices, and repeat the previous steps from this vertex. If during this process, the candidate is the original starting vertex, and there are at least three visited vertices, then we have found a cycle, and the vertices of the cycle are the visited vertices, and the length of the cycle is equal to the amount of visited vertices. If the candidate is not the original starting vertex, but has been visited, we can simply ignore it\todo{comparison with alternative algorithm}, and continue DFS from the previous vertex. Lastly, if the last visited vertex has no more unvisited edges, we can consider this vertex spent and pop it from the list of visited vertices, which also requires us to set its edges as unvisited again.
+
+This algorithm has a glaring issue when it comes to efficiency, namely that during enumeration of the cycles, all cycles are enumerated as many times as it has vertices, times two. The algorithm takes every vertex of the cycle as a starting vertex, and discovers the cycle each time twice, in the two directions it can travel down the cycle. We can reduce this number by using a useful property of the way vertices of graphs are often represented in computer programs. In this thesis' source code, vertices are represented as simple integers, from 0 to $n-1$ with $n$ equal to the order of the graph. This adds the property that the vertices are ordered.
+
+By considering the starting vertex as the ``minimal'' vertex of the DFS algorithm, only allowing vertices to be candidates if they are higher in order than this starting vertex, we can greatly reduce the search space of the algorithm for many starting vertices, while also guaranteeing we only discover each cycle twice, namely starting from its minimal vertex. We can reduce this further to discovering each cycle only once, by also defining an order on its second and last discovered vertex. By claiming we only consider a cycle when the second visited vertex is lower in order than the last visited vertex, we only discover each cycle in one of the two directions.
+
+\subsubsection{Stopping enumeration early}
+
+This algorithm allows us to enumerate all cycles of the graph exactly once. We can get an exact value of the circumference of the graph by setting the circumference equal to 0 at the start of the enumeration and, for each found cycle, taking the maximum of the current believed circumference and the length of the cycle. Note that we are only interested in the graphs with circumference 11 however. Luckily, this enumeration also allows us to stop early when a graph is found to have a cycle that is larger than 11, as we immediately know the graph to be uninteresting for RQ\ref{rq1}.
+
+Similarly, we are also uninterested in cycles smaller than 11. We can choose the starting vertex as the smallest vertex not yet chosen as starting vertex (i.e. iterate through the starting vertices in order), beginning from the lowest ordered vertex.
+
+Of course, we are also interested in the intersection of all 11-cycles. By setting the initial intersection equal to all vertices of the graph at the start of enumeration, whenever a cycle is detected that has length 11, we can take the intersection of the current known intersection of 11-cycle and this last 11-cycle. The result at the end of the enumeration will be the intersection of all 11-cycles if there are any, or all vertices otherwise. If there are no 11-cycles, the graph is already uninteresting for RQ\ref{rq1}, and as such we pay it no heed. \todo{what is this language? what?}
+
+\todo{add explanation for why no direction in code, idea of comparison taking just as long or longer than the instructions}
+
+\todo{add chosen data structures}
+
+% With help from ChatGPT:
+\begin{figure}
+\begin{algorithm}[H]
+  \todo{Read and adjust this generated algorithm code}
+\caption{\textsc{CheckProperties}$(G, k)$}
+\begin{algorithmic}[1]
+\Require Graph $G=(V,E)$ with ordered vertices, integer $k > 2$
+\Ensure 
+    Maximum cycle length $\textit{circumference}$ and
+    intersection of all $k$-cycles $\textit{intersection}$
+
+\State $\textit{circumference} \gets 0$
+\State $\textit{intersection} \gets V(G)$
+
+\State $m \gets |V(G)| - k$
+\Comment{largest possible minimal vertex of a $k$-cycle}
+
+\For{$i \gets 0$ to $m$}
+    \State $\textit{visited} \gets \{i\}$
+    \State $\textit{path} \gets [i]$
+    \State $\textit{indices} \gets [0]$
+    \Comment{next adjacency index for each depth}
+
+    \While{$\textit{path} \neq \emptyset$}
+
+        \If{$\textit{indices.back()} \geq |\Gamma(\textit{path.back()})|$}
+            \Comment{all neighbors processed}
+            \State remove last vertex from $\textit{visited}$
+            \State pop last element from $\textit{path}$
+            \State pop last element from $\textit{indices}$
+            \If{$\textit{indices} \neq \emptyset$}
+                \State increment $\textit{indices.back()}$
+            \EndIf
+            \State \textbf{continue}
+        \EndIf
+
+        \State $u \gets \textit{path.back()}$
+        \State $v \gets \Gamma(u)[\textit{indices.back()}]$
+
+        \If{$v \in \textit{visited}$ \textbf{or} $v < i$}
+
+            \If{$v = i$}
+                \Comment{cycle found}
+                \State $\ell \gets |\textit{path}|$
+                \State $\textit{circumference} \gets \max(\textit{circumference}, \ell)$
+
+                \If{$\ell > k$}
+                    \Comment{optional early stopping}
+                    \State $\textit{intersection} \gets \textit{visited}$
+                    \State \Return failure
+                \EndIf
+
+                \If{$\ell = k$}
+                    \State $\textit{intersection} \gets
+                        \textit{intersection} \cap \textit{visited}$
+                \EndIf
+            \EndIf
+
+            \State increment $\textit{indices.back()}$
+            \State \textbf{continue}
+        \EndIf
+
+        \Comment{extend DFS path}
+        \State add $v$ to $\textit{visited}$
+        \State append $v$ to $\textit{path}$
+        \State append $0$ to $\textit{indices}$
+
+    \EndWhile
+\EndFor
+
+\State \Return success
+\end{algorithmic}
+\end{algorithm}
+\end{figure}
+
+\section{Checking vertex-deleted subgraphs for k-cycles}
+
+This section introduces the algorithm for RQ\ref{rq2} \todo{this section}.
 
 %First we start with equation~\ref{eq:1} after this paragraph.
 %\begin{equation}
@@ -61,6 +167,94 @@ In the second research question RQ\ref{rq2}, only planar graphs are relevant, an
 %
 %\subsection{Another item}
 %\lipsum[56-57]
+
+\section{Study of Known Graphs}
+
+\todo{add construction of tube graph in figure \ref{fig:tube-graph} as text}
+
+\begin{figure}
+  \label{fig:tube-graph}
+  \centering
+  \begin{subfigure}{0.4\textwidth}
+    \centering
+    \begin{tikzpicture}
+      \TubeGraph{5}{3}
+    \end{tikzpicture}
+  \end{subfigure}
+  \begin{subfigure}{0.4\textwidth}
+    \centering
+    \begin{tikzpicture}
+      \TubeGraph{5}{3}
+      \draw[red, very thick]
+        (O1) --
+        (O2) --
+        (M2-1) --
+        (I2) --
+        (I3) --
+        (M3-1) --
+        (O3) --
+        (O4) --
+        (M4-1) --
+        (I4) --
+        (I5) --
+        (M5-1) --
+        (O5) --
+        (O1);
+    \end{tikzpicture}
+  \end{subfigure}
+  \caption{The graph construction by Prof. C. T. Zamfirescu for $p=5$ and $\ell=3$, alongside the same graph but with one longest cycle marked in red}
+\end{figure}
+
+\begin{figure}
+  \label{fig:petersen-divided}
+  \centering
+  \begin{tikzpicture}[scale=1, every node/.style={circle,draw,fill=white,inner sep=2pt}
+  ]
+
+  % Outer pentagon
+  \foreach \i/\a in {
+    1/90,
+    2/18,
+    3/-54,
+    4/-126,
+    5/162
+  }{
+    \node (O\i) at (\a:2) {};
+  }
+
+  % Inner star vertices
+  \foreach \i/\a in {
+    1/90,
+    2/18,
+    3/-54,
+    4/-126,
+    5/162
+  }{
+    \node (I\i) at (\a:0.9) {};
+  }
+
+  % Subdivision vertices on edges adjacent to O1
+  \node[draw,circle,fill=green!80] (S12) at ($(O1)!0.5!(O2)$) {};
+  \node[draw,circle,fill=green!80] (S15) at ($(O1)!0.5!(O5)$) {};
+  \node[draw,circle,fill=green!80] (S11) at ($(O1)!0.5!(I1)$) {};
+
+  % Outer cycle
+  \draw (O2)--(O3)--(O4)--(O5);
+  \draw (O1)--(S12)--(O2);
+  \draw (O1)--(S15)--(O5);
+  \draw (O1)--(S11)--(I1);
+
+  % Spokes
+  \foreach \i in {2,...,5}{
+    \draw (O\i)--(I\i);
+  }
+
+  % Inner star
+  \draw (I1)--(I3)--(I5)--(I2)--(I4)--(I1);
+
+  \end{tikzpicture}
+  \caption{the Petersen graph, with three edges subdivided}
+\end{figure}
 
 \section{Conclusion}
 \todo{Conclusion}

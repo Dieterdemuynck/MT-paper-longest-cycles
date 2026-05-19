@@ -21,6 +21,8 @@
     labelfont=normalfont,
     textfont=normalfont
 }
+\usepackage{algorithm}
+\usepackage{algpseudocode}
 
 % User-defined commands:
 % RQs
@@ -36,6 +38,85 @@
     \end{quotation}
 }
 \newcommand{\todo}[1]{\textcolor{red}{[TODO: #1]}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Tube Graphs by Zamfirescu %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usetikzlibrary{calc}
+
+% With help from ChatGPT:
+\newcommand{\TubeGraph}[2]{%
+  % #1 = p (cycle length)
+  % #2 = l (vertices per connecting path)
+
+  \def\p{#1}
+  \def\l{#2}
+
+  % Radii
+  \def\R{2}
+  \def\r{1}
+
+  % Outer cycle vertices
+  \foreach \i in {1,...,\p} {
+    \node[circle,draw,fill=white,inner sep=2pt]
+      (O\i) at ({90 - 360/\p * (\i-1)}:\R) {};
+  }
+
+  % Inner cycle vertices
+  \foreach \i in {1,...,\p} {
+    \node[circle,draw,fill=white,inner sep=2pt]
+      (I\i) at ({90 - 360/\p * (\i-1)}:\r) {};
+  }
+
+  % Draw Outer cycle (without closing edge)
+  \foreach \i [evaluate=\i as \next using int(\i+1)] in {1,...,\numexpr\p-1\relax} {
+    \draw (O\i) -- (O\next);
+  }
+
+  % Draw Inner cycle (without closing edge)
+  \foreach \i [evaluate=\i as \next using int(\i+1)] in {1,...,\numexpr\p-1\relax} {
+    \draw (I\i) -- (I\next);
+  }
+
+  % Closing edges
+  \ifodd\p
+    % normal closing edges
+    \draw (O\p) -- (O1);
+    \draw (I\p) -- (I1);
+  \else
+    % crossed closing edges
+    \draw (O\p) -- (I1);
+    \draw (I\p) -- (O1);
+  \fi
+
+  % Subdivided connecting paths
+  \foreach \i in {1,...,\p} {
+
+    % start from outer vertex node
+    \def\prev{O\i}
+
+    % internal subdivision vertices
+    \foreach \j in {1,...,\numexpr\l-2\relax} {
+
+      \pgfmathsetmacro{\t}{\j/(\l-1)}
+
+      \node[circle,draw,fill=white,inner sep=2pt]
+        (M\i-\j)
+        at ($(O\i)!\t!(I\i)$) {};
+
+      % node-to-node connection
+      \draw (\prev) -- (M\i-\j);
+
+      % update previous node
+      \xdef\prev{M\i-\j}
+    }
+
+    % final edge to inner cycle
+    \draw (\prev) -- (I\i);
+  }
+}
+% End of Command for Tube Graphs %%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Finally the hyperref package is used for pdf files.
 % This can be commented out for printed versions.
