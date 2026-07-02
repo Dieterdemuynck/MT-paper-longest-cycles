@@ -72,7 +72,7 @@ This algorithm allows us to enumerate all cycles of the graph exactly once. We c
 
 Similarly, we are also uninterested in cycles smaller than 11. We can choose the starting vertex as the smallest vertex not yet chosen as starting vertex (i.e. iterate through the starting vertices in order), beginning from the lowest ordered vertex.
 
-Of course, we are also interested in the intersection of all 11-cycles. By setting the initial intersection equal to all vertices of the graph at the start of enumeration, whenever a cycle is detected that has length 11, we can take the intersection of the current known intersection of 11-cycle and this last 11-cycle. The result at the end of the enumeration will be the intersection of all 11-cycles if there are any, or all vertices otherwise. If there are no 11-cycles, the graph is already uninteresting for RQ\ref{rq1}, and as such we pay it no heed. \todo{what is this language? what?}
+Of course, we are also interested in the intersection of all 11-cycles. By setting the initial intersection equal to all vertices of the graph at the start of enumeration, whenever a cycle is detected that has length 11, we can take the intersection of the current known intersection of 11-cycles and this last 11-cycle. The result at the end of the enumeration will be the intersection of all 11-cycles if there are any, or all vertices otherwise. If there are no 11-cycles, the graph is already uninteresting for RQ\ref{rq1}, and as such we pay it no heed. \todo{what is this language? what?}
 
 \todo{add explanation for why no direction in code, idea of comparison taking just as long or longer than the instructions}
 
@@ -171,6 +171,11 @@ This section introduces the algorithm for RQ\ref{rq2} \todo{this section}.
 \section{Study of Known Graphs}
 
 \todo{add construction of tube graph in figure \ref{fig:tube-graph} as text}
+The paper \textit{On a question of van Aardt et al. on destroying all longest cycles} by C. T. Zamfirescu\cite{article:zamfirescu} constructs a family of graphs providing an answer for some values $k$ to the open question posed by van Aardt et al. similar to RQ\ref{rq1}. We suspect that, if such a graph exists for $k=11$, then that graph may look similar to a graph from that family. Additionaly, some graphs in that family are also negative examples to RQ\ref{rq2}. In this section, we will show this construction, how it has influenced our search space when running the programs, and how we intend to use this construction to potentially manually find interesting values for one of the two Research Questions.
+
+
+
+\todo{path and cycle diagram}
 
 \begin{figure}
   \label{fig:tube-graph}

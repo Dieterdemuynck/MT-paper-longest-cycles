@@ -5,7 +5,52 @@
 \todo{intro}
 %\lipsum[77]
 
-\section{The First Topic of this Chapter}
+\section{New Values for RQ2}
+
+\todo{currently just writing down whatever I think of}
+
+\subsection{Proof}
+
+\todo{"as shown before"}
+\todo{split giant cycle definition into two lines}
+\todo{Similar to proof as paper Zamfirescu}
+\todo{define $X_i$}
+\todo{DIRECTIONAL CYCLES!!! THAT'S IT!!!! THERE ARE TWO TYPES OF POTENTIALLY LONGEST CYCLES, AND THE ANSWER IS DIRECTIONALLITY!!!}
+
+Take an $\ell,p$ tube graph as shown before, with $p$ odd. \todo{Does it need to be odd for this proof?}
+Subdivide all edges $(a_i, a_{i+1})$ and $(b_i, b_{i+1})$ until each subdivided edge now has a total of $d$ vertices, including the original vertices. We denote the path on these vertices from $a_i$ to $a_{i+1}$ as $D_{a,i}$, and similarly we denote the path from $b_i$ to $b_{i+1}$ as $D_{b,i}$.
+
+We now show that there exists a cycle $C$ of length $(pd-1) + (p-1)(\ell-2)$ omitting any vertex $v \in V(G)$. To avoid unnecessary complicated indices, consider the two vertices $v_l \in V(H_1) \backslash \{b_1\}$ and $v_d \in V(D_{a,1}) \backslash \{a_2\}$. Consider the cycle $C = $
+
+$$
+\left( \bigcup_{i \neq 1} H_i \right) \cup \left( \bigcup_{j \ \verb|even|} D_{a,j} \right) \cup \left( \bigcup_{k \ \verb|odd|} D_{b,k} \right) 
+$$
+
+which omits both vertices $v_l$ and $v_d$. For all other vertices, a cycle of length $(pd-1) + (p-1)(\ell-2)$ can be constructed in the same way.
+
+Now to show that $C$ is a longest cycle of $G$. We first observe that a cycle in $G$ cannot traverse all $H_i$: since $X_i$ is a vertex-cut in $G$, the subgraph $H_i$ can only be traversed by entering through $a_i$ and exiting through $b_i$. As a result and by construction, a cycle in $G$ visiting all $H_i$ would have to traverse an even number of $H_i$'s when p is odd, which is a contradiction. Thus, for every longest cycle in $G$ there is at least one $H_i$ which is not traversed. Since $X_i$ is a vertex-cut in $G$, we lose all vertices $V(H_i) \backslash V(X_i)$ for every non-traversed $H_i$. 
+
+\todo{Place the following somewhere that makes sense, and prove longest cycle goes through two subdivided edges:\\
+$X_i = \{a_i, b_i\}, A_i = \{a_i, a_{i+1}\},$ and $B_i = \{b_i, b_{i+1}\}$ are all vertex-cuts. As a result, any longest cycle going through $a_i$ must traverse either both $D_{a,i}$ and $D_{a,i-1}$, or only one of $D_{a,i}$ and $D_{a,i-1}$ and $H_i$.\\
+}
+
+\todo{just writing whatever:}
+
+cycle to worry about: all $D_{a,i}$ and $D_{b,i}$ except for $i=1$, with $H_i$ and $H_{i+1}$. Length is $(d-1)*(p-1)*2 + 2*(\ell-2)$. As a result,
+
+\begin{align*}
+{}      && 2(d-1)(p-1) + 2(\ell-2)      &< (pd-1) + (p-1)(\ell-2) \\
+\iff\;  && 2dp - 2d - 2p + 2\ell - 2    &< pd + p\ell - 2p - \ell + 1 \\
+\iff\;  && dp - 2d + 3\ell - p\ell - 3  &< 0 \\
+\iff\;  && d(p-2) + \ell(3-p) - 3       &< 0 \\
+\iff\;  && d(p-2)                       &< \ell(p-3) + 3.
+\end{align*}
+
+%$\{a_i, a_{i+1}\}$ vertex cut,
+%$\{b_i, b_{i+1}\}$ vertex cut,
+%$\{a_i, b_i\}$ vertex cut.
+%Any cycle going through $x \in A B$ must avoid one of three paths.
+
 %\lipsum[78]
 
 %\subsection{An item}
