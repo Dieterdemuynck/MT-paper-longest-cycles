@@ -12,44 +12,244 @@
 \subsection{Proof}
 
 \todo{"as shown before"}
-\todo{split giant cycle definition into two lines}
 \todo{Similar to proof as paper Zamfirescu}
-\todo{define $X_i$}
-\todo{DIRECTIONAL CYCLES!!! THAT'S IT!!!! THERE ARE TWO TYPES OF POTENTIALLY LONGEST CYCLES, AND THE ANSWER IS DIRECTIONALLITY!!!}
 
-Take an $\ell,p$ tube graph as shown before, with $p$ odd. \todo{Does it need to be odd for this proof?}
-Subdivide all edges $(a_i, a_{i+1})$ and $(b_i, b_{i+1})$ until each subdivided edge now has a total of $d$ vertices, including the original vertices. We denote the path on these vertices from $a_i$ to $a_{i+1}$ as $D_{a,i}$, and similarly we denote the path from $b_i$ to $b_{i+1}$ as $D_{b,i}$.
+% P0: Add a short introductory paragraph.
+% Explain that the proof follows the strategy of Zamfirescu's proof,
+% but the additional subdivision of the D-paths introduces a second
+% possible type of long cycle, which must be analysed separately.
 
-We now show that there exists a cycle $C$ of length $(pd-1) + (p-1)(\ell-2)$ omitting any vertex $v \in V(G)$. To avoid unnecessary complicated indices, consider the two vertices $v_l \in V(H_1) \backslash \{b_1\}$ and $v_d \in V(D_{a,1}) \backslash \{a_2\}$. Consider the cycle $C = $
+Take a $p,\ell$ tube graph as shown before, with $p$ odd.
+\todo{Does it need to be odd for this proof?}
+For simplicity, from here on out, let any use of a numerical index be
+an integer modulo $p$, such that for example $a_0$ = $a_p$.
+Subdivide all edges $(a_i,a_{i+1})$ and $(b_i,b_{i+1})$ until each
+subdivided edge has a total of $d$ vertices, including the original vertices.
+We denote the path on these vertices from $a_i$ to $a_{i+1}$ by $D_{a,i}$,
+and similarly the path from $b_i$ to $b_{i+1}$ by $D_{b,i}$.
+% ------------------------------------------------------------------
+% P1 (Definitions)
+%
+% Move the definitions of X_i, A_i and B_i here.
+%
+% Define
+%   X_i = {a_i,b_i},
+%   A_i = {a_i,a_{i+1}},
+%   B_i = {b_i,b_{i+1}}.
+We also define the sets $X_i = {a_i,b_i}$, $A_i = {a_i,a_{i+1}}$,
+$B_i = {b_i,b_{i+1}}$, as each of these are vertex-cuts of the graph.
+%
+% State that all three are vertex cuts.
+%
+% Prove the local consequence:
+% every cycle using a_i either
+%   (i) continues through both adjacent D_a paths, or
+%   (ii) uses exactly one adjacent D_a path together with H_i.
+% Do the analogous statement for b_i.
+%
+% This is the local structural lemma used everywhere later.
+
+These sets being vertex-cuts has the consequence that any cycle going
+through$a_i$ must either continue through both adjacent $D_{a,i-1}$ and
+$D_{a,i}$ paths or through one of the aforementioned paths and $H_i$, with the
+exception of cycles fully contained within any of the three aforementioned
+paths. An analogous reasoning can be used for cycles going through $b_i$.
+
+%
+% ------------------------------------------------------------------
+
+We now continue to show that there are only two candidate longest cycles, by
+first showing that a longest cycle must traverse an $H_i$, and then showing
+there are two types of cycles containing this $H_i$.
+
+% ------------------------------------------------------------------
+% P3 (Main structural lemma)
+%
+% Show that once a cycle traverses some H_i,
+% there are only two possible ways to leave its endpoints.
+
+\paragraph{$H_i$ requirement}
+If we were to remove all internal nodes and edges belonging to $H_i$, we get
+two disjoint cycles. As such, the longest cycles which do not traverse any
+$H_i$ are the two cycles
 
 $$
-\left( \bigcup_{i \neq 1} H_i \right) \cup \left( \bigcup_{j \ \verb|even|} D_{a,j} \right) \cup \left( \bigcup_{k \ \verb|odd|} D_{b,k} \right) 
+\bigcup_{i \in \mathbb{Z}_p}D_{a,i},\;
+\bigcup_{i \in \mathbb{Z}_p}D_{b,i}
 $$
 
-which omits both vertices $v_l$ and $v_d$. For all other vertices, a cycle of length $(pd-1) + (p-1)(\ell-2)$ can be constructed in the same way.
+These cannot be the longest cycles of the graph, as one can create a longer
+cycle by picking any $i$, removing the internal nodes of the path $D_{a,i}$
+resp. $D_{b_i}$, and creating a new cycle through $H_i$, $D_{b,i}$ resp.
+$D_{a_i}$, and $H_{i+1}$. This removes $d-2$ nodes, but introduces $2(l-2)+d$.
+This cycle is larger when $d-2 < 2(\ell-2)+d$, or simply when $\ell>1$, which
+follows from the condition on $\ell$ during construction. As a result, any
+longest cycle must contain at least one $H_i$.
 
-Now to show that $C$ is a longest cycle of $G$. We first observe that a cycle in $G$ cannot traverse all $H_i$: since $X_i$ is a vertex-cut in $G$, the subgraph $H_i$ can only be traversed by entering through $a_i$ and exiting through $b_i$. As a result and by construction, a cycle in $G$ visiting all $H_i$ would have to traverse an even number of $H_i$'s when p is odd, which is a contradiction. Thus, for every longest cycle in $G$ there is at least one $H_i$ which is not traversed. Since $X_i$ is a vertex-cut in $G$, we lose all vertices $V(H_i) \backslash V(X_i)$ for every non-traversed $H_i$. 
+\todo{Add a figure for clarity}
+\todo{"condition on $\ell$"}
 
-\todo{Place the following somewhere that makes sense, and prove longest cycle goes through two subdivided edges:\\
-$X_i = \{a_i, b_i\}, A_i = \{a_i, a_{i+1}\},$ and $B_i = \{b_i, b_{i+1}\}$ are all vertex-cuts. As a result, any longest cycle going through $a_i$ must traverse either both $D_{a,i}$ and $D_{a,i-1}$, or only one of $D_{a,i}$ and $D_{a,i-1}$ and $H_i$.\\
-}
+% Define:
+%
+%   Type I = opposite directions.
+%
+%   Type II = same direction.
+%
 
-\todo{just writing whatever:}
+If a cycle traverses an $H_i$ path, it must enter at $a_i$ from either the
+$D_{a,i}$ or $D_{a,i-1}$ paths, and leave at $b_i$ through either $D_{b,i}$ or $D_{b,i-1}$. We now show there are two types of cycles these choices create.
 
-cycle to worry about: all $D_{a,i}$ and $D_{b,i}$ except for $i=1$, with $H_i$ and $H_{i+1}$. Length is $(d-1)*(p-1)*2 + 2*(\ell-2)$. As a result,
+\paragraph{Same-side cycles}
+A cycle can enter and leave an $H_i$ path on the same side, either through $D_{a,i-1}$ and $D_{b,i-1}$ or through $D_{a,i}$ and $D_{b,i}$. For simplicity, assume a cycle $C$ traverses $H_0$, $D_{a,0}$, and $D_{b,0}$. At $a_1$, this cycle now has two choices: to either traverse $H_1$, closing the cycle, or to traverse $D_{a,1}$. The latter choice leaves the cycle no other choice at $b_i$, since traversing $H_1$ would close the cycle prematurely, so $D_{b,1}$ must be traversed. We then again have the same choice at $a_2$. One can see this choice of traversing the $D$ paths as extending the closed cycle of the former choice (with length $2\ell+2d-4$) with $2d-2$ vertices. \todo{Figure}
+This choice of extending repeats up until $a_{p-1}$, meaning the longest same-side cycle through $H_0$, $D_{a,0}$, and $D_{b,0}$ has a length of $2\ell-2+(p-1)(d-1)$, and traverses all vertices
+
+$$
+\bigcup_{i \in \mathbb{Z}_p \setminus \{p-1\}}V(D_{a,i})
+\;\cup\;
+\bigcup_{i \in \mathbb{Z}_p \setminus \{p-1\}}V(D_{b,i})
+\;\cup\; 
+V(H_0)
+\;\cup\; 
+V(H_{p-1})
+$$
+
+The reasoning for $D_{a,-1}$ and $D_{b,-1}$, and for other $H_i$ paths, is analogous. Note that if this type of cycle is the longest cycle of the graph, all vertices $a_i$ and $b_i$ meet all longest cycles.
+
+\paragraph{Opposite-side cycles}
+A cycle can also enter and leave an $H_i$ path on opposite sides, either through $D_{a,i-1}$ and $D_{b,i}$ or through $D_{a,i}$ and $D_{b,i-1}$.
+
+% Then prove these choices propagate around the graph.
+%
+% Conclude:
+%
+% - Type I cycles are exactly the zig-zag cycles,
+%   traversing every H-path except one.
+%
+% - Type II cycles are exactly the tube cycles,
+%   travelling around both rings and using two adjacent H-paths.
+%
+% Everything after this point becomes a length comparison.
+% ------------------------------------------------------------------
+
+We now show that there exists a cycle $C$ of length
+$(pd-1)+(p-1)(\ell-2)$ omitting any vertex $v\in V(G)$.
+To avoid unnecessarily complicated indices, consider the two vertices
+$v_l\in V(H_1)\setminus\{b_1\}$ and
+$v_d\in V(D_{a,1})\setminus\{a_2\}$.
+
+Consider the cycle
+
+$$
+C=
+\left(
+\bigcup_{i\neq1}H_i
+\right)
+\cup
+\left(
+\bigcup_{j\ \verb|even|}D_{a,j}
+\right)
+\cup
+\left(
+\bigcup_{k\ \verb|odd|}D_{b,k}
+\right).
+$$
+
+\todo{Split this definition over multiple lines if it becomes longer.}
+
+which omits both vertices $v_l$ and $v_d$.
+
+For all other vertices, a cycle of length
+$(pd-1)+(p-1)(\ell-2)$ can be constructed in the same way.
+
+Now we show that $C$ is a longest cycle of $G$.
+
+We first observe that a cycle in $G$ cannot traverse all $H_i$:
+since $X_i$ is a vertex-cut in $G$, the subgraph $H_i$ can only be
+traversed by entering through $a_i$ and exiting through $b_i$.
+As a result, by construction, a cycle visiting all $H_i$ would have
+to traverse an even number of $H_i$ when $p$ is odd, a contradiction.
+
+Thus every longest cycle omits at least one $H_i$.
+
+Since $X_i$ is a vertex-cut, omitting $H_i$ loses all vertices
+$V(H_i)\setminus V(X_i)$.
+
+% ------------------------------------------------------------------
+% P2
+%
+% Add a lemma here proving that a longest cycle MUST traverse
+% at least one H-path.
+%
+% This rules out the cycle consisting solely of the two subdivided
+% rings.
+%
+% (You mentioned this was your eureka moment.)
+% ------------------------------------------------------------------
+
+% MOVE P4 HERE
+
+cycle to worry about:
+all $D_{a,i}$ and $D_{b,i}$ except for $i=1$,
+together with $H_i$ and $H_{i+1}$.
+
+Length:
+
+\[
+2(d-1)(p-1)+2(\ell-2).
+\]
+
+% ------------------------------------------------------------------
+% P4
+%
+% Explicitly state:
+%
+% L_same = 2(d-1)(p-1)+2(\ell-2)
+%
+% L_zig  = (pd-1)+(p-1)(\ell-2)
+%
+% Then say:
+%
+% "The zig-zag cycle is longest whenever
+% L_same < L_zig."
+%
+% ------------------------------------------------------------------
+
+As a result,
 
 \begin{align*}
-{}      && 2(d-1)(p-1) + 2(\ell-2)      &< (pd-1) + (p-1)(\ell-2) \\
-\iff\;  && 2dp - 2d - 2p + 2\ell - 2    &< pd + p\ell - 2p - \ell + 1 \\
-\iff\;  && dp - 2d + 3\ell - p\ell - 3  &< 0 \\
-\iff\;  && d(p-2) + \ell(3-p) - 3       &< 0 \\
-\iff\;  && d(p-2)                       &< \ell(p-3) + 3.
+{}      && 2(d-1)(p-1)+2(\ell-2)
+        &< (pd-1)+(p-1)(\ell-2)\\
+\iff\;  && 2dp-2d-2p+2\ell-2
+        &< pd+p\ell-2p-\ell+1\\
+\iff\;  && dp-2d+3\ell-p\ell-3
+        &<0\\
+\iff\;  && d(p-2)+\ell(3-p)-3
+        &<0\\
+\iff\;  && d(p-2)
+        &<\ell(p-3)+3.
 \end{align*}
 
-%$\{a_i, a_{i+1}\}$ vertex cut,
-%$\{b_i, b_{i+1}\}$ vertex cut,
-%$\{a_i, b_i\}$ vertex cut.
-%Any cycle going through $x \in A B$ must avoid one of three paths.
+% ------------------------------------------------------------------
+% P5 (Conclusion)
+%
+% State:
+%
+% Therefore, whenever
+%
+%   d(p-2) < \ell(p-3)+3,
+%
+% every longest cycle is necessarily of Type I (zig-zag).
+%
+% Since for every vertex we constructed such a longest cycle avoiding
+% that vertex, the intersection of all longest cycles is empty.
+%
+% End with the theorem.
+% ------------------------------------------------------------------
+
+% Old notes:
+% {a_i,a_{i+1}} is a vertex cut.
+% {b_i,b_{i+1}} is a vertex cut.
+% {a_i,b_i} is a vertex cut.
 
 %\lipsum[78]
 
