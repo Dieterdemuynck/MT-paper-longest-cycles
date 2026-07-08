@@ -49,11 +49,15 @@ $B_i = {b_i,b_{i+1}}$, as each of these are vertex-cuts of the graph.
 %
 % This is the local structural lemma used everywhere later.
 
-These sets being vertex-cuts has the consequence that any cycle going
-through$a_i$ must either continue through both adjacent $D_{a,i-1}$ and
-$D_{a,i}$ paths or through one of the aforementioned paths and $H_i$, with the
-exception of cycles fully contained within any of the three aforementioned
-paths. An analogous reasoning can be used for cycles going through $b_i$.
+These sets being vertex-cuts has the consequence that any cycle going through
+any internal vertex of $D_{a_i}$, $D_{b,i}$, or $H_i$ must pass through $A_i$,
+$B_i$, resp. $X_i$. Alongside this condition, we also have that $D_{a,i-1}$,
+$D_{a,i}$, and $H_i$ are the only paths connected to any $a_i$, and thus every
+cycle containing $a_i$ must either continue through both adjacent $D_{a,i-1}$
+and $D_{a,i}$ paths or through one of the aforementioned paths and $H_i$. The
+only exception to this are cycles fully contained within one of these paths,
+but we can safely ignore these as these cannot be longest cycles. An analogous
+reasoning can be used for cycles going through $b_i$.
 
 %
 % ------------------------------------------------------------------
@@ -81,10 +85,11 @@ $$
 These cannot be the longest cycles of the graph, as one can create a longer
 cycle by picking any $i$, removing the internal nodes of the path $D_{a,i}$
 resp. $D_{b_i}$, and creating a new cycle through $H_i$, $D_{b,i}$ resp.
-$D_{a_i}$, and $H_{i+1}$. This removes $d-2$ nodes, but introduces $2(l-2)+d$.
-This cycle is larger when $d-2 < 2(\ell-2)+d$, or simply when $\ell>1$, which
-follows from the condition on $\ell$ during construction. As a result, any
-longest cycle must contain at least one $H_i$.
+$D_{a_i}$, and $H_{i+1}$. The original cycle has length $p(d-1)$, while this
+new cycle has length $p(d-1)+2(l-1)$. As a result, this new cycle is at least
+as large as the former cycle when $l\ge1$, which follows from the condition on
+$\ell$ during construction. As a result, any longest cycle must contain at
+least one $H_i$.
 
 \todo{Add a figure for clarity}
 \todo{"condition on $\ell$"}
@@ -96,12 +101,23 @@ longest cycle must contain at least one $H_i$.
 %   Type II = same direction.
 %
 
-If a cycle traverses an $H_i$ path, it must enter at $a_i$ from either the
-$D_{a,i}$ or $D_{a,i-1}$ paths, and leave at $b_i$ through either $D_{b,i}$ or $D_{b,i-1}$. We now show there are two types of cycles these choices create.
+If a cycle traverses an $H_i$, it must enter at $a_i$ from either
+$D_{a,i}$ or $D_{a,i-1}$, and leave at $b_i$ through either $D_{b,i}$ or $D_{b,i-1}$. We now show there are two types of cycles these choices create.
 
-\paragraph{Same-side cycles}
-A cycle can enter and leave an $H_i$ path on the same side, either through $D_{a,i-1}$ and $D_{b,i-1}$ or through $D_{a,i}$ and $D_{b,i}$. For simplicity, assume a cycle $C$ traverses $H_0$, $D_{a,0}$, and $D_{b,0}$. At $a_1$, this cycle now has two choices: to either traverse $H_1$, closing the cycle, or to traverse $D_{a,1}$. The latter choice leaves the cycle no other choice at $b_i$, since traversing $H_1$ would close the cycle prematurely, so $D_{b,1}$ must be traversed. We then again have the same choice at $a_2$. One can see this choice of traversing the $D$ paths as extending the closed cycle of the former choice (with length $2\ell+2d-4$) with $2d-2$ vertices. \todo{Figure}
-This choice of extending repeats up until $a_{p-1}$, meaning the longest same-side cycle through $H_0$, $D_{a,0}$, and $D_{b,0}$ has a length of $2\ell-2+(p-1)(d-1)$, and traverses all vertices
+\paragraph{Same-direction cycles}
+A cycle can enter and leave an $H_i$ in the same direction, either through
+$D_{a,i-1}$ and $D_{b,i-1}$ or through $D_{a,i}$ and $D_{b,i}$. For simplicity,
+assume a cycle $C$ traverses $H_0$, $D_{a,0}$, and $D_{b,0}$. At $a_1$, there
+are two options: to either traverse $H_1$, closing the cycle, or to traverse
+$D_{a,1}$. The latter option disallows any traversal of $H_1$, and therefore
+forces the choice at $b_i$ to traverse $D_{b,1}$. We then again have the same
+options for traversal at $a_2$.
+One can see this choice of traversing $D_{a,i}$ and $D_{b,i}$ instead of $H_i$
+as extending the otherwise closed cycle with $2d-2$ vertices.
+\todo{Figure}
+This choice of extending repeats up until $a_{p-1}$, meaning the longest
+same-direction cycle through $H_0$, $D_{a,0}$, and $D_{b,0}$ has a length of
+$2\ell-2+(p-1)(d-1)$, and traverses all vertices
 
 $$
 \bigcup_{i \in \mathbb{Z}_p \setminus \{p-1\}}V(D_{a,i})
@@ -113,10 +129,16 @@ V(H_0)
 V(H_{p-1})
 $$
 
-The reasoning for $D_{a,-1}$ and $D_{b,-1}$, and for other $H_i$ paths, is analogous. Note that if this type of cycle is the longest cycle of the graph, all vertices $a_i$ and $b_i$ meet all longest cycles.
+The reasoning for $D_{a,-1}$ and $D_{b,-1}$, and for other $H_i$ paths, is
+analogous. Note that if this type of cycle is the longest cycle of the graph,
+all vertices $a_i$ and $b_i$ meet all longest cycles.
 
-\paragraph{Opposite-side cycles}
-A cycle can also enter and leave an $H_i$ path on opposite sides, either through $D_{a,i-1}$ and $D_{b,i}$ or through $D_{a,i}$ and $D_{b,i-1}$.
+\paragraph{Opposite-direction cycles}
+The only other option for a cycle traversing $H_i$ is to enter and leave
+$H_i$ in opposite directions, either through $D_{a,i-1}$ and $D_{b,i}$ or
+through $D_{a,i}$ and $D_{b,i-1}$. Note that this cycle will leave all
+traversed $H_i$ in opposite directions, as otherwise we would be in the
+previous case of same-direction cycles.
 
 % Then prove these choices propagate around the graph.
 %
@@ -131,18 +153,25 @@ A cycle can also enter and leave an $H_i$ path on opposite sides, either through
 % Everything after this point becomes a length comparison.
 % ------------------------------------------------------------------
 
+% ------------------------------------------------------------------
+% U1
+%
+% Construct a cycle similar to the same-side construction, showing
+% longest traverses all but one H_i
+%
+% ------------------------------------------------------------------
+
 We now show that there exists a cycle $C$ of length
 $(pd-1)+(p-1)(\ell-2)$ omitting any vertex $v\in V(G)$.
 To avoid unnecessarily complicated indices, consider the two vertices
-$v_l\in V(H_1)\setminus\{b_1\}$ and
-$v_d\in V(D_{a,1})\setminus\{a_2\}$.
+$v_l\in V(H_0)\setminus\{b_0\}$ and $v_d\in V(D_{a,0})\setminus\{a_1\}$.
 
 Consider the cycle
 
 $$
 C=
 \left(
-\bigcup_{i\neq1}H_i
+\bigcup_{i\neq0}H_i
 \right)
 \cup
 \left(
@@ -154,49 +183,27 @@ C=
 \right).
 $$
 
-\todo{Split this definition over multiple lines if it becomes longer.}
+which omits both vertices $v_l$ and $v_d$. For all other vertices, a cycle of
+length $(pd-1)+(p-1)(\ell-2)$ can be constructed in the same way.
 
-which omits both vertices $v_l$ and $v_d$.
-
-For all other vertices, a cycle of length
-$(pd-1)+(p-1)(\ell-2)$ can be constructed in the same way.
-
-Now we show that $C$ is a longest cycle of $G$.
-
+Now we show that $C$ is a longest opposite-direction cycle of $G$.
 We first observe that a cycle in $G$ cannot traverse all $H_i$:
 since $X_i$ is a vertex-cut in $G$, the subgraph $H_i$ can only be
 traversed by entering through $a_i$ and exiting through $b_i$.
-As a result, by construction, a cycle visiting all $H_i$ would have
-to traverse an even number of $H_i$ when $p$ is odd, a contradiction.
-
-Thus every longest cycle omits at least one $H_i$.
-
-Since $X_i$ is a vertex-cut, omitting $H_i$ loses all vertices
+As a result, a cycle visiting all $H_i$ would have to traverse an even number
+of $H_i$ while $p$ is odd, a contradiction. Thus every longest cycle omits at
+least one $H_i$. Since $X_i$ is a vertex-cut, omitting $H_i$ loses all vertices
 $V(H_i)\setminus V(X_i)$.
 
 % ------------------------------------------------------------------
-% P2
+% U0-DELETE-ME
 %
-% Add a lemma here proving that a longest cycle MUST traverse
-% at least one H-path.
+% Follow the same structure as in C. T. Zamfirescu's proof
 %
-% This rules out the cycle consisting solely of the two subdivided
-% rings.
-%
-% (You mentioned this was your eureka moment.)
 % ------------------------------------------------------------------
 
-% MOVE P4 HERE
-
-cycle to worry about:
-all $D_{a,i}$ and $D_{b,i}$ except for $i=1$,
-together with $H_i$ and $H_{i+1}$.
-
-Length:
-
-\[
-2(d-1)(p-1)+2(\ell-2).
-\]
+AAAAAAAAAAAAAAAAAAAAAAA
+Q.E.D.
 
 % ------------------------------------------------------------------
 % P4
@@ -218,15 +225,15 @@ As a result,
 
 \begin{align*}
 {}      && 2(d-1)(p-1)+2(\ell-2)
-        &< (pd-1)+(p-1)(\ell-2)\\
+        &\le (pd-1)+(p-1)(\ell-2)\\
 \iff\;  && 2dp-2d-2p+2\ell-2
-        &< pd+p\ell-2p-\ell+1\\
+        &\le pd+p\ell-2p-\ell+1\\
 \iff\;  && dp-2d+3\ell-p\ell-3
-        &<0\\
+        &\le0\\
 \iff\;  && d(p-2)+\ell(3-p)-3
-        &<0\\
+        &\le0\\
 \iff\;  && d(p-2)
-        &<\ell(p-3)+3.
+        &\le\ell(p-3)+3.
 \end{align*}
 
 % ------------------------------------------------------------------
