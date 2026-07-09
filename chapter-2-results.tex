@@ -52,13 +52,14 @@ $B_i = {b_i,b_{i+1}}$, as each of these are vertex-cuts of the graph.
 These sets being vertex-cuts has the consequence that any cycle going through
 any internal vertex of $D_{a_i}$, $D_{b,i}$, or $H_i$ must pass through $A_i$,
 $B_i$, resp. $X_i$. Alongside this condition, we also have that $D_{a,i-1}$,
-$D_{a,i}$, and $H_i$ are the only paths connected to any $a_i$, and thus every
-cycle containing $a_i$ must either continue through both adjacent $D_{a,i-1}$
-and $D_{a,i}$ paths or through one of the aforementioned paths and $H_i$. The
-only exception to this are cycles fully contained within one of these paths,
-but we can safely ignore these as these cannot be longest cycles. An analogous
-reasoning can be used for cycles going through $b_i$.
-
+$D_{a,i}$, and $H_i$ are the only subgraphs connected to any $a_i$, and thus
+every cycle containing $a_i$ must either continue through both adjacent
+$D_{a,i-1}$ and $D_{a,i}$ subgraphs, or through exactly one of the
+aforementioned subgraphs and $H_i$. The only exception to this are cycles fully
+contained within one ofthese subgraphs, but we can safely ignore these as these
+cannot be longestcycles. An analogous reasoning can be used for cycles going
+through $b_i$. 
+% TODO: Paths? Only paths connected to a_i? 
 %
 % ------------------------------------------------------------------
 
@@ -102,7 +103,8 @@ least one $H_i$.
 %
 
 If a cycle traverses an $H_i$, it must enter at $a_i$ from either
-$D_{a,i}$ or $D_{a,i-1}$, and leave at $b_i$ through either $D_{b,i}$ or $D_{b,i-1}$. We now show there are two types of cycles these choices create.
+$D_{a,i}$ or $D_{a,i-1}$, and leave at $b_i$ through either $D_{b,i}$ or
+$D_{b,i-1}$. We now show there are two types of cycles these choices create.
 
 \paragraph{Same-direction cycles}
 A cycle can enter and leave an $H_i$ in the same direction, either through
@@ -136,9 +138,9 @@ all vertices $a_i$ and $b_i$ meet all longest cycles.
 \paragraph{Opposite-direction cycles}
 The only other option for a cycle traversing $H_i$ is to enter and leave
 $H_i$ in opposite directions, either through $D_{a,i-1}$ and $D_{b,i}$ or
-through $D_{a,i}$ and $D_{b,i-1}$. Note that this cycle will leave all
-traversed $H_i$ in opposite directions, as otherwise we would be in the
-previous case of same-direction cycles.
+through $D_{a,i}$ and $D_{b,i-1}$.
+% Note that this cycle will leave all traversed $H_i$ in opposite directions,
+% as otherwise we would be in the previous case of same-direction cycles.
 
 % Then prove these choices propagate around the graph.
 %
@@ -159,14 +161,31 @@ previous case of same-direction cycles.
 % Construct a cycle similar to the same-side construction, showing
 % longest traverses all but one H_i
 %
+
+Say a cycle traversed $H_0$ and $D_{a,0}$. There are again two options at
+$a_1$: to traverse $D_{a,1}$, or to traverse $H_1$. In the latter option, the
+traversal of $D_{b,1}$ is forced, as the only other option to traverse
+$D_{b,0}$ would result in the same-side case from before. From then on, this
+option repeats: at any endpoint $b_i$, either $D_{b,i}$ is traversed, or $H_i$
+and $D_{a,i}$ are traversed, and analogous for endpoints $a_i$, up until
+$i=p-1$. There, $D_{b,p-1}$ must be traversed to complete the cycle, either
+from $a_{p-1}$ through $H_{p-1}$, or directly from $b_{p-1}$. In total, every
+$H_i$ traversed this way adds $d+\ell-2$ vertices to the cycle (including
+$H_0$, where $b_0$ is counted from the traversal of $D_{b,p-1}$), while every
+$H_i$ avoided adds only $d-1$ vertices.
+
+By construction, a cycle in $G$ cannot traverse all $H_i$. Since $X_i$ is a
+vertex-cut in $G$, the subgraph $H_i$ can only be traversed by entering through
+$a_i$ and exiting through $b_i$. As a result, a cycle must visit an even number
+of $H_i$'s. Since $p$ is odd, at least one $H_i$ must be avoided. Thus, the
+largest opposite-side cycle must traverse all but one $H_i$, resulting in a
+length of $(p-1)(d+\ell-2) + (d-1)$. An example of such a cycle is the cycle
+%
 % ------------------------------------------------------------------
-
-We now show that there exists a cycle $C$ of length
-$(pd-1)+(p-1)(\ell-2)$ omitting any vertex $v\in V(G)$.
-To avoid unnecessarily complicated indices, consider the two vertices
-$v_l\in V(H_0)\setminus\{b_0\}$ and $v_d\in V(D_{a,0})\setminus\{a_1\}$.
-
-Consider the cycle
+% We now show that there exists a cycle $C$ of length
+% $(pd-1)+(p-1)(\ell-2)$ omitting any vertex $v\in V(G)$.
+% To avoid unnecessarily complicated indices, consider the two vertices
+% $v_l\in V(H_0)\setminus\{b_0\}$ and $v_d\in V(D_{a,0})\setminus\{a_1\}$.
 
 $$
 C=
@@ -183,17 +202,18 @@ C=
 \right).
 $$
 
-which omits both vertices $v_l$ and $v_d$. For all other vertices, a cycle of
-length $(pd-1)+(p-1)(\ell-2)$ can be constructed in the same way.
+which omits all vertices $V(H_0)\setminus\{b_0\}$ and
+$V(D_{a,0})\setminus\{a_1\}$. For all other vertices, a cycle of length
+$(p-1)(d+\ell-2) + (d-1)$ can be constructed in the same way.
 
-Now we show that $C$ is a longest opposite-direction cycle of $G$.
-We first observe that a cycle in $G$ cannot traverse all $H_i$:
-since $X_i$ is a vertex-cut in $G$, the subgraph $H_i$ can only be
-traversed by entering through $a_i$ and exiting through $b_i$.
-As a result, a cycle visiting all $H_i$ would have to traverse an even number
-of $H_i$ while $p$ is odd, a contradiction. Thus every longest cycle omits at
-least one $H_i$. Since $X_i$ is a vertex-cut, omitting $H_i$ loses all vertices
-$V(H_i)\setminus V(X_i)$.
+% Now we show that $C$ is a longest opposite-direction cycle of $G$.
+% We first observe that a cycle in $G$ cannot traverse all $H_i$:
+% since $X_i$ is a vertex-cut in $G$, the subgraph $H_i$ can only be
+% traversed by entering through $a_i$ and exiting through $b_i$.
+% As a result, a cycle visiting all $H_i$ would have to traverse an even number
+% of $H_i$ while $p$ is odd, a contradiction. Thus every longest cycle omits at
+% least one $H_i$. Since $X_i$ is a vertex-cut, omitting $H_i$ loses all vertices
+% $V(H_i)\setminus V(X_i)$.
 
 % ------------------------------------------------------------------
 % U0-DELETE-ME
@@ -201,9 +221,6 @@ $V(H_i)\setminus V(X_i)$.
 % Follow the same structure as in C. T. Zamfirescu's proof
 %
 % ------------------------------------------------------------------
-
-AAAAAAAAAAAAAAAAAAAAAAA
-Q.E.D.
 
 % ------------------------------------------------------------------
 % P4
