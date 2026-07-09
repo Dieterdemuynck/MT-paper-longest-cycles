@@ -7,26 +7,24 @@
 
 \section{New Values for RQ2}
 
-\todo{currently just writing down whatever I think of}
-
 \subsection{Proof}
 
 \todo{"as shown before"}
-\todo{Similar to proof as paper Zamfirescu}
 
 % P0: Add a short introductory paragraph.
 % Explain that the proof follows the strategy of Zamfirescu's proof,
 % but the additional subdivision of the D-paths introduces a second
 % possible type of long cycle, which must be analysed separately.
 
-Take a $p,\ell$ tube graph as shown before, with $p$ odd.
-\todo{Does it need to be odd for this proof?}
-For simplicity, from here on out, let any use of a numerical index be
-an integer modulo $p$, such that for example $a_0$ = $a_p$.
-Subdivide all edges $(a_i,a_{i+1})$ and $(b_i,b_{i+1})$ until each
-subdivided edge has a total of $d$ vertices, including the original vertices.
-We denote the path on these vertices from $a_i$ to $a_{i+1}$ by $D_{a,i}$,
-and similarly the path from $b_i$ to $b_{i+1}$ by $D_{b,i}$.
+Take a $p,\ell$ tube graph as shown before, with $p$ odd. For simplicity, from
+here on out, let any use of a numerical index be an integer modulo $p$, such
+that for example $a_0$ = $a_p$. Subdivide all edges $(a_i,a_{i+1})$ and
+$(b_i,b_{i+1})$ until each subdivided edge has a total of $d$ vertices,
+including the original vertices. We denote the path on these vertices from
+$a_i$ to $a_{i+1}$ by $D_{a,i}$, and similarly the path from $b_i$ to $b_{i+1}$
+by $D_{b,i}$.
+\todo{footnote: these paths may each have additional edges, and the resulting proof does not change}
+
 % ------------------------------------------------------------------
 % P1 (Definitions)
 %
@@ -48,18 +46,17 @@ $B_i = {b_i,b_{i+1}}$, as each of these are vertex-cuts of the graph.
 % Do the analogous statement for b_i.
 %
 % This is the local structural lemma used everywhere later.
-
 These sets being vertex-cuts has the consequence that any cycle going through
 any internal vertex of $D_{a_i}$, $D_{b,i}$, or $H_i$ must pass through $A_i$,
 $B_i$, resp. $X_i$. Alongside this condition, we also have that $D_{a,i-1}$,
-$D_{a,i}$, and $H_i$ are the only subgraphs connected to any $a_i$, and thus
+$D_{a,i}$, and $H_i$ are the only subgraphs connected to $a_i$, and thus
 every cycle containing $a_i$ must either continue through both adjacent
 $D_{a,i-1}$ and $D_{a,i}$ subgraphs, or through exactly one of the
 aforementioned subgraphs and $H_i$. The only exception to this are cycles fully
-contained within one ofthese subgraphs, but we can safely ignore these as these
-cannot be longestcycles. An analogous reasoning can be used for cycles going
+contained within one of these subgraphs, but we can safely ignore these as these
+cannot be longest cycles. An analogous reasoning can be used for cycles going
 through $b_i$. 
-% TODO: Paths? Only paths connected to a_i? 
+% TODO: "the only subgraphs connected to $a_i$", is this terminology correct?
 %
 % ------------------------------------------------------------------
 
@@ -84,13 +81,12 @@ $$
 $$
 
 These cannot be the longest cycles of the graph, as one can create a longer
-cycle by picking any $i$, removing the internal nodes of the path $D_{a,i}$
-resp. $D_{b_i}$, and creating a new cycle through $H_i$, $D_{b,i}$ resp.
-$D_{a_i}$, and $H_{i+1}$. The original cycle has length $p(d-1)$, while this
-new cycle has length $p(d-1)+2(l-1)$. As a result, this new cycle is at least
-as large as the former cycle when $l\ge1$, which follows from the condition on
-$\ell$ during construction. As a result, any longest cycle must contain at
-least one $H_i$.
+cycle by picking any $i$, removing the internal nodes of $D_{a,i}$ resp.
+$D_{b_i}$, and creating a new cycle through $H_i$, $D_{b,i}$ resp. $D_{a_i}$,
+and $H_{i+1}$. The original cycle has length $p(d-1)$, while this new cycle has
+length $p(d-1)+2(l-1)$. As a result, this new cycle is at least as large as the
+former cycle when $l\ge1$, which follows from the condition on $\ell$ during
+construction. As a result, any longest cycle must contain at least one $H_i$.
 
 \todo{Add a figure for clarity}
 \todo{"condition on $\ell$"}
@@ -131,7 +127,7 @@ V(H_0)
 V(H_{p-1})
 $$
 
-The reasoning for $D_{a,-1}$ and $D_{b,-1}$, and for other $H_i$ paths, is
+The reasoning for $D_{a,-1}$ and $D_{b,-1}$, and for other $H_i$'s, is
 analogous. Note that if this type of cycle is the longest cycle of the graph,
 all vertices $a_i$ and $b_i$ meet all longest cycles.
 
@@ -238,20 +234,22 @@ $(p-1)(d+\ell-2) + (d-1)$ can be constructed in the same way.
 %
 % ------------------------------------------------------------------
 
-As a result,
+\paragraph{Length comparison and conclusion}
+We've determined there are two types of cycles with the potential of being
+longest cycles, the length of which are $2\ell-2+(p-1)(d-1)$ for same-direction
+cycles and $(p-1)(d+\ell-2) + (d-1)$ for opposite-direction cycles. Only in the
+latter case can we construct a cycle for every vertex avoiding that vertex. As
+a result, there exists a 2-connected, planar graph $G$ with circumference $(p-1)(d+\ell-2) + (d-1)$ for which no vertex
+meets every longest cycle if
 
 \begin{align*}
-{}      && 2(d-1)(p-1)+2(\ell-2)
-        &\le (pd-1)+(p-1)(\ell-2)\\
-\iff\;  && 2dp-2d-2p+2\ell-2
-        &\le pd+p\ell-2p-\ell+1\\
-\iff\;  && dp-2d+3\ell-p\ell-3
-        &\le0\\
-\iff\;  && d(p-2)+\ell(3-p)-3
-        &\le0\\
+{}      && 2\ell-2+(p-1)(d-1)
+        &\le (p-1)(d+\ell-2) + (d-1)\\
 \iff\;  && d(p-2)
-        &\le\ell(p-3)+3.
+        &\le \ell(p-3)+3.
 \end{align*}
+\todo{quick check with wolfram alpha}
+% p-d <= l(p-3)+2
 
 % ------------------------------------------------------------------
 % P5 (Conclusion)
