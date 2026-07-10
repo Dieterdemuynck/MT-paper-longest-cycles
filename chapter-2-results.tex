@@ -1,9 +1,8 @@
 \chapter{Results}
 \label{cha:2}
-\todo{Results}
+\todo{Results from running experiments}
 
 \todo{intro}
-%\lipsum[77]
 
 \section{New Values for RQ2}
 
@@ -18,13 +17,18 @@
 
 \todo{REMEMBER: definition of l is different from paper Zamfirescu: here it is one less}
 
+\todo{I have a few todo's for figures, I'm wondering how many I should actually add}
+
+\todo{Likely need a citation to Prof. Zamfirescu's paper for the similarity in the proofs}
+
 Take a $p,\ell$ tube graph as shown before, with $p$ odd. For simplicity, from
 here on out, let any use of a numerical index be an integer modulo $p$, such
 that for example $a_0$ = $a_p$. Subdivide all edges $(a_i,a_{i+1})$ and
 $(b_i,b_{i+1})$ until each subdivided edge has a total of $d+1$ vertices,
-including the original vertices (i.e. forms a path of length $d$). We denote the path on these vertices from
-$a_i$ to $a_{i+1}$ by $D_{a,i}$, and similarly the path from $b_i$ to $b_{i+1}$
-by $D_{b,i}$.
+including the original vertices (i.e. forms a path of length $d$). We denote
+this graph as $G_{p,\ell,d}$, and denote the path on these vertices from $a_i$
+to $a_{i+1}$ by $D_{a,i}$, and similarly the path from $b_i$ to $b_{i+1}$ by
+$D_{b,i}$.
 \todo{footnote: these paths may each have additional edges, and the resulting proof does not change}
 
 % ------------------------------------------------------------------
@@ -49,7 +53,7 @@ $B_i = {b_i,b_{i+1}}$, as each of these are vertex-cuts of the graph.
 %
 % This is the local structural lemma used everywhere later.
 Since these sets are vertex-cuts, any cycle going through an internal vertex or
-edge of $D_{a_i}$, $D_{b,i}$, or $H_i$ (i.e. traverses these subgraphs) must
+edge of $D_{a,i}$, $D_{b,i}$, or $H_i$ (i.e. traverses these subgraphs) must
 also contain $A_i$, $B_i$, resp. $X_i$. Furthermore, the only subgraphs
 incident on $a_i$ are $D_{a,i-1}$, $D_{a,i}$, and $H_i$, and thus every cycle
 containing $a_i$ must either continue through both adjacent $D_{a,i-1}$ and
@@ -73,7 +77,7 @@ there are two types of cycles containing this $H_i$.
 \paragraph{$H_i$ requirement}
 If we were to remove all internal nodes and edges belonging to $H_i$, we get
 two disjoint cycles. As such, the longest cycles which do not traverse any
-$H_i$ are the two cycles
+$H_i$ are contained within the two subgraphs
 
 $$
 \bigcup_{i \in \mathbb{Z}_p}D_{a,i},\;
@@ -82,7 +86,7 @@ $$
 
 These cannot be the longest cycles of the graph, as one can create a longer
 cycle by picking any $i$, removing the internal nodes of $D_{a,i}$ resp.
-$D_{b_i}$, and creating a new cycle through $H_i$, $D_{b,i}$ resp. $D_{a_i}$,
+$D_{b,i}$, and creating a new cycle through $H_i$, $D_{b,i}$ resp. $D_{a,i}$,
 and $H_{i+1}$. The original cycle has length $pd$, while this new cycle has
 length $pd+2l$. As a result, this new cycle is larger than the former cycle,
 since by construction $\ell > 0$. As a result, any longest cycle must contain
@@ -114,7 +118,7 @@ $D_{a,i}$ and $D_{b,i}$ instead of $H_i$ as extending the otherwise closed
 cycle with $2d$ vertices.
 \todo{Figure}
 Repeating this argument successively for $a_2$, $a_3$, \dots, $a_{p-1}$ yields
-longest same-direction cycle through $H_0$, $D_{a,0}$, and $D_{b,0}$ with
+the longest same-direction cycle through $H_0$, $D_{a,0}$, and $D_{b,0}$ with
 length $(p-1)(2d)+2\ell$, and traverses all vertices
 
 $$
@@ -173,8 +177,7 @@ By construction, a cycle in $G$ cannot traverse all $H_i$. Since $X_i$ is a
 vertex-cut in $G$, the subgraph $H_i$ can only be traversed by entering through
 $a_i$ and exiting through $b_i$. As a result, a cycle must visit an even number
 of $H_i$'s. Since $p$ is odd, at least one $H_i$ must be avoided. Thus, the
-largest opposite-side cycle must traverse all but one $H_i$, resulting in a
-length of $(p-1)(d+\ell) + (d)$. An example of such a cycle is the cycle
+largest opposite-side cycle must traverse (1) a maximal amount of $H_i$'s, and (2) at most all but one $H_i$. We can construct a cycle $C$ avoiding exactly one $H_i$, with length $(p-1)(d+\ell) + d$. Put
 %
 % ------------------------------------------------------------------
 % We now show that there exists a cycle $C$ of length
@@ -197,9 +200,10 @@ C=
 \right).
 $$
 
-which omits all vertices $V(H_0)\setminus\{b_0\}$ and
+where $C$ omits all vertices $V(H_0)\setminus\{b_0\}$ and
 $V(D_{a,0})\setminus\{a_1\}$. For all other vertices, a cycle of length
 $(p-1)(d+\ell)+d$ can be constructed in the same way.
+\todo{Maybe I should generalize this example cycle, rather than claiming other cycles can simply be constructed? I fear I might bring forth indexation hell}
 
 % Now we show that $C$ is a longest opposite-direction cycle of $G$.
 % We first observe that a cycle in $G$ cannot traverse all $H_i$:
