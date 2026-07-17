@@ -28,8 +28,18 @@ $(b_i,b_{i+1})$ until each subdivided edge has a total of $d+1$ vertices,
 including the original vertices (i.e. forms a path of length $d$). We denote
 this graph as $G_{p,\ell,d}$, and denote the path on these vertices from $a_i$
 to $a_{i+1}$ by $D_{a,i}$, and similarly the path from $b_i$ to $b_{i+1}$ by
-$D_{b,i}$.
-\todo{footnote: these paths may each have additional edges, and the resulting proof does not change}
+$D_{b,i}$. These subgraphs $D_{a,i}$, $D_{b,i}$, and $H_i$ may have any
+number of additional internal edges without effect on the proof.
+Figure \ref{fig:g532} shows an example graph $G_{5,3,2}$.
+
+\begin{figure}
+    \centering
+    \begin{tikzpicture}
+    \ExtendedTubeGraph{5}{3}{2}
+    \end{tikzpicture}
+    \caption{A graph $G_{p,\ell,d}$ with $p=5$,$\ell=3$,$d=2$}
+    \label{fig:g532}
+\end{figure}
 
 % ------------------------------------------------------------------
 % P1 (Definitions)
@@ -80,7 +90,7 @@ two disjoint cycles. As such, the longest cycles which do not traverse any
 $H_i$ are contained within the two subgraphs
 
 $$
-\bigcup_{i \in \mathbb{Z}_p}D_{a,i},\;
+\bigcup_{i \in \mathbb{Z}_p}D_{a,i}\; \text{and} \;
 \bigcup_{i \in \mathbb{Z}_p}D_{b,i}
 $$
 
@@ -91,9 +101,6 @@ and $H_{i+1}$. The original cycle has length $pd$, while this new cycle has
 length $pd+2l$. As a result, this new cycle is larger than the former cycle,
 since by construction $\ell > 0$. As a result, any longest cycle must contain
 at least one $H_i$.
-
-\todo{Add a figure for clarity}
-\todo{"condition on $\ell$"}
 
 % Define:
 %
@@ -110,13 +117,13 @@ $D_{b,i-1}$. We now show there are two types of cycles these choices create.
 A cycle can enter and leave an $H_i$ in the same direction, either through
 $D_{a,i-1}$ and $D_{b,i-1}$ or through $D_{a,i}$ and $D_{b,i}$. For simplicity,
 assume a cycle $C$ traverses $H_0$, $D_{a,0}$, and $D_{b,0}$. At $a_1$, there
-are two possibilities: to either traverse $H_1$, closing the cycle, or to
-traverse $D_{a,1}$. The latter option disallows any traversal of $H_1$, and
-therefore forces the choice at $b_i$ to traverse $D_{b,1}$. We then again have
-the same options for traversal at $a_2$. One can see this choice of traversing
-$D_{a,i}$ and $D_{b,i}$ instead of $H_i$ as extending the otherwise closed
-cycle with $2d$ vertices.
-\todo{Figure}
+are two possibilities: to either traverse $H_1$, closing the cycle as in Figure
+\ref{fig:same-side:closed}, or to traverse $D_{a,1}$. The latter option
+disallows any traversal of $H_1$, and therefore forces the choice at $b_i$ to
+traverse $D_{b,1}$, as shown in Figure \ref{fig:same-side:continued}. We then
+again have the same options for traversal at $a_2$. One can see this choice of
+traversing $D_{a,i}$ and $D_{b,i}$ instead of $H_i$ as extending the otherwise
+closed cycle with $2d$ vertices.
 Repeating this argument successively for $a_2$, $a_3$, \dots, $a_{p-1}$ yields
 the longest same-direction cycle through $H_0$, $D_{a,0}$, and $D_{b,0}$ with
 length $(p-1)(2d)+2\ell$, and traverses all vertices
@@ -133,6 +140,149 @@ $$
 
 The reasoning for $D_{a,-1}$ and $D_{b,-1}$, and for other $H_i$'s, is
 analogous. Note that all vertices $a_i$ and $b_i$ meet all these cycles.
+
+\begin{figure}
+    \centering
+
+    %=========================================================
+    % Version (1)
+    %=========================================================
+    \begin{subfigure}{0.45\textwidth}
+    \centering
+    \resizebox{\linewidth}{!}{
+    \begin{tikzpicture}[line cap=round,line join=round]
+
+    %---------------------------------------------------------
+    % Main vertices
+    %---------------------------------------------------------
+    \node[vertex,draw=red,label=above:$a_0$] (a0) at (0,2) {};
+    \node[vertex,draw=red,label=above:$a_1$] (a1) at (2,2) {};
+    \node[vertex,draw=red,label=above:$a_2$] (a2) at (4,2) {};
+
+    \node[vertex,draw=red,label=below:$b_0$] (b0) at (0,0) {};
+    \node[vertex,draw=red,label=below:$b_1$] (b1) at (2,0) {};
+    \node[vertex,draw=red!40,label=below:$b_2$] (b2) at (4,0) {};
+
+    %---------------------------------------------------------
+    % Continuation edges
+    %---------------------------------------------------------
+    \draw[dashed,lightgray] (-0.8,2)--(a0);
+    \draw[dashed,lightgray] (a2)--(4.8,2);
+
+    \draw[dashed,lightgray] (-0.8,0)--(b0);
+    \draw[dashed,lightgray] (b2)--(4.8,0);
+
+    %---------------------------------------------------------
+    % Horizontal edges
+    %---------------------------------------------------------
+    % D_{a,0}
+    \draw[red,very thick] (a0)--(a1);
+    \node[fill=white,inner sep=1pt,text=red] at (1,2) {//};
+
+    % D_{a,1}
+    \draw[red,very thick] (a1)--(a2);
+    \node[fill=white,inner sep=1pt,text=red] at (3,2) {//};
+
+    % D_{b,0}
+    \draw[red,very thick] (b0)--(b1);
+    \node[fill=white,inner sep=1pt,text=red] at (1,0) {//};
+
+    % D_{b,1}
+    \draw[red!40,very thick] (b1)--(b2);
+    \node[fill=white,inner sep=1pt,text=red!40] at (3,0) {//};
+
+    %---------------------------------------------------------
+    % Vertical edges
+    %---------------------------------------------------------
+    % H_0
+    \draw[red,very thick] (a0)--(b0);
+    \node[fill=white,inner sep=1pt,rotate=90,text=red] at (0,1) {//};
+
+    % H_1
+    \draw (a1)--(b1);
+    \node[fill=white,inner sep=1pt,rotate=90] at (2,1) {//};
+
+    % H_2
+    \draw (a2)--(b2);
+    \node[fill=white,inner sep=1pt,rotate=90] at (4,1) {//};
+
+    \end{tikzpicture}
+    }
+    \caption{}
+    \label{fig:same-side:continued}
+    \end{subfigure}
+    \hfill
+    %=========================================================
+    % Version (2)
+    %=========================================================
+    \begin{subfigure}{0.45\textwidth}
+    \centering
+    \resizebox{\linewidth}{!}{
+    \begin{tikzpicture}[line cap=round,line join=round]
+
+    %---------------------------------------------------------
+    % Main vertices
+    %---------------------------------------------------------
+    \node[vertex,draw=red,label=above:$a_0$] (a0) at (0,2) {};
+    \node[vertex,draw=red,label=above:$a_1$] (a1) at (2,2) {};
+    \node[vertex,label=above:$a_2$] (a2) at (4,2) {};
+
+    \node[vertex,draw=red,label=below:$b_0$] (b0) at (0,0) {};
+    \node[vertex,draw=red,label=below:$b_1$] (b1) at (2,0) {};
+    \node[vertex,label=below:$b_2$] (b2) at (4,0) {};
+
+    %---------------------------------------------------------
+    % Continuation edges
+    %---------------------------------------------------------
+    \draw[dashed,lightgray] (-0.8,2)--(a0);
+    \draw[dashed,lightgray] (a2)--(4.8,2);
+
+    \draw[dashed,lightgray] (-0.8,0)--(b0);
+    \draw[dashed,lightgray] (b2)--(4.8,0);
+
+    %---------------------------------------------------------
+    % Horizontal edges
+    %---------------------------------------------------------
+    % D_{a,0}
+    \draw[red,very thick] (a0)--(a1);
+    \node[fill=white,inner sep=1pt,text=red] at (1,2) {//};
+
+    % D_{a,1}
+    \draw (a1)--(a2);
+    \node[fill=white,inner sep=1pt] at (3,2) {//};
+
+    % D_{b,0}
+    \draw[red,very thick] (b0)--(b1);
+    \node[fill=white,inner sep=1pt,text=red] at (1,0) {//};
+
+    % D_{b,1}
+    \draw (b1)--(b2);
+    \node[fill=white,inner sep=1pt] at (3,0) {//};
+
+    %---------------------------------------------------------
+    % Vertical edges
+    %---------------------------------------------------------
+    % H_0
+    \draw[red,very thick] (a0)--(b0);
+    \node[fill=white,inner sep=1pt,rotate=90,text=red] at (0,1) {//};
+
+    % H_1
+    \draw[red,very thick] (a1)--(b1);
+    \node[fill=white,inner sep=1pt,rotate=90,text=red] at (2,1) {//};
+
+    % H_2
+    \draw (a2)--(b2);
+    \node[fill=white,inner sep=1pt,rotate=90] at (4,1) {//};
+
+    \end{tikzpicture}
+    }
+    \caption{}
+    \label{fig:same-side:closed}
+    \end{subfigure}
+
+    \caption{A graph segment of $G_{p,\ell,d}$ with the two possibilities at $a_1$ for cycle through $H_0$, $D_{a,0}$, and $D_{a,1}$.}
+    \label{fig:placeholder}
+\end{figure}
 
 \paragraph{Opposite-direction cycles}
 The only other option for a cycle traversing $H_i$ is to enter and leave
@@ -192,18 +342,66 @@ C=
 \right)
 \cup
 \left(
-\bigcup_{j\ \verb|even|}D_{a,j}
+\bigcup_{j\ \verb|even|}D_{b,j}
 \right)
 \cup
 \left(
-\bigcup_{k\ \verb|odd|}D_{b,k}
+\bigcup_{k\ \verb|odd|}D_{a,k}
 \right).
 $$
 
 where $C$ omits all vertices $V(H_0)\setminus\{b_0\}$ and
-$V(D_{a,0})\setminus\{a_1\}$. For all other vertices, a cycle of length
+$V(D_{a,0})\setminus\{a_1\}$. Figure \ref{fig:opposite-side:g532} shows this cycle for a graph $G_{5,3,2}$. For all other vertices, a cycle of length
 $(p-1)(d+\ell)+d$ can be constructed in the same way.
 \todo{Maybe I should generalize this example cycle, rather than claiming other cycles can simply be constructed? I fear I might bring forth indexation hell}
+
+\begin{figure}
+  \centering
+  \begin{tikzpicture}
+    \ExtendedTubeGraph{5}{3}{2}
+
+    \foreach \v in {
+    A1,DA1-1,A2,
+    H2-1,H2-2,B2,
+    DB2-1,B3,
+    H3-2,H3-1,A3,
+    DA3-1,A4,
+    H4-1,H4-2,B4,
+    DB4-1,B5,
+    H5-2,H5-1,A5,
+    DA5-1}{
+    \node[vertex,draw=red,fill=white] at (\v) {};
+    }
+    % Highlighted cycle
+    \draw[red, very thick]
+      (A1) --
+      (DA1-1) --
+      (A2) --
+      (H2-1) --
+      (H2-2) --
+      (B2) --
+      (DB2-1) --
+      (B3) --
+      (H3-2) --
+      (H3-1) --
+      (A3) --
+      (DA3-1) --
+      (A4) --
+      (H4-1) --
+      (H4-2) --
+      (B4) --
+      (DB4-1) --
+      (B5) --
+      (H5-2) --
+      (H5-1) --
+      (A5) --
+      (DA5-1) --
+      (A1);
+
+  \end{tikzpicture}
+  \caption{A longest opposite-direction cycle marked red in a graph $G_{5,3,2}$.}
+  \label{fig:opposite-side:g532}
+\end{figure}
 
 % Now we show that $C$ is a longest opposite-direction cycle of $G$.
 % We first observe that a cycle in $G$ cannot traverse all $H_i$:
@@ -242,8 +440,8 @@ We've determined there are two types of cycles with the potential of being
 longest cycles, the length of which are $(p-1)(2d)+2\ell$ for same-direction
 cycles and $(p-1)(d+\ell)+d$ for opposite-direction cycles. Only in the
 latter case can we construct a cycle for every vertex avoiding that vertex. As
-a result, there exists a 2-connected, planar graph $G$ with circumference $(p-1)(d+\ell)+d$ for which no vertex
-meets every longest cycle if
+a result, there exists a 2-connected, planar graph $G$ with circumference
+$(p-1)(d+\ell)+d$ for which no vertex meets every longest cycle if
 
 \begin{align*}
 {}      && (p-1)(2d)+2\ell
@@ -251,6 +449,8 @@ meets every longest cycle if
 \iff\;  && d(p-2)
         &\le \ell(p-3).
 \end{align*}
+
+\hfill $\square$
 
 % ------------------------------------------------------------------
 % P5 (Conclusion)

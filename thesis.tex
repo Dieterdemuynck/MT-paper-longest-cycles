@@ -42,14 +42,33 @@
 \newcommand{\todo}[1]{\textcolor{red}{[TODO: #1]}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Tube Graphs by Zamfirescu %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Graph Style Definitions %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\tikzset{
+  vertex/.style={
+    circle,
+    draw,
+    fill=white,
+    inner sep=2pt
+  },
+  edge/.style={
+    line width=0.8pt
+  },
+  smallvertex/.style={
+    circle,
+    draw,
+    fill=white,
+    inner sep=1.5pt
+  }
+}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Tube Graphs by Zamfirescu %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \usetikzlibrary{calc}
 
-% With help from ChatGPT:
 \newcommand{\TubeGraph}[2]{%
   % #1 = p (cycle length)
-  % #2 = l (vertices per connecting path)
+  % #2 = l (edges in each connecting path)
 
   \def\p{#1}
   \def\l{#2}
@@ -58,63 +77,162 @@
   \def\R{2}
   \def\r{1}
 
-  % Outer cycle vertices
+  % Outer cycle vertices (a_i)
   \foreach \i in {1,...,\p} {
-    \node[circle,draw,fill=white,inner sep=2pt]
-      (O\i) at ({90 - 360/\p * (\i-1)}:\R) {};
+    \node[vertex]
+      (A\i) at ({90 - 360/\p * (\i-1)}:\R) {};
   }
 
-  % Inner cycle vertices
+  % Inner cycle vertices (b_i)
   \foreach \i in {1,...,\p} {
-    \node[circle,draw,fill=white,inner sep=2pt]
-      (I\i) at ({90 - 360/\p * (\i-1)}:\r) {};
+    \node[vertex]
+      (B\i) at ({90 - 360/\p * (\i-1)}:\r) {};
   }
 
-  % Draw Outer cycle (without closing edge)
+  % Draw outer cycle
   \foreach \i [evaluate=\i as \next using int(\i+1)] in {1,...,\numexpr\p-1\relax} {
-    \draw (O\i) -- (O\next);
+    \draw (A\i) -- (A\next);
   }
 
-  % Draw Inner cycle (without closing edge)
+  % Draw inner cycle
   \foreach \i [evaluate=\i as \next using int(\i+1)] in {1,...,\numexpr\p-1\relax} {
-    \draw (I\i) -- (I\next);
+    \draw (B\i) -- (B\next);
   }
 
   % Closing edges
   \ifodd\p
-    % normal closing edges
-    \draw (O\p) -- (O1);
-    \draw (I\p) -- (I1);
+    \draw (A\p) -- (A1);
+    \draw (B\p) -- (B1);
   \else
-    % crossed closing edges
-    \draw (O\p) -- (I1);
-    \draw (I\p) -- (O1);
+    \draw (A\p) -- (B1);
+    \draw (B\p) -- (A1);
   \fi
 
-  % Subdivided connecting paths
+  % Connecting paths H_i
   \foreach \i in {1,...,\p} {
 
-    % start from outer vertex node
-    \def\prev{O\i}
+    \def\prev{A\i}
 
-    % internal subdivision vertices
-    \foreach \j in {1,...,\numexpr\l-2\relax} {
+    \foreach \j in {1,...,\numexpr\l-1\relax} {
 
-      \pgfmathsetmacro{\t}{\j/(\l-1)}
+      \pgfmathsetmacro{\t}{\j/\l}
 
-      \node[circle,draw,fill=white,inner sep=2pt]
-        (M\i-\j)
-        at ($(O\i)!\t!(I\i)$) {};
+      \node[vertex]
+        (H\i-\j)
+        at ($(A\i)!\t!(B\i)$) {};
 
-      % node-to-node connection
-      \draw (\prev) -- (M\i-\j);
+      \draw (\prev) -- (H\i-\j);
 
-      % update previous node
-      \xdef\prev{M\i-\j}
+      \xdef\prev{H\i-\j}
     }
 
-    % final edge to inner cycle
-    \draw (\prev) -- (I\i);
+    \draw (\prev) -- (B\i);
+  }
+}
+
+% Extended Tube Graphs
+\newcommand{\ExtendedTubeGraph}[3]{%
+  % #1 = p (cycle length)
+  % #2 = l (edges in each connecting path)
+  % #3 = d (edges in each cycle edge)
+
+  \pgfmathtruncatemacro{\P}{#1}
+  \pgfmathtruncatemacro{\L}{#2}
+  \pgfmathtruncatemacro{\D}{#3}
+
+  % Radii
+  \def\R{2}
+  \def\r{1}
+
+  % Outer cycle vertices
+  \foreach \i in {1,...,\P}{
+    \node[vertex]
+      (A\i)
+      at ({90-360/\P*(\i-1)}:\R) {};
+  }
+
+  % Inner cycle vertices
+  \foreach \i in {1,...,\P}{
+    \node[vertex]
+      (B\i)
+      at ({90-360/\P*(\i-1)}:\r) {};
+  }
+
+  % Outer cycle
+  \foreach \i in {1,...,\P}{
+    \pgfmathtruncatemacro{\next}{mod(\i,\P)+1}
+
+    \def\prev{A\i}
+
+    \foreach \j in {1,...,\numexpr\D-1\relax}{
+      \pgfmathsetmacro{\t}{\j/\D}
+
+      \node[vertex]
+        (DA\i-\j)
+        at ($(A\i)!\t!(A\next)$) {};
+
+      \draw (\prev) -- (DA\i-\j);
+
+      \xdef\prev{DA\i-\j}
+    }
+
+    \ifodd\P
+      \draw (\prev) -- (A\next);
+    \else
+      \ifnum\i=\P
+        \draw (\prev) -- (B1);
+      \else
+        \draw (\prev) -- (A\next);
+      \fi
+    \fi
+  }
+
+  % Inner cycle
+  \foreach \i in {1,...,\P}{
+    \pgfmathtruncatemacro{\next}{mod(\i,\P)+1}
+
+    \def\prev{B\i}
+
+    \foreach \j in {1,...,\numexpr\D-1\relax}{
+      \pgfmathsetmacro{\t}{\j/\D}
+
+      \node[vertex]
+        (DB\i-\j)
+        at ($(B\i)!\t!(B\next)$) {};
+
+      \draw (\prev) -- (DB\i-\j);
+
+      \xdef\prev{DB\i-\j}
+    }
+
+    \ifodd\P
+      \draw (\prev) -- (B\next);
+    \else
+      \ifnum\i=\P
+        \draw (\prev) -- (A1);
+      \else
+        \draw (\prev) -- (B\next);
+      \fi
+    \fi
+  }
+
+  % Connecting paths
+  \foreach \i in {1,...,\P}{
+    \def\prev{A\i}
+
+    \foreach \j in {1,...,\numexpr\L-1\relax}{
+      \pgfmathsetmacro{\t}{\j/\L}
+
+      \node[vertex]
+        (H\i-\j)
+        at ($(A\i)!\t!(B\i)$) {};
+
+      \draw (\prev) -- (H\i-\j);
+
+      \xdef\prev{H\i-\j}
+    }
+
+    \draw (\prev) -- (B\i);
   }
 }
 % End of Command for Tube Graphs %%%%%%%%%%%%%%%%%%%%%%%%
