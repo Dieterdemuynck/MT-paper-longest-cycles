@@ -9,28 +9,90 @@ In this chapter, we explain in detail what graph generators we used, the algorit
 
 \todo{Pipelining, generators to algorithm (with language choice) to output}
 
-Since the goal of this thesis is to exhaustively check a large number of graphs, an efficient implementation is required. Since we'll also use other programs to solve part of the problem (see section \ref{sec:generators} on graph generators), we chose to use pipelining on Linux to efficiently pass output from one program as input to another. The implementation of the algorithms must also be efficient, and for that reason, \texttt{C++} was chosen as the programming language to implement all algorithms discussed in section \ref{sec:algorithms}. To make analysis of the results easier, the output for both programs is put in a CSV format, with header. % I don't think this was written very well...
+Since the goal of this thesis is to exhaustively check a large number of graphs, an efficient implementation is required. Since we will also use other programs to solve part of the problem (see section~\ref{sec:generators} on graph generators), we chose to use pipelining on Linux to efficiently pass output from one program as input to another. The implementation of the algorithms must also be efficient, and for that reason, \texttt{C++} was chosen as the programming language to implement all algorithms discussed in section~\ref{sec:algorithms}. To make analysis of the results easier, the output for both programs is put in a CSV format, with header. % I don't think this was written very well...
 
 \section{Graph Generators}
 \label{sec:generators}
 
-Efficient but exhaustive graph generation is a difficult problem to solve. Writing a specialized graph generator specifically for this problem is expected to take the work of an entire master thesis as is\todo{source?}. When a graph generator has to generate a large magnitude of graphs, we want to only generate each graph once. In a nutshell, if we can rearrange a graph without removing or adding vertices or edges to get another graph, we call those graphs isomorphic. If not much care is put into generating each graph once, the same graph can easily be generated multiple times as isomorphic graphs, where for example simply the order of the nodes is different. Luckily, graph generation is an important field of research in computer sciences, and many graph generators have already been developed\todo{cite}\cite{article:jorik-jooken}, including some which we will use in this thesis.
+Efficient but exhaustive graph generation is a difficult problem to solve. A graph generator needs to be exhaustive (i.e. generate every graph in a certain category), while also avoiding generating isomorphic graphs. If not much care is put into generating each graph once, the same graph can easily be generated multiple times as isomorphic graphs, resulting in redundant computations. Many graph generators have already been made, each of which already took a lot of research\cite{article:jorik-jooken}. That is why, rather than making an attempt at our own graph generator specific for this problem, we use existing graph generators in this thesis.
 
 \subsection{Nauty and GenerateUHG}
 
-The \texttt{Nauty} package\todo{cite}\cite{lib:nauty} for example has a graph generator \texttt{geng} which can ``generate non-ismorphic very quickly''\cite{lib:nauty}, including specifically 2-connected graphs. It can also output its graphs in the \texttt{graph6} format, which is a compact ASCII string representation of graphs\todo{citation?}. This creates a useful graph generator for RQ\ref{rq1}.
+The \texttt{Nauty} package\cite{lib:nauty} has a graph generator \texttt{geng} which can ``generate non-ismorphic graphs very quickly''\cite{lib:nauty}, including specifically 2-connected graphs. It can also output its graphs in the \texttt{graph6} format, which is a compact ASCII string representation of graphs\todo{citation?}. This creates a useful graph generator for RQ\ref{rq1}.
 
-During the year we realised that it is likely that most of the generated 2-connected graphs are hamiltonian. Since a hamiltonian graph has a cycle that goes through all vertices of the graph, this would mean that the intersection of all longest cycles would simply be all vertices. We would thus like to avoid hamiltonian graphs completely. This is why, for RQ\ref{rq1}, we instead opted to use the Uniquely Hamiltonian Graphs generator\todo{cite}\cite{lib:UHG}, which holds a program \texttt{GenerateUHG} that allows us to generate graphs with a specific amount of hamiltonian cycles, in the \texttt{graph6} format. By setting that amount to 0, we only get non-hamiltonian graphs, which we suspect to have a much lower quantity of graphs than simply 2-connected graphs.
+During the year we realised that it is likely that most of the generated 2-connected graphs are hamiltonian, as seen in Table~\ref{tab:2con-nonhamil}.\todo{table with values} Since a hamiltonian graph has a cycle that goes through all vertices of the graph, this would mean that the intersection of all longest cycles would simply be all vertices. We would thus like to avoid hamiltonian graphs completely. This is why, for RQ\ref{rq1}, we instead opted to use the Uniquely Hamiltonian Graphs generator\cite{lib:UHG}, which holds a program \texttt{GenerateUHG} that allows us to generate graphs with a specific amount of hamiltonian cycles, in the \texttt{graph6} format. By setting that amount to 0, we only get non-hamiltonian graphs, which we suspect to have a much lower quantity of graphs than simply 2-connected graphs.
 
-Using this generator instead reintroduced the problem of making sure the graphs are 2-connected, since we could not add this condition to the generator's input. The \texttt{Nauty} package luckily also contains the program \texttt{pickg}, which lets us filter the output of another program. It takes \texttt{graph6} strings as input, and only outputs those strings for which the graph is 2-connected, given the correct parameters \todo{include parameters}. This program is very efficient compared to generation and the rest of the algorithm\todo{proof}, and therefore the use of \texttt{GenerateUHG} with \texttt{pickg} seems to be a good choice for the graph generation of RQ\ref{rq1}.
+\begin{table}
+  \caption{\todo{nonhamil counts \& fix width}Amount of 2-connected graphs\cite{data:integer-sequence} and nonhamiltonian graphs per order of the graph $n$}
+  \label{tab:2con-nonhamil}
+  \begin{tabular}{rrl}
+    \hline\\
+    $n$ & Number of 2-connected graph & Number of nonhamiltonian graphs \\
+    \hline \\
+    1 & 0 & 0 \\
+    2 & 1 & 0 \\
+    3 & 1 & 0 \\
+    4 & 3 & 0 \\
+    5 & 10 & 0 \\
+    6 & 56 & 0 \\
+    7 & 468 & 0 \\
+    8	& 7123 & 0 \\
+    9	& 194066 & 0 \\
+    10 & 9743542 & 0 \\
+    11 & 900969091 & 0 \\
+    12 & 153620333545 & 0 \\
+    13 & 48432939150704 & 0 \\
+    14 & 28361824488394169 & 0 \\
+    15 & 30995890806033380784 & 0 \\
+    16 & 63501635429109597504951 & 0 \\
+    17 & 244852079292073376010411280 & 0 \\
+    18 & 1783160594069429925952824734641 & 0 \\
+    19 & 24603887051350945867492816663958981 & 0 \\
+    \hline
+  \end{tabular}
+\end{table}
 
-\subsection{plantri55}
+Using this generator instead reintroduced the problem of making sure the graphs are 2-connected, since we could not add this condition to the generator's input. The \texttt{Nauty} package fortunately also contains the program \texttt{pickg},\todo{is this more formal?} which lets us filter the output of another program. It takes \texttt{graph6} strings as input, and only outputs those strings for which the graph is 2-connected, given the correct parameters \todo{include parameters}. This program is very efficient compared to generation and the rest of the algorithm\todo{proof}, and therefore the use of \texttt{GenerateUHG} with \texttt{pickg} seems to be a good choice for the graph generation of RQ\ref{rq1}.
 
-In the second research question RQ\ref{rq2}, only planar graphs are relevant, and as such, a planar graph generator seems to be the most interesting. The \texttt{plantri55} package\todo{cite}\cite{lib:plantri} includes a suitable generator \texttt{plantri} for this. With the correct parameters \todo{include parameters}, this package can generate 2-connected planar graphs with minimal degree 4. By default however, this generator generates non-isomorphic 3-connected graphs, and creates 2-connected graphs by deleting elements\todo{edges? Vertices?} from these 3-connected graphs. As a result, there may be duplicate 2-connected graphs. \todo{Add table planar vs 2-connected and explanation on why generating duplicate planar is better than generating 2-conn and checking planarity} 
+\subsection{plantri}
 
-% This is awful. Why? I stupid.
+In the second research question RQ\ref{rq2}, only planar graphs are relevant, and as such, a planar graph generator seems to be the most interesting. The \texttt{plantri} package\todo{cite}\cite{lib:plantri} includes a suitable generator \texttt{plantri} for this. With the correct parameters \todo{include parameters}, this package can generate 2-connected planar graphs with minimal degree 4. By default, however, this generator generates non-isomorphic 3-connected graphs, and creates 2-connected graphs by deleting elements\todo{edges? Vertices?} from these 3-connected graphs.\todo{check this} As a result, there may be duplicate 2-connected graphs. Despite this redundancy, generating planar graphs is still more efficient than generating 2-connected graphs and checking their planarity, as seen in Table~\ref{tab:2con-planar}.
 
-\todo{Add section on use of database of graphs by J. Goedgebeur for RQ2}
+\begin{table}
+  \caption{\todo{planar counts \& fix width}Amount of 2-connected graphs\cite{data:integer-sequence} and nonhamiltonian graphs per order of the graph $n$}
+  \label{tab:2con-planar}
+  \begin{tabular}{rrl}
+    \hline\\
+    $n$ & Number of 2-connected graph & Number of planar graphs \\
+    \hline \\
+    1 & 0 & 0 \\
+    2 & 1 & 0 \\
+    3 & 1 & 0 \\
+    4 & 3 & 0 \\
+    5 & 10 & 0 \\
+    6 & 56 & 0 \\
+    7 & 468 & 0 \\
+    8	& 7123 & 0 \\
+    9	& 194066 & 0 \\
+    10 & 9743542 & 0 \\
+    11 & 900969091 & 0 \\
+    12 & 153620333545 & 0 \\
+    13 & 48432939150704 & 0 \\
+    14 & 28361824488394169 & 0 \\
+    15 & 30995890806033380784 & 0 \\
+    16 & 63501635429109597504951 & 0 \\
+    17 & 244852079292073376010411280 & 0 \\
+    18 & 1783160594069429925952824734641 & 0 \\
+    19 & 24603887051350945867492816663958981 & 0 \\
+    \hline
+  \end{tabular}
+\end{table}
+
+
+\subsection{list of graphs by J. Goedgebeur}
+
+\todo{check mail with proof and refer to it here}
+During development on the second research question, we noticed hamiltonian graphs are irrelevant. This is because, regardless of if a graph has a cycle of length $k$ in each of their vertex-deleted subgraphs, the statement of RQ\ref{rq2} remains true. A supervisor of this thesis, Jan Goedgebeur, had previously done research on nonhamiltonian 2-connected planar graphs with minimal degree 4, and had saved these generated graphs of up to 20 vertices\todo{cite}. By using this list, we could push the total amount of relevant graphs further than with only generation.
 
 %\subsection{An item}
 %Please don't abuse enumerations: short enumerations shouldn't use
@@ -55,7 +117,7 @@ In the second research question RQ\ref{rq2}, only planar graphs are relevant, an
 
 \subsection{Intersection of cycles}
 
-To know if a graph has circumference 11 and has no vertex meeting every 11-cycle for RQ\ref{rq1}, we need an algorithm that can find the length of the longest cycle (the circumference) of the graph, while also keeping track of the intersection of all 11-cycles. Finding the circumference is an NP-hard problem\todo{cite, proofcheck}\cite{to-do}, meaning there is no known polynomial algorithm for it and is a difficult problem to solve. In this thesis, the best solution we have is to simply enumerate all cycles and find the longest. This also already provides an easy method for finding the intersection of all 11-cycles: if we find a cycle of length 11 during enumeration of all cycles, we can simply use its vertices to compute the intersection with all previous 11-cycles. Thus, we need an algorithm for enumerating all cycles efficiently.
+To know if a graph has circumference 11 and has no vertex meeting every 11-cycle for RQ\ref{rq1}, we need an algorithm that can find the length of the longest cycle (the circumference) of the graph, while also keeping track of the intersection of all 11-cycles. Finding the circumference is an NP-hard problem\todo{cite, proofcheck}\cite{to-do}, meaning there is no known polynomial algorithm for it and is a difficult problem to solve. In this thesis, the best solution we have is to simply enumerate all cycles and find the longest one. This also already provides an easy method for finding the intersection of all 11-cycles: if we find a cycle of length 11 during enumeration of all cycles, we can simply use its vertices to compute the intersection with all previous 11-cycles. Thus, we need an algorithm for enumerating all cycles efficiently.
 
 \subsubsection{Enumeration of all cycles}
 
@@ -64,7 +126,7 @@ The simplest approach to this problem is a depth-first search on the vertices. S
 
 This algorithm has a glaring issue when it comes to efficiency, namely that during enumeration of the cycles, all cycles are enumerated as many times as it has vertices, times two. The algorithm takes every vertex of the cycle as a starting vertex, and discovers the cycle each time twice, in the two directions it can travel down the cycle. We can reduce this number by using a useful property of the way vertices of graphs are often represented in computer programs. In this thesis' source code, vertices are represented as simple integers, from 0 to $n-1$ with $n$ equal to the order of the graph. This adds the property that the vertices are ordered.
 
-By considering the starting vertex as the ``minimal'' vertex of the DFS algorithm, only allowing vertices to be candidates if they are higher in order than this starting vertex, we can greatly reduce the search space of the algorithm for many starting vertices, while also guaranteeing we only discover each cycle twice, namely starting from its minimal vertex. We can reduce this further to discovering each cycle only once, by also defining an order on its second and last discovered vertex. By claiming we only consider a cycle when the second visited vertex is lower in order than the last visited vertex, we only discover each cycle in one of the two directions.
+By considering the starting vertex as the ``minimal'' vertex of the DFS algorithm, only allowing vertices to be candidates if they are higher in order than this starting vertex, we can greatly reduce the search space of the algorithm for many starting vertices, while also guaranteeing we only discover each cycle twice, namely starting from its minimal vertex. We can reduce this further to discovering each cycle only once, by also defining an order on its second and last discovered vertex. By only considering a cycle when the second visited vertex is lower in order than the last visited vertex, we only discover each cycle in one of the two directions.
 
 \subsubsection{Stopping enumeration early}
 
@@ -170,15 +232,35 @@ This section introduces the algorithm for RQ\ref{rq2} \todo{this section}.
 
 \section{Study of Known Graphs}
 
-\todo{add construction of tube graph in figure \ref{fig:tube-graph} as text}
-The paper \textit{On a question of van Aardt et al. on destroying all longest cycles} by C. T. Zamfirescu\cite{article:zamfirescu} constructs a family of graphs providing an answer for some values $k$ to the open question posed by van Aardt et al. similar to RQ\ref{rq1}. We suspect that, if such a graph exists for $k=11$, then that graph may look similar to a graph from that family. Additionaly, some graphs in that family are also negative examples to RQ\ref{rq2}. In this section, we will show this construction, how it has influenced our search space when running the programs, and how we intend to use this construction to potentially manually find interesting values for one of the two Research Questions.
+\todo{add construction of tube graph in Figure~\ref{fig:tube-graph} as text}
+The paper \textit{On a question of van Aardt et al. on destroying all longest cycles} by C. T. Zamfirescu~\cite{article:zamfirescu} constructs a family of graphs providing an answer for the values $k = 10, 13, 16$ to the open question posed by van Aardt et al. similar to RQ\ref{rq1}. We suspect that, if such a graph exists for $k=11$, then that graph may look similar to a graph from that family. Additionaly, some graphs in that family are also negative examples to RQ\ref{rq2}. In this section, we will show this construction, how it has influenced our search space when running the programs, and how we intend to use this construction to potentially manually find interesting values for one of the two Research Questions.
 
+\subsection{Construction by C. T. Zamfirescu}
 
+C. T. Zamfirescu showed~\cite{article:zamfirescu} that for every pair of integers $\ell \ge 2$ and $p \ge 4$, there exists a 2-connected graph G of order $\ell p$ and circumference $(\ell+1) (p-1) + 1$ whose intersection of all longest cycles is empty. We repeat the construction of the graph $G$ used in the proof here. Note that in this thesis, we use a different convention for $\ell$ than in the paper by C. Zamfirescu.
+Take two cycles $(a_0, a_1, ..., a_{p-1})$ and $(b_0, b_1, ..., b_{p-1})$, each of length $p$, and connect $(a_i, b_i)$ for all $i$. Then, insert vertices on each edge $(a_i, b_i)$ until each becomes a path of length $\ell$ (i.e., has $\ell$ edges or $\ell-1$ vertices, including the vertices $a_i$ and $b_i$). Denote these paths from $a_i$ to $b_i$ as $H_i$. If $p$ is even, remove the edges $a_{p-1}a_0$ and $b_{p-1}b_0$, and replace them with the edges $a_{p-1}b_0$ and $b_{p-1}a_0$. We denote the graph constructed in this way as $G_{p,ell}$. C. Zamfirescu has shown~\cite{article:zamfirescu} that the cycle $C$ with vertices
+
+$$
+\bigcup_{i \neq 0} V(H_i) \cup {b_0}
+$$
+
+and edges
+
+$$
+\bigcup_{i \neq 0} E(H_i)
+  \cup {(a_j,a_{j+1})}_{j \text{odd}}
+  \cup {(b_k,b_{k+1})}_{k>0 \text{even}}
+  \cup \begin{cases}
+    \emptyset\ \text{if}\ p \text{odd} \\
+    (a_{p-1},b_0)\ \text{otherwise}
+  \end{cases}
+$$
+
+is a longest cycle of the graph $G$ avoiding all vertices $v \in V(H_0) \setminus \{b_0\}$, and that a similar cycle can be constructed for all other vertices. Figure~\ref{fig:tube-graph-odd} shows the graph $G_{5,2}$ alongside one longest cycle in the graph, and similarly Figure~\ref{fig:tube-graph-even} shows the graph $G_{4,3}$ alongside one longest cycle.
 
 \todo{path and cycle diagram}
 
 \begin{figure}
-  \label{fig:tube-graph}
   \centering
   \begin{subfigure}{0.4\textwidth}
     \centering
@@ -205,9 +287,49 @@ The paper \textit{On a question of van Aardt et al. on destroying all longest cy
         (H5-1) --
         (A5) --
         (A1);
+
+      \foreach \v in {A1,A2,H2-1,B2,B3,H3-1,A3,A4,H4-1,B4,B5,H5-1,A5}
+        \node[vertex, draw=red] at (\v) {};
     \end{tikzpicture}
   \end{subfigure}
-  \caption{The graph construction by Prof. C. T. Zamfirescu for $p=5$ and $\ell=3$, alongside the same graph but with one longest cycle marked in red}
+  \caption{The graph construction $G_{p,\ell}$ by C. T. Zamfirescu~\cite{article:zamfirescu} for $p=5$ and $\ell=2$, alongside the same graph but with one longest cycle marked in red}
+  \label{fig:tube-graph-odd}
+\end{figure}
+
+\begin{figure}
+  \centering
+  \begin{subfigure}{0.4\textwidth}
+    \centering
+    \begin{tikzpicture}
+      \TubeGraph{4}{3}
+    \end{tikzpicture}
+  \end{subfigure}
+  \begin{subfigure}{0.4\textwidth}
+    \centering
+    \begin{tikzpicture}
+      \TubeGraph{4}{3}
+      \draw[red, very thick]
+        (A1) --
+        (A2) --
+        (H2-1) --
+        (H2-2) --
+        (B2) --
+        (B3) --
+        (H3-2) --
+        (H3-1) --
+        (A3) --
+        (A4) --
+        (H4-1) --
+        (H4-2) --
+        (B4) --
+        (A1);
+
+      \foreach \v in {A1,A2,H2-1,H2-2,B2,B3,H3-2,H3-1,A3,A4,H4-1,H4-2,B4}
+        \node[vertex, draw=red] at (\v) {};
+    \end{tikzpicture}
+  \end{subfigure}
+  \caption{The graph construction $G_{p,\ell}$ by C. T. Zamfirescu~\cite{article:zamfirescu} for $p=4$ and $\ell=3$, alongside the same graph but with one longest cycle marked in red}
+  \label{fig:tube-graph-even}
 \end{figure}
 
 \begin{figure}

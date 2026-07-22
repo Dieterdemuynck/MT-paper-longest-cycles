@@ -4,33 +4,37 @@
 
 \todo{intro}
 
+\section{Generated graphs for RQ1}
+
+\todo{Number of results, timing, plotting the 1-vertex solutions}
+
+\section{Generated graphs for RQ2}
+
+\todo{Number of results, timing}
+
 \section{New Values for RQ2}
 
-\subsection{Proof}
+Stuyding the gadget mentioned in section~\ref{sec:gadget} led to an insight in finding new negative examples to RQ\ref{rq2}. By expanding not only the inner edges between the cycles, but also expanding the edges of the cycles to a new length, graphs could be created with longest cycle that differ in length compared to the order of the graph than those already known. Similar to graphs of the form $G_{p,\ell}$, these graphs also have no vertex meeting every cycle.
 
-\todo{"as shown before"}
+We will now prove that, for $\ell \ge 1$, $d \ge 1$, and $p \ge 3$ integers with $p$ is odd, where $d(p-2) \le \ell(p-3)$, there exists a 2-connected planar graph with order~$p(\ell+2d-1)$ and circumference~$(p-1)(d+\ell)+d$, whose intersection of all longest cycles is empty. The proof takes inspiration from the proof of the similar Theorem 1 in~\cite{article:zamfirescu}.
+
+\subsection{Proof}
 
 % P0: Add a short introductory paragraph.
 % Explain that the proof follows the strategy of Zamfirescu's proof,
 % but the additional subdivision of the D-paths introduces a second
 % possible type of long cycle, which must be analysed separately.
 
-\todo{REMEMBER: definition of l is different from paper Zamfirescu: here it is one less}
-
-\todo{I have a few todo's for figures, I'm wondering how many I should actually add}
-
-\todo{Likely need a citation to Prof. Zamfirescu's paper for the similarity in the proofs}
-
 Take a $p,\ell$ tube graph as shown before, with $p$ odd. For simplicity, from
 here on out, let any use of a numerical index be an integer modulo $p$, such
-that for example $a_0$ = $a_p$. Subdivide all edges $(a_i,a_{i+1})$ and
-$(b_i,b_{i+1})$ until each subdivided edge has a total of $d+1$ vertices,
-including the original vertices (i.e. forms a path of length $d$). We denote
-this graph as $G_{p,\ell,d}$, and denote the path on these vertices from $a_i$
-to $a_{i+1}$ by $D_{a,i}$, and similarly the path from $b_i$ to $b_{i+1}$ by
-$D_{b,i}$. These subgraphs $D_{a,i}$, $D_{b,i}$, and $H_i$ may have any
-number of additional internal edges without effect on the proof.
-Figure \ref{fig:g532} shows an example graph $G_{5,3,2}$.
+that for example $a_0 = a_p$. Insert vertices on each of the edges
+$(a_i,a_{i+1})$ and $(b_i,b_{i+1})$ until each is a path of length $d$, i.e.
+has a total of $d+1$ vertices, including the original vertices. We denote this
+graph as $G_{p,\ell,d}$, and denote the path on these vertices from $a_i$ to
+$a_{i+1}$ by $D_{a,i}$, and similarly the path from $b_i$ to $b_{i+1}$ by
+$D_{b,i}$. These subgraphs $D_{a,i}$, $D_{b,i}$, and $H_i$ may have any number
+of additional internal edges without effect on the proof.
+Figure~\ref{fig:g532} shows an example graph $G_{5,3,2}$.
 
 \begin{figure}
     \centering
@@ -85,7 +89,7 @@ there are two types of cycles containing this $H_i$.
 % there are only two possible ways to leave its endpoints.
 
 \paragraph{$H_i$ requirement}
-If we were to remove all internal nodes and edges belonging to $H_i$, we get
+If we were to remove all internal vertices and edges belonging to $H_i$, we get
 two disjoint cycles. As such, the longest cycles which do not traverse any
 $H_i$ are contained within the two subgraphs
 
@@ -95,7 +99,7 @@ $$
 $$
 
 These cannot be the longest cycles of the graph, as one can create a longer
-cycle by picking any $i$, removing the internal nodes of $D_{a,i}$ resp.
+cycle by picking any $i$, removing the internal vertices of $D_{a,i}$ resp.
 $D_{b,i}$, and creating a new cycle through $H_i$, $D_{b,i}$ resp. $D_{a,i}$,
 and $H_{i+1}$. The original cycle has length $pd$, while this new cycle has
 length $pd+2l$. As a result, this new cycle is larger than the former cycle,
@@ -120,7 +124,7 @@ assume a cycle $C$ traverses $H_0$, $D_{a,0}$, and $D_{b,0}$. At $a_1$, there
 are two possibilities: to either traverse $H_1$, closing the cycle as in Figure
 \ref{fig:same-side:closed}, or to traverse $D_{a,1}$. The latter option
 disallows any traversal of $H_1$, and therefore forces the choice at $b_i$ to
-traverse $D_{b,1}$, as shown in Figure \ref{fig:same-side:continued}. We then
+traverse $D_{b,1}$, as shown in Figure~\ref{fig:same-side:continued}. We then
 again have the same options for traversal at $a_2$. One can see this choice of
 traversing $D_{a,i}$ and $D_{b,i}$ instead of $H_i$ as extending the otherwise
 closed cycle with $2d$ vertices.
@@ -281,7 +285,7 @@ analogous. Note that all vertices $a_i$ and $b_i$ meet all these cycles.
     \end{subfigure}
 
     \caption{A graph segment of $G_{p,\ell,d}$ with the two possibilities at $a_1$ for cycle through $H_0$, $D_{a,0}$, and $D_{a,1}$.}
-    \label{fig:placeholder}
+    \label{fig:same-side}
 \end{figure}
 
 \paragraph{Opposite-direction cycles}
@@ -351,7 +355,7 @@ C=
 $$
 
 where $C$ omits all vertices $V(H_0)\setminus\{b_0\}$ and
-$V(D_{a,0})\setminus\{a_1\}$. Figure \ref{fig:opposite-side:g532} shows this cycle for a graph $G_{5,3,2}$. For all other vertices, a cycle of length
+$V(D_{a,0})\setminus\{a_1\}$. Figure~\ref{fig:opposite-side:g532} shows this cycle for a graph $G_{5,3,2}$. For all other vertices, a cycle of length
 $(p-1)(d+\ell)+d$ can be constructed in the same way.
 \todo{Maybe I should generalize this example cycle, rather than claiming other cycles can simply be constructed? I fear I might bring forth indexation hell}
 
@@ -450,89 +454,9 @@ $(p-1)(d+\ell)+d$ for which no vertex meets every longest cycle if
         &\le \ell(p-3).
 \end{align*}
 
-\hfill $\square$
+\hfill $\square$ \\
 
-% ------------------------------------------------------------------
-% P5 (Conclusion)
-%
-% State:
-%
-% Therefore, whenever
-%
-%   d(p-2) < \ell(p-3)+3,
-%
-% every longest cycle is necessarily of Type I (zig-zag).
-%
-% Since for every vertex we constructed such a longest cycle avoiding
-% that vertex, the intersection of all longest cycles is empty.
-%
-% End with the theorem.
-% ------------------------------------------------------------------
-
-% Old notes:
-% {a_i,a_{i+1}} is a vertex cut.
-% {b_i,b_{i+1}} is a vertex cut.
-% {a_i,b_i} is a vertex cut.
-
-%\lipsum[78]
-
-%\subsection{An item}
-%A master's thesis is never an isolated work. This means that your text must contain references. On-line documents\cite{wiki} as well as books\cite{pratchett06:_good_omens} can be referenced.
-
-%Usually a text also contains inline formulas (\(\sin^2\eta + \cos^2\eta = 1\)) or formulas as separate equations.
-%\begin{equation}
-%  \sigma(t) = \frac{1}{\sqrt{2\pi}} \int_0^t e^{-x^2/2} dx 
-%\end{equation}
-
-
-%\section{Figures}
-%Figures are used to add illustrations to the text. The \fref{fig:logo} shows
-%the KU~Leuven logo as an illustration.
-%\begin{figure}
-%  \centering
-%  \includegraphics{logokuleng-en}
-%  \caption{The logo of the Faculty of Engineering Science.}
-%  \label{fig:logo}
-%\end{figure}
-
-%\section{Tables}
-%Tables are used to present data neatly arranged. A table is normally
-%not a spreadsheet! Compare \tref{tab:wrong} en \tref{tab:ok}: which table do
-%you prefer?
-
-%\begin{table}
-%  \centering
-%  \begin{tabular}{||l|lr||} \hline
-%    gnats     & gram      & \$13.65 \\ \cline{2-3}
-%              & each      & .01 \\ \hline
-%    gnu       & stuffed   & 92.50 \\ \cline{1-1} \cline{3-3}
-%    emu       &           & 33.33 \\ \hline
-%    armadillo & frozen    & 8.99 \\ \hline
-%  \end{tabular}
-%  \caption{A table with the wrong layout.}
-%  \label{tab:wrong}
-%\end{table}
-
-%\begin{table}
-%  \centering
-%  \begin{tabular}{@{}llr@{}} \toprule
-%    \multicolumn{2}{c}{Item} \\ \cmidrule(r){1-2}
-%    Animal    & Description & Price (\$)\\ \midrule
-%    Gnat      & per gram    & 13.65 \\
-%              & each        & 0.01 \\
-%    Gnu       & stuffed     & 92.50 \\
-%    Emu       & stuffed     & 33.33 \\
-%    Armadillo & frozen      & 8.99 \\ \bottomrule
-%  \end{tabular}
-%  \caption{A table with the correct layout.}
-%  \label{tab:ok}
-%\end{table}
-
-%\section{Lorem Ipsum}
-%This section is added to check headers and footers. So this chapter must at
-%least contain three pages. To make sure that we get the required amount,
-%the \textsf{lipsum} package isn't used but the text is put directly in the
-%text.
+There remains one final condition to satisfy, namely that the grahs must have minimal degree at least 4. \todo{``Add edges until tracable(?) planar graph with minimal degree at least 4, except for two outer nodes'' and show existance for these from $\ell,d \ge 6$ and inexistance for lower}
 
 \section{Conclusion}
 \todo{conclusion}
