@@ -23,31 +23,25 @@ The \texttt{Nauty} package\cite{lib:nauty} has a graph generator \texttt{geng} w
 During the year we realised that it is likely that most of the generated 2-connected graphs are hamiltonian, as seen in Table~\ref{tab:2con-nonhamil}.\todo{table with values} Since a hamiltonian graph has a cycle that goes through all vertices of the graph, this would mean that the intersection of all longest cycles would simply be all vertices. We would thus like to avoid hamiltonian graphs completely. This is why, for RQ\ref{rq1}, we instead opted to use the Uniquely Hamiltonian Graphs generator\cite{lib:UHG}, which holds a program \texttt{GenerateUHG} that allows us to generate graphs with a specific amount of hamiltonian cycles, in the \texttt{graph6} format. By setting that amount to 0, we only get non-hamiltonian graphs, which we suspect to have a much lower quantity of graphs than simply 2-connected graphs.
 
 \begin{table}
-  \caption{\todo{nonhamil counts \& fix width}Amount of 2-connected graphs\cite{data:integer-sequence} and nonhamiltonian graphs per order of the graph $n$}
+  \caption{Amount of 2-connected graphs\cite{data:integer-sequence} and nonhamiltonian graphs per order of the graph $n$}
   \label{tab:2con-nonhamil}
   \begin{tabular}{rrl}
     \hline\\
     $n$ & Number of 2-connected graph & Number of nonhamiltonian graphs \\
     \hline \\
-    1 & 0 & 0 \\
-    2 & 1 & 0 \\
-    3 & 1 & 0 \\
-    4 & 3 & 0 \\
-    5 & 10 & 0 \\
-    6 & 56 & 0 \\
-    7 & 468 & 0 \\
-    8	& 7123 & 0 \\
-    9	& 194066 & 0 \\
-    10 & 9743542 & 0 \\
-    11 & 900969091 & 0 \\
-    12 & 153620333545 & 0 \\
-    13 & 48432939150704 & 0 \\
-    14 & 28361824488394169 & 0 \\
-    15 & 30995890806033380784 & 0 \\
-    16 & 63501635429109597504951 & 0 \\
-    17 & 244852079292073376010411280 & 0 \\
-    18 & 1783160594069429925952824734641 & 0 \\
-    19 & 24603887051350945867492816663958981 & 0 \\
+    1 & 0 & 1 \\
+    2 & 1 & 2 \\
+    3 & 1 & 3 \\
+    4 & 3 & 8 \\
+    5 & 10 & 26 \\
+    6 & 56 & 108 \\
+    7 & 468 & 661 \\
+    8	& 7123 & 6150 \\
+    9	& 194066 & 97585 \\
+    10 & 9743542 & 270050 \\
+    11 & 900969091 & 135841840 \\
+    12 & 153620333545 & 12568984762 \\
+    13 & 48432939150704 & 2179513027405 \\
     \hline
   \end{tabular}
 \end{table}
@@ -56,14 +50,14 @@ Using this generator instead reintroduced the problem of making sure the graphs 
 
 \subsection{plantri}
 
-In the second research question RQ\ref{rq2}, only planar graphs are relevant, and as such, a planar graph generator seems to be the most interesting. The \texttt{plantri} package\todo{cite}\cite{lib:plantri} includes a suitable generator \texttt{plantri} for this. With the correct parameters \todo{include parameters}, this package can generate 2-connected planar graphs with minimal degree 4. By default, however, this generator generates non-isomorphic 3-connected graphs, and creates 2-connected graphs by deleting elements\todo{edges? Vertices?} from these 3-connected graphs.\todo{check this} As a result, there may be duplicate 2-connected graphs. Despite this redundancy, generating planar graphs is still more efficient than generating 2-connected graphs and checking their planarity, as seen in Table~\ref{tab:2con-planar}.
+In the second research question RQ\ref{rq2}, only planar graphs are relevant, and as such, a planar graph generator seems to be the most interesting. The \texttt{plantri} package~\cite{lib:plantri} includes a suitable generator \texttt{plantri} for this. With the correct parameters \todo{include parameters}, this package can generate 2-connected planar graphs with minimal degree 4. By default, however, this generator only generates non-isomorphic 2-connected graphs where isomorphism is defined with reference to the embedding on a sphere, ``which means that outputs may be isomorphic as abstract graphs if the connectivity is less than 3''~\cite{lib:plantri}, i.e. there may be some duplicate 2-connected graphs. Despite this redundancy, generating planar graphs is still more efficient than generating 2-connected graphs and checking their planarity, as seen in Table~\ref{tab:2con-planar}.
 
 \begin{table}
-  \caption{\todo{planar counts \& fix width}Amount of 2-connected graphs\cite{data:integer-sequence} and nonhamiltonian graphs per order of the graph $n$}
+  \caption{\todo{planar counts \& fix width}Amount of 2-connected graphs\cite{data:integer-sequence} and generated planar 2-connected graphs per order of the graph $n$}
   \label{tab:2con-planar}
   \begin{tabular}{rrl}
     \hline\\
-    $n$ & Number of 2-connected graph & Number of planar graphs \\
+    $n$ & Number of 2-connected graph & Number of connected planar graphs \\
     \hline \\
     1 & 0 & 0 \\
     2 & 1 & 0 \\
@@ -78,12 +72,6 @@ In the second research question RQ\ref{rq2}, only planar graphs are relevant, an
     11 & 900969091 & 0 \\
     12 & 153620333545 & 0 \\
     13 & 48432939150704 & 0 \\
-    14 & 28361824488394169 & 0 \\
-    15 & 30995890806033380784 & 0 \\
-    16 & 63501635429109597504951 & 0 \\
-    17 & 244852079292073376010411280 & 0 \\
-    18 & 1783160594069429925952824734641 & 0 \\
-    19 & 24603887051350945867492816663958981 & 0 \\
     \hline
   \end{tabular}
 \end{table}

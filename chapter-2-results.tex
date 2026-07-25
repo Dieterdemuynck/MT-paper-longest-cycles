@@ -16,24 +16,18 @@
 
 Stuyding the gadget mentioned in section~\ref{sec:gadget} led to an insight in finding new negative examples to RQ\ref{rq2}. By expanding not only the inner edges between the cycles, but also expanding the edges of the cycles to a new length, graphs could be created with longest cycle that differ in length compared to the order of the graph than those already known. Similar to graphs of the form $G_{p,\ell}$, these graphs also have no vertex meeting every cycle.
 
-We will now prove that, for $\ell \ge 1$, $d \ge 1$, and $p \ge 3$ integers with $p$ is odd, where $d(p-2) \le \ell(p-3)$, there exists a 2-connected planar graph with order~$p(\ell+2d-1)$ and circumference~$(p-1)(d+\ell)+d$, whose intersection of all longest cycles is empty. The proof takes inspiration from the proof of the similar Theorem 1 in~\cite{article:zamfirescu}.
+We will now prove that, for $\ell \ge 6$, $d \ge 5$, and $p \ge 3$ integers with $p$ is odd, where $d(p-2) \le \ell(p-3)$, there exists a 2-connected planar graph with with minimal degree 4, order~$p(\ell+2d-1)$ and circumference~$(p-1)(d+\ell)+d$, whose intersection of all longest cycles is empty. The proof takes inspiration from the proof of the similar Theorem 1 and Proposition 1 in~\cite{article:zamfirescu}.
 
 \subsection{Proof}
 
-% P0: Add a short introductory paragraph.
-% Explain that the proof follows the strategy of Zamfirescu's proof,
-% but the additional subdivision of the D-paths introduces a second
-% possible type of long cycle, which must be analysed separately.
-
-Take a $p,\ell$ tube graph as shown before, with $p$ odd. For simplicity, from
+Take the graph $G_{p,\ell}$ from Section \ref{sec:tube-graph}, with $p$ odd. For simplicity, from
 here on out, let any use of a numerical index be an integer modulo $p$, such
 that for example $a_0 = a_p$. Insert vertices on each of the edges
 $(a_i,a_{i+1})$ and $(b_i,b_{i+1})$ until each is a path of length $d$, i.e.
 has a total of $d+1$ vertices, including the original vertices. We denote this
 graph as $G_{p,\ell,d}$, and denote the path on these vertices from $a_i$ to
 $a_{i+1}$ by $D_{a,i}$, and similarly the path from $b_i$ to $b_{i+1}$ by
-$D_{b,i}$. These subgraphs $D_{a,i}$, $D_{b,i}$, and $H_i$ may have any number
-of additional internal edges without effect on the proof.
+$D_{b,i}$.
 Figure~\ref{fig:g532} shows an example graph $G_{5,3,2}$.
 
 \begin{figure}
@@ -45,27 +39,8 @@ Figure~\ref{fig:g532} shows an example graph $G_{5,3,2}$.
     \label{fig:g532}
 \end{figure}
 
-% ------------------------------------------------------------------
-% P1 (Definitions)
-%
-% Move the definitions of X_i, A_i and B_i here.
-%
-% Define
-%   X_i = {a_i,b_i},
-%   A_i = {a_i,a_{i+1}},
-%   B_i = {b_i,b_{i+1}}.
 We also define the sets $X_i = {a_i,b_i}$, $A_i = {a_i,a_{i+1}}$,
 $B_i = {b_i,b_{i+1}}$, as each of these are vertex-cuts of the graph.
-%
-% State that all three are vertex cuts.
-%
-% Prove the local consequence:
-% every cycle using a_i either
-%   (i) continues through both adjacent D_a paths, or
-%   (ii) uses exactly one adjacent D_a path together with H_i.
-% Do the analogous statement for b_i.
-%
-% This is the local structural lemma used everywhere later.
 Since these sets are vertex-cuts, any cycle going through an internal vertex or
 edge of $D_{a,i}$, $D_{b,i}$, or $H_i$ (i.e. traverses these subgraphs) must
 also contain $A_i$, $B_i$, resp. $X_i$. Furthermore, the only subgraphs
@@ -75,18 +50,10 @@ $D_{a,i}$ subgraphs, or through exactly one of the aforementioned subgraphs and
 $H_i$. The only exceptions are cycles contained entirely within one of these
 subgraphs, which cannot be longest cycles. An analogous reasoning can be used
 for cycles going through $b_i$.
-%
-% ------------------------------------------------------------------
 
 We now continue to show that there are only two candidate longest cycles, by
 first showing that a longest cycle must traverse an $H_i$, and then showing
 there are two types of cycles containing this $H_i$.
-
-% ------------------------------------------------------------------
-% P3 (Main structural lemma)
-%
-% Show that once a cycle traverses some H_i,
-% there are only two possible ways to leave its endpoints.
 
 \paragraph{$H_i$ requirement}
 If we were to remove all internal vertices and edges belonging to $H_i$, we get
@@ -105,13 +72,6 @@ and $H_{i+1}$. The original cycle has length $pd$, while this new cycle has
 length $pd+2l$. As a result, this new cycle is larger than the former cycle,
 since by construction $\ell > 0$. As a result, any longest cycle must contain
 at least one $H_i$.
-
-% Define:
-%
-%   Type I = opposite directions.
-%
-%   Type II = same direction.
-%
 
 If a cycle traverses an $H_i$, it must enter at $a_i$ from either
 $D_{a,i}$ or $D_{a,i-1}$, and leave at $b_i$ through either $D_{b,i}$ or
@@ -292,28 +252,6 @@ analogous. Note that all vertices $a_i$ and $b_i$ meet all these cycles.
 The only other option for a cycle traversing $H_i$ is to enter and leave
 $H_i$ in opposite directions, either through $D_{a,i-1}$ and $D_{b,i}$ or
 through $D_{a,i}$ and $D_{b,i-1}$.
-% Note that this cycle will leave all traversed $H_i$ in opposite directions,
-% as otherwise we would be in the previous case of same-direction cycles.
-
-% Then prove these choices propagate around the graph.
-%
-% Conclude:
-%
-% - Type I cycles are exactly the zig-zag cycles,
-%   traversing every H-path except one.
-%
-% - Type II cycles are exactly the tube cycles,
-%   travelling around both rings and using two adjacent H-paths.
-%
-% Everything after this point becomes a length comparison.
-% ------------------------------------------------------------------
-
-% ------------------------------------------------------------------
-% U1
-%
-% Construct a cycle similar to the same-side construction, showing
-% longest traverses all but one H_i
-%
 
 Say a cycle traversed $H_0$ and $D_{a,0}$. There are again two possibilities at
 $a_1$: to traverse $D_{a,1}$, or to traverse $H_1$. In the latter option, the
@@ -332,12 +270,6 @@ vertex-cut in $G$, the subgraph $H_i$ can only be traversed by entering through
 $a_i$ and exiting through $b_i$. As a result, a cycle must visit an even number
 of $H_i$'s. Since $p$ is odd, at least one $H_i$ must be avoided. Thus, the
 largest opposite-side cycle must traverse (1) a maximal amount of $H_i$'s, and (2) at most all but one $H_i$. We can construct a cycle $C$ avoiding exactly one $H_i$, with length $(p-1)(d+\ell) + d$. Put
-%
-% ------------------------------------------------------------------
-% We now show that there exists a cycle $C$ of length
-% $(pd-1)+(p-1)(\ell-2)$ omitting any vertex $v\in V(G)$.
-% To avoid unnecessarily complicated indices, consider the two vertices
-% $v_l\in V(H_0)\setminus\{b_0\}$ and $v_d\in V(D_{a,0})\setminus\{a_1\}$.
 
 $$
 C=
@@ -407,39 +339,7 @@ $(p-1)(d+\ell)+d$ can be constructed in the same way.
   \label{fig:opposite-side:g532}
 \end{figure}
 
-% Now we show that $C$ is a longest opposite-direction cycle of $G$.
-% We first observe that a cycle in $G$ cannot traverse all $H_i$:
-% since $X_i$ is a vertex-cut in $G$, the subgraph $H_i$ can only be
-% traversed by entering through $a_i$ and exiting through $b_i$.
-% As a result, a cycle visiting all $H_i$ would have to traverse an even number
-% of $H_i$ while $p$ is odd, a contradiction. Thus every longest cycle omits at
-% least one $H_i$. Since $X_i$ is a vertex-cut, omitting $H_i$ loses all vertices
-% $V(H_i)\setminus V(X_i)$.
-
-% ------------------------------------------------------------------
-% U0-DELETE-ME
-%
-% Follow the same structure as in C. T. Zamfirescu's proof
-%
-% ------------------------------------------------------------------
-
-% ------------------------------------------------------------------
-% P4
-%
-% Explicitly state:
-%
-% L_same = 2(d-1)(p-1)+2(\ell-2)
-%
-% L_zig  = (pd-1)+(p-1)(\ell-2)
-%
-% Then say:
-%
-% "The zig-zag cycle is longest whenever
-% L_same < L_zig."
-%
-% ------------------------------------------------------------------
-
-\paragraph{Length comparison and conclusion}
+\paragraph{Length comparison}
 We've determined there are two types of cycles with the potential of being
 longest cycles, the length of which are $(p-1)(2d)+2\ell$ for same-direction
 cycles and $(p-1)(d+\ell)+d$ for opposite-direction cycles. Only in the
@@ -447,16 +347,121 @@ latter case can we construct a cycle for every vertex avoiding that vertex. As
 a result, there exists a 2-connected, planar graph $G$ with circumference
 $(p-1)(d+\ell)+d$ for which no vertex meets every longest cycle if
 
-\begin{align*}
-{}      && (p-1)(2d)+2\ell
-        &\le (p-1)(d+\ell)+d\\
-\iff\;  && d(p-2)
-        &\le \ell(p-3).
-\end{align*}
+\[
+\begin{aligned}
+(p-1)(2d)+2\ell
+    &\le (p-1)(d+\ell)+d\\
+\iff\qquad
+d(p-2)
+    &\le \ell(p-3).
+\end{aligned}
+\]
+
+\paragraph{Minimal degree 4}
+Let $G$ be a graph $G_{p,\ell,d}$ with $p$ odd, $\ell \ge 5$, and $d \ge 5$ with $d(p-2) \le \ell(p-3)$. Similar to the proof of Proposition 1 in~\cite{article:zamfirescu}, observe that that in each $D_{a,i}$, $D_{b,i}$, and $H_i$, we may add edges as desired within each respective subgraph (but without adding edges between internal nodes of different subgraphs) without altering the fact that the intersection of all longest cycles remains empty. We denote these modified paths with additional edges as $D_{a,i}'$, $D_{b,i}'$, respectively $H_i'$.
+
+Trivially, if we choose $D_{a,i}'$ and $D_{b,i}'$ to each be the path $P_d^2$, i.e. a path of length $d$ with an additional edge between all vertices at distance 2 as in Figure~\ref{fig:path-2}, and similarly choose $H_i'$ to be the path $P_\ell^2$, then $G$ remains planar. Observe that, for each of these subgrahs, all internal vertices except two have degree 4, and two internal vertices, say $w$ and $w'$, have degree 3. These vertices $w$ and $w'$ are adjacent to an endpoint of the (modified) paths, say $x$ and $y$. Adding the edges $wx$ and $w'y$ when $d$ (resp. $\ell$) is odd as in Figure~\ref{fig:degree-4-opposite-side}, and adding the edge $ww'$ when $d$ (resp. $\ell$) is even as in Figure~\ref{fig:degree-4-same-side}, provides a minimal degree 4 for the graph $G$ when $\ell,d \ge 5$.
+
+\begin{figure}[ht]
+  \centering
+
+  % First graph
+  \begin{tikzpicture}[>=stealth]
+    % Nodes
+    \node[vertex, label=left:$x$] (v1) at (0,0) {};
+    \node[vertex] (v2) at (1,1) {};
+    \node[vertex] (v3) at (2,0) {};
+    \node[vertex] (v4) at (3,1) {};
+    \node[vertex] (v5) at (4,0) {};
+    \node[vertex, label=right:$y$] (v6) at (5,1) {};
+
+    % Path edges
+    \draw (v1) -- (v2) -- (v3) -- (v4) -- (v5) -- (v6);
+
+    % Edges between vertices at distance 2
+    \draw (v1) -- (v3);
+    \draw (v2) -- (v4);
+    \draw (v3) -- (v5);
+    \draw (v4) -- (v6);
+  \end{tikzpicture}
+  \caption{A path $P_5^2$ with endpoints $x$ and $y$.}
+  \label{fig:path-2}
+\end{figure}
+
+\begin{figure}
+  \centering
+  \begin{tikzpicture}[>=stealth]
+    % Nodes
+    \node[vertex, label=left:$x$] (v1) at (0,0.5) {};
+    \node[vertex] (v2) at (1,1) {};
+    \node[vertex] (v3) at (2,0) {};
+    \node[vertex] (v4) at (3,1) {};
+    \node[vertex] (v5) at (4,0) {};
+    \node[vertex, label=right:$y$] (v6) at (5,0.5) {};
+
+    % Path edges
+    \draw (v1) -- (v2) -- (v3) -- (v4) -- (v5) -- (v6);
+
+    % Edges between vertices at distance 2
+    \draw (v1) -- (v3);
+    \draw (v2) -- (v4);
+    \draw (v3) -- (v5);
+    \draw (v4) -- (v6);
+
+    % Additional endpoint edges
+    \draw[lightgray] (v1) -- (-0.5,-0.5);
+    \draw[lightgray] (v1) -- (-0.5,1.5);
+    \draw[lightgray] (v6) -- (5.5,-0.5);
+    \draw[lightgray] (v6) -- (5.5,1.5);
+
+    % Additional red edges
+    \draw[red] (v2) to[bend left=25] (v6);
+    \draw[red] (v5) to[bend left=25] (v1);
+  \end{tikzpicture}
+  \caption{The additional edges (marked in red) placed on either $D_{a,i}'$, $D_{b,i}'$, or $H_i'$ when $d$ or $l$ $=5$ odd.}
+  \label{fig:degree-4-opposite-side}
+\end{figure}
+
+
+\begin{figure}
+  \centering
+  \begin{tikzpicture}[>=stealth]
+    % Nodes
+    \node[vertex, label=left:$x$] (v1) at (0,0.5) {};
+    \node[vertex] (v2) at (1,1) {};
+    \node[vertex] (v3) at (2,0) {};
+    \node[vertex] (v4) at (3,1) {};
+    \node[vertex] (v5) at (4,0) {};
+    \node[vertex] (v6) at (5,1) {};
+    \node[vertex, label=right:$y$] (v7) at (6,0.5) {};
+
+    % Path edges
+    \draw (v1) -- (v2) -- (v3) -- (v4) -- (v5) -- (v6) -- (v7);
+
+    % Edges between vertices at distance 2
+    \draw (v1) -- (v3);
+    \draw (v2) -- (v4);
+    \draw (v3) -- (v5);
+    \draw (v4) -- (v6);
+    \draw (v5) -- (v7);
+
+    % Additional endpoint edges
+    \draw[lightgray] (v1) -- (-0.5,-0.5);
+    \draw[lightgray] (v1) -- (-0.5,1.5);
+    \draw[lightgray] (v7) -- (6.5,-0.5);
+    \draw[lightgray] (v7) -- (6.5,1.5);
+
+    % Additional red edge
+    \draw[red] (v2) to[bend left=25] (v6);
+  \end{tikzpicture}
+  \caption{The additional edges (marked in red) placed on either $D_{a,i}'$, $D_{b,i}'$, or $H_i'$ when $d$ or $l$ $=6$ even.}
+  \label{fig:degree-4-same-side}
+\end{figure}
+
+\paragraph{Conclusion}
+As a result, the previous construction shows that for all integers $p\ge5$ odd, $\ell \ge 6$, $d \ge 5$, where $d(p-2) \le \ell(p-3)$, there exists a planar graph with minimal degree 4 of order~$p(\ell+2d-1)$ and circumference~$(p-1)(d+\ell)+d$, where the intersection of all longest cycles is empty.
 
 \hfill $\square$ \\
-
-There remains one final condition to satisfy, namely that the grahs must have minimal degree at least 4. \todo{``Add edges until tracable(?) planar graph with minimal degree at least 4, except for two outer nodes'' and show existance for these from $\ell,d \ge 6$ and inexistance for lower}
 
 \section{Conclusion}
 \todo{conclusion}
