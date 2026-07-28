@@ -187,20 +187,22 @@ During enumeration, we must also compute the intersection of all 11-cycles. Set 
 
 This section introduces the algorithm for RQ\ref{rq2}. The approach is similar to RQ\ref{rq1}: we generate planar graphs with minimum degree 4, and check for each graph if in every vertex-deleted subgraph there exists a $k$-cycle, that there then is a cycle larger than $k$. Trivially, if a vertex-deleted subgraph of a graph $G$ has a $k$-cycle, then the graph $G$ itself also has a $k$-cycle. As a result, for a graph $G$ can only be a negative example of RQ\ref{rq2}, there must be a $k$-cycle in every vertex-deleted subgraph of $G$ and $G$ must also have circumference $k$. From this, we decided to focus our algorithm on finding negative examples, as we can assume all other graphs to be positive examples.
 
+\todo{Something is missing here, in terms of circumference}
 \begin{theorem}
-  For a graph $G$ with circumference $k$ less than the order of $G$, $G$ has a $k$-cycle in every vertex-deleted subgraph if and only if the intersection of the vertices of all $k$-cycles in the graph is empty.
+  \label{theorem:intersection-vertex-deletion}
+  A graph $G$ has a $k$-cycle in every vertex-deleted subgraph, and no cycle larger than $k$ in $g$ if and only if the intersection of the vertices of all $k$-cycles in the graph is empty, and $G$ has circumference $k$.
 \end{theorem}
 
 \begin{proof}
-  Assume $G$ with circumference $k$ has a $k$-cycle in every vertex-deleted subgraph. $G$ therefore has at least one $k$-cycle, denoted $C$, and the intersection of all $k$-cycles must be at most the vertices $V(C) \subset V(G)$. Per the assumption, for every vertex $v_i \in V(C)$ there must be a $k$-cycle $C_i'$ in $G$ avoiding the vertex $v_i$. As a result, the intersection of all $k$-cycles is at most
+  Assume $G$ has a $k$-cycle in every vertex-deleted subgraph, and no cycle larger than $k$ exists in $G$. $G$ must have at least one $k$-cycle, denoted $C$, and therefore must have circumference $k$. The intersection of all $k$-cycles must be at most the vertices $V(C) \subset V(G)$. Per the assumption, for every vertex $v_i \in V(G)$ there must be a $k$-cycle $C_i'$ in $G$ avoiding the vertex $v_i$, including those vertices $v_i \in V(C)$. As a result, the intersection of all $k$-cycles is at most
   $$
   \bigcap_{i} C_i' \cap C = \emptyset
   $$
   and thus the intersection of all $k$-cycles must be empty.
 
-  Now assume $G$ has circumference $k$ (less than the order of $G$) and the intersection of all $k$-cycles is empty. $G$ again has at least one $k$-cycle $C$, which avoids all vertices $v_{\text{out}} \in V(G) \setminus V(C)$. Additionally, since the intersection of all $k$-cycles is empty, there must be a $k$-cycle for every vertex $v_{\text{in}} \in V(C)$ which avoids $v_{\text{in}}$. As a result, there exists a $k$-cycle avoiding every vertex $v \in V(C) \cup (V(G) \setminus V(C)) = V(G)$, and therefore every vertex-deleted subgraph of $G$ has a $k$-cycle.
+  Now assume $G$ has circumference $k$ and the intersection of all $k$-cycles is empty. $G$ cannot be hamiltonian, as otherwise the intersection of the vertices of all $k$-cycles must be the vertices $V(G)$. $G$ must have at least one $k$-cycle $C$, which avoids all vertices $v_{\text{out}} \in V(G) \setminus V(C)$. Additionally, since the intersection of all $k$-cycles is empty, there must be a $k$-cycle for every vertex $v_{\text{in}} \in V(C)$ which avoids $v_{\text{in}}$. As a result, there exists a $k$-cycle avoiding every vertex $v \in V(C) \cup (V(G) \setminus V(C)) = V(G)$, and therefore every vertex-deleted subgraph of $G$ has a $k$-cycle.
 
-  We conclude that for a graph $G$ with circumference $k$ less than the order of $G$, $G$ has a $k$-cycle in every vertex-deleted subgraph if and only if the intersection of the vertices of all $k$-cycles in the graph is empty.
+  We conclude that for a graph $G$, $G$ has a $k$-cycle in every vertex-deleted subgraph and has circumference $k$ if and only if the intersection of the vertices of all $k$-cycles in the graph is empty.
 \end{proof}
 
 
