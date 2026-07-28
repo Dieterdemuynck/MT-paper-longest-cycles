@@ -25,8 +25,12 @@
 \usepackage{algpseudocode}
 \usepackage{amsmath}
 \usepackage{amsfonts}
+\usepackage{amsthm}
 
 % User-defined commands:
+% Theorem environments
+\newtheorem{theorem}{Theorem}[chapter]
+
 % RQs
 \newcounter{rq}
 \renewcommand{\therq}{\arabic{rq}}
@@ -283,40 +287,40 @@ The intention is that this should be limited to 1 page.
 %\listoffigures
 %\listoftables
 % If there are only a few figures and tables, it is better to use the following:
-\listoffiguresandtables
+% \listoffiguresandtables
 % The list of symbols is also optional.
 % This list must be created manually, e.g. as follows:
-\chapter{List of abbreviations and symbols}
-\section*{abbreviations}
-\begin{flushleft}
-  \renewcommand{\arraystretch}{1.1}
-  \begin{tabularx}{\textwidth}{@{}p{12mm}X@{}}
-    LoG   & Laplacian-of-Gaussian \\
-    MSE   & Mean Square error \\
-    PSNR  & Peak Signal-to-Noise ratio \\
-  \end{tabularx}
-\end{flushleft}
-\section*{Symbols}
-\begin{flushleft}
-  \renewcommand{\arraystretch}{1.1}
-  \begin{tabularx}{\textwidth}{@{}p{12mm}X@{}}
-    42    & ``The Answer to the Ultimate Question of Life, the Universe,
-            and Everything'' volgens de \cite{h2g2} \\
-    $c$   & Speed of light \\
-    $E$   & Energy \\
-    $m$   & Mass \\
-    $\pi$ & The number pi \\
-  \end{tabularx}
-\end{flushleft}
+% \chapter{List of abbreviations and symbols}
+% \section*{abbreviations}
+% \begin{flushleft}
+%   \renewcommand{\arraystretch}{1.1}
+%   \begin{tabularx}{\textwidth}{@{}p{12mm}X@{}}
+%     LoG   & Laplacian-of-Gaussian \\
+%     MSE   & Mean Square error \\
+%     PSNR  & Peak Signal-to-Noise ratio \\
+%   \end{tabularx}
+% \end{flushleft}
+% \section*{Symbols}
+% \begin{flushleft}
+%   \renewcommand{\arraystretch}{1.1}
+%   \begin{tabularx}{\textwidth}{@{}p{12mm}X@{}}
+%     42    & ``The Answer to the Ultimate Question of Life, the Universe,
+%             and Everything'' volgens de \cite{h2g2} \\
+%     $c$   & Speed of light \\
+%     $E$   & Energy \\
+%     $m$   & Mass \\
+%     $\pi$ & The number pi \\
+%   \end{tabularx}
+% \end{flushleft}
 
 % Now comes the main text
 \mainmatter
 
 \include{intro}
+\include{chapter-0-background}
 \include{chapter-1-methodology}
 \include{chapter-2-results}
 % ... and so on until
-\include{chapter-n}
 \include{conclusion}
 
 % If you have appendices:

@@ -1,6 +1,5 @@
-% Version 0.1 19d/05m/26y 11:52
 \chapter{Methodology}
-\label{cha:1}
+\label{cha:methodology}
 \todo{methodology introduction. To write in this chapter: literature study (including known structures), algorithms used, tests that have been written, language used and why, Makefile maybe?}
 % A chapter is a logical unit. It normally starts with an introduction, which you are reading now. The last topic of the chapter holds the conclusion.
 In this chapter, we explain in detail what graph generators we used, the algorithms written for the research, the relevant graphs from previous research, the programming language the algorithms were written in and why, and the tests performed to make sure the programs are correctly written.
@@ -9,24 +8,29 @@ In this chapter, we explain in detail what graph generators we used, the algorit
 
 \todo{Pipelining, generators to algorithm (with language choice) to output}
 
-Since the goal of this thesis is to exhaustively check a large number of graphs, an efficient implementation is required. Since we will also use other programs to solve part of the problem (see section~\ref{sec:generators} on graph generators), we chose to use pipelining on Linux to efficiently pass output from one program as input to another. The implementation of the algorithms must also be efficient, and for that reason, \texttt{C++} was chosen as the programming language to implement all algorithms discussed in section~\ref{sec:algorithms}. To make analysis of the results easier, the output for both programs is put in a CSV format, with header. % I don't think this was written very well...
+Since the goal of this thesis is to exhaustively check a large number of graphs, an efficient implementation is required. We will use multiple programs and processes to solve this problem (see section~\ref{sec:generators} on graph generators), and therefore chose to use Linux' pipelining capabilities to efficiently pass output from one program as input to another. The implementation of the developed algorithms must also be efficient, and for that reason, \texttt{C++} was chosen as the programming language to implement all algorithms discussed in section~\ref{sec:algorithms}. To make analysis of the results easier, the output for both programs is put in a CSV format, with header.
 
 \section{Graph Generators}
 \label{sec:generators}
 
-Efficient but exhaustive graph generation is a difficult problem to solve. A graph generator needs to be exhaustive (i.e. generate every graph in a certain category), while also avoiding generating isomorphic graphs. If not much care is put into generating each graph once, the same graph can easily be generated multiple times as isomorphic graphs, resulting in redundant computations. Many graph generators have already been made, each of which already took a lot of research\cite{article:jorik-jooken}. That is why, rather than making an attempt at our own graph generator specific for this problem, we use existing graph generators in this thesis.
+\todo{what is a graph generator?}
+\todo{More examples of generators, and their intended graph classes (algemene grafen geng (nauty), kubische grafen snarkhunter, planaire grafen plantri)}
+
+Efficient but exhaustive graph generation is a difficult problem to solve. A graph generator needs to be exhaustive (i.e. generate every graph in a certain category), while also avoiding generating isomorphic graphs. If not much care is put into generating each graph once, the same graph can easily be generated multiple times as isomorphic graphs, resulting in redundant computations. Many graph generators have already been made, each of which already took a lot of research~\cite{article:jorik-jooken}. That is why, rather than making an attempt at our own graph generator specific for this problem, we use existing graph generators in this thesis.
 
 \subsection{Nauty and GenerateUHG}
 
-The \texttt{Nauty} package\cite{lib:nauty} has a graph generator \texttt{geng} which can ``generate non-ismorphic graphs very quickly''\cite{lib:nauty}, including specifically 2-connected graphs. It can also output its graphs in the \texttt{graph6} format, which is a compact ASCII string representation of graphs\todo{citation?}. This creates a useful graph generator for RQ\ref{rq1}.
+The \texttt{Nauty} package~\cite{lib:nauty} has a graph generator \texttt{geng} which can ``generate non-ismorphic graphs very quickly''~\cite{lib:nauty}, including specifically 2-connected graphs. It can also output its graphs in the \texttt{graph6} format, which is a compact ASCII string representation of graphs. This creates a useful graph generator for RQ\ref{rq1}.
 
-During the year we realised that it is likely that most of the generated 2-connected graphs are hamiltonian, as seen in Table~\ref{tab:2con-nonhamil}.\todo{table with values} Since a hamiltonian graph has a cycle that goes through all vertices of the graph, this would mean that the intersection of all longest cycles would simply be all vertices. We would thus like to avoid hamiltonian graphs completely. This is why, for RQ\ref{rq1}, we instead opted to use the Uniquely Hamiltonian Graphs generator\cite{lib:UHG}, which holds a program \texttt{GenerateUHG} that allows us to generate graphs with a specific amount of hamiltonian cycles, in the \texttt{graph6} format. By setting that amount to 0, we only get non-hamiltonian graphs, which we suspect to have a much lower quantity of graphs than simply 2-connected graphs.
+\todo{Add: Why 2-connected? (Well, it's the question we're trying to answer, no?)}
+
+During the year we suspected that most of the generated 2-connected graphs are hamiltonian. Since a hamiltonian graph has a cycle that goes through all vertices of the graph, this would mean that the graphs of order 13 and higher would not have circumference 11. We would thus like to avoid hamiltonian graphs completely. This is why, for RQ\ref{rq1}, we instead opted to use the Uniquely Hamiltonian Graphs generator~\cite{lib:UHG}, which holds a program \texttt{GenerateUHG} that allows us to generate graphs with a specific amount of hamiltonian cycles, in the \texttt{graph6} format. By setting that amount to 0, we only get non-hamiltonian graphs, which we suspect to have a lower quantity of graphs than 2-connected graphs. For larger $n$, these suspicions seem to be confirmed, as seen in Table~\ref{tab:2con-nonhamil}.
 
 \begin{table}
   \centering
-  \caption{Amount of 2-connected graphs\cite{data:integer-sequence} and nonhamiltonian graphs per order of the graph $n$}
+  \caption{Amount of 2-connected graphs~\cite{data:integer-sequence} and of nonhamiltonian graphs~\cite{lib:UHG} per order of the graph $n$}
   \label{tab:2con-nonhamil}
-  \begin{tabular}{rrl}
+  \begin{tabular}{rrr}
     \hline\\
     $n$ & Number of 2-connected graph & Number of nonhamiltonian graphs \\
     \hline \\
@@ -47,21 +51,21 @@ During the year we realised that it is likely that most of the generated 2-conne
   \end{tabular}
 \end{table}
 
-Using this generator instead reintroduced the problem of making sure the graphs are 2-connected, since we could not add this condition to the generator's input. The \texttt{Nauty} package fortunately also contains the program \texttt{pickg},\todo{is this more formal?} which lets us filter the output of another program. It takes \texttt{graph6} strings as input, and only outputs those strings for which the graph is 2-connected, given the correct parameters \todo{include parameters}. This program is very efficient compared to generation and the rest of the algorithm\todo{proof}, and therefore the use of \texttt{GenerateUHG} with \texttt{pickg} seems to be a good choice for the graph generation of RQ\ref{rq1}.
+Using this generator instead reintroduced the problem of making sure the graphs are 2-connected, since the generator has no option to only generate 2-connected graphs. The \texttt{Nauty} package fortunately also contains the program \texttt{pickg},\todo{is this more formal?} which lets us filter the output of another program. It takes \texttt{graph6} strings as input, and only outputs those strings for which the graph is 2-connected, given the correct parameters \todo{include parameters}. This program is very efficient compared to generation and the rest of the algorithm\todo{proof}, and therefore the use of \texttt{GenerateUHG} with \texttt{pickg} seems to be a good choice for the graph generation of RQ\ref{rq1}.
 
 \subsection{plantri}
 
-In the second research question RQ\ref{rq2}, only planar graphs are relevant, and as such, a planar graph generator seems to be the most interesting. The \texttt{plantri} package~\cite{lib:plantri} includes a suitable generator \texttt{plantri} for this. With the correct parameters, this package can generate 2-connected planar graphs with minimal degree 4. This generator only generates non-isomorphic 2-connected graphs where isomorphism is defined with reference to the embedding on a sphere, ``which means that outputs may be isomorphic as abstract graphs if the connectivity is less than 3''~\cite{lib:plantri}, i.e. there may be some duplicate 2-connected graphs. Despite this redundancy, generating planar graphs remains more efficient than generating 2-connected graphs and checking their planarity. 
+In the second research question RQ\ref{rq2}, only planar graphs are relevant, and as such, a planar graph generator seems to be the most interesting. The \texttt{plantri} package~\cite{lib:plantri} includes a suitable generator \texttt{plantri} for this. With the correct parameters, this package can generate 2-connected planar graphs with minimum degree 4. This generator only generates non-isomorphic 2-connected graphs where isomorphism is defined with reference to the embedding on a sphere, ``which means that outputs may be isomorphic as abstract graphs if the connectivity is less than 3''~\cite{lib:plantri}, i.e. there may be some duplicate 2-connected graphs. Despite this redundancy, generating planar graphs remains more efficient than generating 2-connected graphs and checking their planarity. 
 
-It has also been shown that all 3-connected planar graphs, with minimal degree 4, on at most 22 vertices are hamiltonian~\cite{article:hamiltonian-planar}. This means that up to 22 vertices, we simply have to generate graphs with connectivity 2, i.e. graphs which are 2-connected but not 3-connected. This reduces the search space even more, as seen in Table~\ref{tab:2con-planar}.
+It has also been shown that all 3-connected planar graphs, with minimum degree 4, on at most 22 vertices are hamiltonian~\cite{article:hamiltonian-planar}. This means that up to 22 vertices, we simply have to generate graphs with connectivity 2, i.e. graphs which are 2-connected but not 3-connected. This reduces the search space even more, as seen in Table~\ref{tab:2con-planar}.
 
-The parameters used include the option \texttt{-p} to select general plane simple graphs, the option \texttt{-m4} to select graphs with minimal degree 4, the option \texttt{-c2x} to select exclusively 2-connected graphs and not 3-connected graphs. Lastly, the option \texttt{-g} is used which forces the outputted graphs to be in the \texttt{graph6} format.
+The parameters used include the option \texttt{-p} to select general plane simple graphs, the option \texttt{-m4} to select graphs with minimum degree 4, the option \texttt{-c2x} to select exclusively 2-connected graphs and not 3-connected graphs. Lastly, the option \texttt{-g} is used which forces the outputted graphs to be in the \texttt{graph6} format.
 
 \begin{table}
   \centering
   \caption{Amount of generated 2-connected planar graphs with (parameters \texttt{pgm4c2}), and generated planar graphs with connectivity 2 (with parameters \texttt{pgm4c2x}) per order of the graph $n$}
   \label{tab:2con-planar}
-  \begin{tabular}{rrl}
+  \begin{tabular}{rrr}
     \hline\\
     $n$ & 2-connected planar graphs & connectivity 2 planar graphs \\
     \hline \\
@@ -82,9 +86,9 @@ The parameters used include the option \texttt{-p} to select general plane simpl
 \end{table}
 
 
-\subsection{list of graphs by J. Goedgebeur}
+\subsection{Existing lists of graphs}
 
-During development on the second research question, we quickly noticed hamiltonian graphs are irrelevant. This is because, regardless of if a graph has a cycle of length $k$ in each of their vertex-deleted subgraphs, if the graph has a hamiltonian cycle, the statement of RQ\ref{rq2} is trivially true. A supervisor of this thesis, Jan Goedgebeur, had previously done research on nonhamiltonian 2-connected planar graphs with minimal degree 4, and had saved these graphs of up to 20 vertices~\cite{article:hamiltonian-planar}. By using this list, we could push the total amount of relevant graphs further than with only generation.
+During development on the second research question, we quickly noticed hamiltonian graphs are irrelevant. This is because, regardless of if a graph has a cycle of length $k$ in each of their vertex-deleted subgraphs, if the graph has a hamiltonian cycle, the statement of RQ\ref{rq2} is trivially true. A supervisor of this thesis, Jan Goedgebeur, had previously done research on nonhamiltonian 2-connected planar graphs with minimum degree 4, and had saved these graphs of up to 20 vertices~\cite{article:hamiltonian-planar}. By using this list, we could push the total amount of relevant graphs further than with only generation.
 
 %\subsection{An item}
 %Please don't abuse enumerations: short enumerations shouldn't use
@@ -104,20 +108,22 @@ During development on the second research question, we quickly noticed hamiltoni
 %  third one.
 %\end{quote}
 
-\section{Finding the Intersection of longest 11-cycles}
+\section{Finding the Intersection of longest k-cycles}
 \label{sec:algorithms}
+
+\todo{Correctness tests}
 
 \subsection{Intersection of cycles}
 
-To know if a graph has circumference 11 and has no vertex meeting every 11-cycle for RQ\ref{rq1}, we need an algorithm that can find the length of the longest cycle (the circumference) of the graph, while also keeping track of the intersection of all 11-cycles. Finding the circumference for a 2-connected or planar graph is known to be an NP-hard problem~\cite{article:np-completeness}, meaning there is no known polynomial algorithm for it and is a difficult problem to solve. In this thesis, the approach used to compute the circumference of a graph is to enumerate all cycles and take the maximum of the length of these cycles. This also already provides an easy method for finding the intersection of all 11-cycles: if we find a cycle of length 11 during enumeration of all cycles, we can simply use its vertices to compute the intersection with all previous 11-cycles. Thus, we need an algorithm for enumerating all cycles efficiently.
+One of the aims of this thesis is to create an algorithm that can determine if a graph has circumference 11, and has no vertex meeting every 11-cycle for RQ\ref{rq1}. Finding the longest cycle in a general graph, known as longest cycle problem, ``is well known as NP-complete.''~\cite{article:longest-cycle-np}, meaning there is no known polynomial algorithm for solving it and remains computationally expensive. In this thesis, the approach used is to enumerate all cycles, which lets us determine if a cycle of length 11 exists and no larger. This enumeration also provides an easy method for computing the required intersection, as we just take the intersection of all found 11-cycles. Thus, we need an algorithm for enumerating all cycles efficiently.
 
-\subsubsection{Enumeration of all cycles}
+\subsubsection{Enumeration of all cycles once}
 
-The simplest approach to this problem is a depth-first search on the vertices. Simply take a starting vertex and set it as visited. Then take an unvisited edge for the last visited vertex (also setting this edge as visited), and consider the other vertex of that edge as a candidate next vertex. If this candidate is not yet visited, we simply add it to the currently visited vertices, and repeat the previous steps from this vertex. If during this process, the candidate is the original starting vertex, and there are at least three visited vertices, then we have found a cycle, and the vertices of the cycle are the visited vertices, with the length of the cycle equal to the amount of visited vertices. If the candidate is not the original starting vertex, but has been visited, we can simply ignore it, and continue DFS from the previous vertex. Lastly, if the last visited vertex has no more unvisited edges, we can consider this vertex spent and pop it from the list of visited vertices, which also requires us to set its edges as unvisited again.
+The simplest approach to this problem is a depth-first search on the vertices. The algorithm goes as follows: take a starting vertex and add it to the current path. Then, repeat the following steps until the path is empty. Take an unvisited neighbor of the last vertex in the path, and consider that vertex as a candidate next vertex. If this candidate is the original starting vertex (and there are at least three vertices in the path), then we have found a cycle, and the vertices of the cycle are the visited vertices together with the starting vertex. The length of this cycle equal to the amount of vertices in the path. If the last vertex has no more unvisited edges, we can consider this vertex spent and pop it from the list of visited vertices, which also requires us to set its edges as unvisited again.
 
-This algorithm by itself is not yet efficient: during enumeration of the cycles, each cycle is found once for every vertex it contains, times two. The algorithm takes every vertex of the cycle as a starting vertex, and discovers the cycle each time twice, in the two directions it can travel down the cycle. We can reduce this number by using a useful property of the way vertices of graphs are often represented in computer programs. In this thesis' source code, vertices are represented as integers, from 0 to $n-1$ with $n$ equal to the order of the graph. This provides us with the useful property that the vertices are ordered.
+This algorithm by itself is not yet efficient, as during enumeration, each cycle is found once for every vertex it contains, times two. This because the algorithm takes every vertex of the cycle as a starting vertex, and discovers the cycle each time twice, in the two directions it can travel down the cycle. We can reduce this number by using a useful property of the way vertices of graphs are often represented in computer programs. In this thesis' source code, vertices are represented as integers, from 0 to $n-1$ with $n$ equal to the order of the graph. This provides us with the useful property that the vertices are \textit{ordered}.
 
-By considering the starting vertex as the ``minimal'' vertex of the DFS algorithm, only allowing new vertices to be candidates if they are higher in order than this starting vertex, we can greatly reduce the search space of the algorithm for many starting vertices, all while guaranteeing we only enumerate each cycle twice. We can reduce this further by also defining an order on its second and last discovered vertex: by only outputting a cycle when the second visited vertex is lower in order than the last visited vertex, we only enumerate each cycle when it was travelled one of the two directions.
+The ordering of the vertices allows us to consider the starting vertex as the \textit{minimal} vertex, where we only allow new vertices to be candidates if they are higher in order than this starting vertex. The algorithm would then run starting from every This greatly reduces the number of times each cycle is enumerated, from twice for every vertex in both directions, to only twice from the minimal vertex of the cycle. Furthermore, we can also use the ordering of the vertices to force the cycle to only be enumerated in one of the two directions. This by requiring that the cycle's first and last vertex (other than the starting vertex) must be in, for example, ascending order, and ignoring found cycles which are in descending order. 
 
 \subsubsection{Halting cycle enumeration early}
 
@@ -131,88 +137,76 @@ During enumeration, we must also compute the intersection of all 11-cycles. Set 
 
 \todo{add chosen data structures}
 
-% With help from ChatGPT:
-\begin{figure}
-\begin{algorithm}[H]
-\caption{\textsc{CheckProperties}$(G, k)$}
+\begin{algorithm}
+\caption{\textsc{FindIntersectionK}$(G,k,\prec)$}
+\label{alg:find-k-intersection}
+
 \begin{algorithmic}[1]
-\Require Graph $G=(V,E)$ with ordered vertices, integer $k > 2$
-\Ensure 
-    Maximum cycle length $\textit{circumference}$ and
-    intersection of all $k$-cycles $\textit{intersection}$
+\Require Graph $G$, integer $|V(G)|>k>2$, and a total ordering on $V$
+\Ensure intersection of all $k$-cycles $\textit{intersection}$ and circumference $c(G)=k$
 
-\State $\textit{circumference} \gets 0$
 \State $\textit{intersection} \gets V(G)$
-
-\State $m \gets |V(G)| - k$
-\Comment{largest possible minimal vertex of a $k$-cycle}
-
-\For{$i \gets 0$ to $m$}
-    \State $\textit{visited} \gets [i]$
-    \State $\textit{indices} \gets [0]$
-    \Comment{next adjacency index for each depth}
-
-    \While{\textit{visited} is not empty}
-
-        \If{last vertex in \textit{visited} has run through all neighbors}
-            \State remove last vertex from $\textit{visited}$
-            \State remove last element from $\textit{indices}$
-            \If{\textit{indices} not empty}
-                \State increment last element of $\textit{indices}$
-            \EndIf
-            \State \textbf{continue}
+\ForAll{$s \in V(G)$ ascending}
+\State $\textit{path} \gets [s]$
+\While{$\textit{path}$ is not empty}
+    \State $u \gets$ the last vertex in $\textit{path}$
+    \If{no unvisited neighbor of $u$}
+        \State remove $u$ from $\textit{path}$
+        \Comment Including its visited neighbors
+        \State \textbf{continue}
+    \EndIf
+    \State {$v \gets$ an unvisited vertex, and unvisited neighbor of $u$}
+    \State mark $v$ as visited neighbor of $u$
+    \If{$v=s$}
+        \State $\ell \gets |\textit{path}|$
+        \If{$\ell > k$}
+            \State \Return $\text{LARGER\_THAN\_K}$
         \EndIf
-
-        \State $v \gets n^{\text{th}}$ neighbor of last vertex in \textit{visited}
-
-        \If{$v \in \textit{visited}$ \textbf{or} $v < i$}
-
-            \If{$v = i$ \textbf{and} second vertex in \textit{visited} $<$ last vertex in \textit{visited}}
-                \State $\ell \gets |\textit{visited}|$
-                \State $\textit{circumference} \gets \max(\textit{circumference}, \ell)$
-
-                \If{$\ell > k$}
-                    \Comment{halt early}
-                    \State \Return failure
-                \EndIf
-
-                \If{$\ell = k$}
-                    \State $\textit{intersection} \gets
-                        \textit{intersection} \cap \textit{visited}$
-                \EndIf
-            \EndIf
-
-            \State increment last element of \textit{indices}
-            \State \textbf{continue}
+        \If{$\ell = k$}
+            \State $\textit{intersection} \gets
+            \textit{intersection} \cap \textit{path}$
         \EndIf
-
-        \State add $v$ to $\textit{visited}$
-        \Comment Continue with DFS
-        \State append $v$ to $\textit{path}$
-        \State append $0$ to $\textit{indices}$
-
-    \EndWhile
+        \State \textbf{continue}
+    \EndIf
+    \If{$s \prec v$}
+        \State add $v$ to $\textit{path}$
+    \EndIf
+\EndWhile
 \EndFor
 
-\State \Return success
+\If{$\textit{intersection} = V(G)$}
+    \State \Return $\text{SMALLER\_THAN\_K}$
+\EndIf
+\State \Return $\text{EQUAL\_TO\_K}$
 \end{algorithmic}
 \end{algorithm}
-\end{figure}
 
 \section{Checking vertex-deleted subgraphs for k-cycles}
 
-This section introduces the algorithm for RQ\ref{rq2} \todo{this section}.
+\todo{Add RQ2 again for clarity}
 
-%First we start with equation~\ref{eq:1} after this paragraph.
-%\begin{equation}
-%  \label{eq:1}
-%  A = \pi r^2
-%\end{equation}
-%
-%\lipsum[64]
-%
-%\subsection{Another item}
-%\lipsum[56-57]
+This section introduces the algorithm for RQ\ref{rq2}. The approach is similar to RQ\ref{rq1}: we generate planar graphs with minimum degree 4, and check for each graph if in every vertex-deleted subgraph there exists a $k$-cycle, that there then is a cycle larger than $k$. Trivially, if a vertex-deleted subgraph of a graph $G$ has a $k$-cycle, then the graph $G$ itself also has a $k$-cycle. As a result, for a graph $G$ can only be a negative example of RQ\ref{rq2}, there must be a $k$-cycle in every vertex-deleted subgraph of $G$ and $G$ must also have circumference $k$. From this, we decided to focus our algorithm on finding negative examples, as we can assume all other graphs to be positive examples.
+
+\begin{theorem}
+  For a graph $G$ with circumference $k$ less than the order of $G$, $G$ has a $k$-cycle in every vertex-deleted subgraph if and only if the intersection of the vertices of all $k$-cycles in the graph is empty.
+\end{theorem}
+
+\begin{proof}
+  Assume $G$ with circumference $k$ has a $k$-cycle in every vertex-deleted subgraph. $G$ therefore has at least one $k$-cycle, denoted $C$, and the intersection of all $k$-cycles must be at most the vertices $V(C) \subset V(G)$. Per the assumption, for every vertex $v_i \in V(C)$ there must be a $k$-cycle $C_i'$ in $G$ avoiding the vertex $v_i$. As a result, the intersection of all $k$-cycles is at most
+  $$
+  \bigcap_{i} C_i' \cap C = \emptyset
+  $$
+  and thus the intersection of all $k$-cycles must be empty.
+
+  Now assume $G$ has circumference $k$ (less than the order of $G$) and the intersection of all $k$-cycles is empty. $G$ again has at least one $k$-cycle $C$, which avoids all vertices $v_{\text{out}} \in V(G) \setminus V(C)$. Additionally, since the intersection of all $k$-cycles is empty, there must be a $k$-cycle for every vertex $v_{\text{in}} \in V(C)$ which avoids $v_{\text{in}}$. As a result, there exists a $k$-cycle avoiding every vertex $v \in V(C) \cup (V(G) \setminus V(C)) = V(G)$, and therefore every vertex-deleted subgraph of $G$ has a $k$-cycle.
+
+  We conclude that for a graph $G$ with circumference $k$ less than the order of $G$, $G$ has a $k$-cycle in every vertex-deleted subgraph if and only if the intersection of the vertices of all $k$-cycles in the graph is empty.
+\end{proof}
+
+
+This result allows us to reuse most of Algorithm~\ref{alg:find-k-intersection}. To adapt it to RQ\ref{rq2}, instead of keeping track of the intersection of all $k$-cycles for an arbitrary value $k$, we must keep track of the intersection of the longest currently found cycles of the graph. This means that during execution, if a longer cycle is found than the current length of the longest cycles found, instead of halting early, we simply set the intersection of the longest cycles to the vertices of that new cycle.
+
+Thomassen has shown~\cite{article:thomassen} that for every planar graph with minimum degree 4 of order $n$, if the graph has an $(n-1)$-cycle in every vertex-deleted subgraph, it must also be hamiltonian. This mean we can still halt the algorithm early, namely when a cycle is found of length $n-1$ or $n$.
 
 \section{Study of Known Graphs}
 
@@ -221,8 +215,8 @@ The paper \textit{On a question of van Aardt et al. on destroying all longest cy
 \subsection{Construction by C. T. Zamfirescu}
 \label{sec:tube-graph}
 
-C. T. Zamfirescu showed~\cite{article:zamfirescu} that for every pair of integers $\ell \ge 2$ and $p \ge 4$, there exists a 2-connected graph G of order $\ell p$ and circumference $(\ell+1) (p-1) + 1$ whose intersection of all longest cycles is empty. We repeat the construction of the graph $G$ used in the proof here. Note that in this thesis, we use a different convention for $\ell$ than in the paper by C. Zamfirescu.
-Take two cycles $(a_0, a_1, ..., a_{p-1})$ and $(b_0, b_1, ..., b_{p-1})$, each of length $p$, and connect $(a_i, b_i)$ for all $i$. Then, insert vertices on each edge $(a_i, b_i)$ until each becomes a path of length $\ell$ (i.e., has $\ell$ edges or $\ell-1$ vertices, including the vertices $a_i$ and $b_i$). Denote these paths from $a_i$ to $b_i$ as $H_i$. If $p$ is even, remove the edges $a_{p-1}a_0$ and $b_{p-1}b_0$, and replace them with the edges $a_{p-1}b_0$ and $b_{p-1}a_0$. We denote the graph constructed in this way as $G_{p,ell}$. C. Zamfirescu has shown~\cite{article:zamfirescu} that the cycle $C$ with vertices
+C. T. Zamfirescu showed~\cite{article:zamfirescu} that for every pair of integers $\ell \ge 2$ and $p \ge 4$, there exists a 2-connected graph G of order $()\ell+1) p$ and circumference $(\ell+1) (p-1) + 1$ whose intersection of all longest cycles is empty. We repeat the construction of the graph $G$ used in the proof here. Note that in this thesis, we use a different convention for $\ell$ than in the paper by C. Zamfirescu.
+Take two cycles $(a_0, a_1, ..., a_{p-1})$ and $(b_0, b_1, ..., b_{p-1})$, each of length $p$, and connect $(a_i, b_i)$ for all $i$. Then, insert vertices on each edge $(a_i, b_i)$ until each becomes a path of length $\ell$ (i.e., has $\ell$ edges or $\ell+1$ vertices, including the vertices $a_i$ and $b_i$). Denote these paths from $a_i$ to $b_i$ as $H_i$. If $p$ is even, remove the edges $a_{p-1}a_0$ and $b_{p-1}b_0$, and replace them with the edges $a_{p-1}b_0$ and $b_{p-1}a_0$. We denote the graph constructed in this way as $G_{p,\ell}$. C. Zamfirescu has shown~\cite{article:zamfirescu} that the cycle $C$ with vertices
 
 $$
 \bigcup_{i \neq 0} V(H_i) \cup {b_0}
@@ -323,7 +317,9 @@ In this thesis, we look deeper into the types of cycles that can be created from
 
 \subsection{Almost-solution to RQ1}
 
-While a solution for RQ\ref{rq1} is unknown, we do have an upper bound for the smallest amount of vertices in the intersection of all 11-cycle. In \cite{article:zamfirescu}, a graph of circumference 11 is constructed in which all but one vertex avoid all longest 11-cycles. This graph exploits the properties of the Petersen's graph, which is a hypohamiltonian graph of order 10 and thus circumference 9, and extends the three edges incident on one of its vertices $v$ with one extra vertex each, as seen in Figure~\ref{fig:petersen-divided}. This extends all cycles through this vertex $v$ by either 1 or 2. One can prove that as a result, this new graph of order 13 has circumference 11, with only one vertex meeting every 11-cycle~\cite{article:zamfirescu}.
+\label{sec:modified-petersen}
+
+While a solution for RQ\ref{rq1} is unknown, we do have an upper bound for the smallest amount of vertices in the intersection of all 11-cycle. In \cite{article:zamfirescu}, it is shown that a graph of circumference 11 can be constructed in which all but one vertex avoid all longest 11-cycles. This graph exploits the properties of the Petersen's graph, which is a hypohamiltonian graph of order 10 and thus circumference 9, and extends all three edges incident on one of its vertices $v$ with one extra vertex each, say $x_1$, $x_2$, and $x_3$, as seen in Figure~\ref{fig:petersen-divided}. This extends all cycles through this vertex $v$ by either 1 or 2. One can prove that as a result, this new graph of order 13 has circumference 11, with only one vertex meeting every 11-cycle~\cite{article:zamfirescu}. Note that this graph has a maximal degree of 3.
 
 \begin{figure}
   \centering
