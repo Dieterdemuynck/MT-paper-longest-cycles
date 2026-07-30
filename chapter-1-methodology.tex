@@ -1,8 +1,10 @@
 \chapter{Methodology}
 \label{cha:methodology}
-\todo{methodology introduction. To write in this chapter: literature study (including known structures), algorithms used, tests that have been written, language used and why, Makefile maybe?}
+\todo{methodology introduction. To write in this chapter: algorithms used, tests that have been written, language used and why, Makefile maybe?}
 % A chapter is a logical unit. It normally starts with an introduction, which you are reading now. The last topic of the chapter holds the conclusion.
 In this chapter, we explain in detail what graph generators we used, the algorithms written for the research, the relevant graphs from previous research, the programming language the algorithms were written in and why, and the tests performed to make sure the programs are correctly written.
+
+% --- COMMENT: This introduction currently gives Graph Generators and "relevant graphs from previous research" equal status with the actual methodology. After moving the theoretical background and literature-study material, this should be revised to introduce only the methodological contents that remain: the computational pipeline, selected generators (briefly), algorithms, implementation choices, and validation/testing. The detailed discussion of graph generators and prior constructions should be removed from this sentence or reduced to a brief methodological overview. ---
 
 \section{General Structure}
 
@@ -10,21 +12,24 @@ In this chapter, we explain in detail what graph generators we used, the algorit
 
 Since the goal of this thesis is to exhaustively check a large number of graphs, an efficient implementation is required. We will use multiple programs and processes to solve this problem (see section~\ref{sec:generators} on graph generators), and therefore chose to use Linux' pipelining capabilities to efficiently pass output from one program as input to another. The implementation of the developed algorithms must also be efficient, and for that reason, \texttt{C++} was chosen as the programming language to implement all algorithms discussed in section~\ref{sec:algorithms}. To make analysis of the results easier, the output for both programs is put in a CSV format, with header.
 
-\section{Graph Generators}
-\label{sec:generators}
+% --- COMMENT: KEEP IN METHODOLOGY. This is methodological/implementation material. However, the reference to section~\ref{sec:generators} should eventually point to the Background chapter if the generator overview is moved there. The detailed justification for why particular generators were selected should not be repeated here; this section can say which generators were used in the actual pipeline and refer back to Background for their general properties. ---
 
-\todo{what is a graph generator?}
-\todo{More examples of generators, and their intended graph classes (algemene grafen geng (nauty), kubische grafen snarkhunter, planaire grafen plantri)}
-
-Efficient but exhaustive graph generation is a difficult problem to solve. A graph generator needs to be exhaustive (i.e. generate every graph in a certain category), while also avoiding generating isomorphic graphs. If not much care is put into generating each graph once, the same graph can easily be generated multiple times as isomorphic graphs, resulting in redundant computations. Many graph generators have already been made, each of which already took a lot of research~\cite{article:jorik-jooken}. That is why, rather than making an attempt at our own graph generator specific for this problem, we use existing graph generators in this thesis.
 
 \subsection{Nauty and GenerateUHG}
 
+% --- COMMENT: SPLIT THIS SUBSECTION BETWEEN BACKGROUND AND METHODOLOGY. Background should introduce Nauty/geng and GenerateUHG as generators, their intended graph classes, relevant capabilities, and limitations. Methodology should retain the specific reason they were selected for RQ\ref{rq1}, the exact configuration used, and the resulting pipeline with \texttt{pickg}. ---
+
 The \texttt{Nauty} package~\cite{lib:nauty} has a graph generator \texttt{geng} which can ``generate non-ismorphic graphs very quickly''~\cite{lib:nauty}, including specifically 2-connected graphs. It can also output its graphs in the \texttt{graph6} format, which is a compact ASCII string representation of graphs. This creates a useful graph generator for RQ\ref{rq1}.
+
+% --- COMMENT: The first two sentences belong in Background: they describe Nauty/geng and graph6 generally. The final sentence is methodological and should remain in Methodology, but it should be expanded to explain why these properties matter specifically for RQ1. If Nauty/geng is not actually used in the final pipeline for RQ1, be especially careful: this may instead belong entirely in Background as a considered-but-rejected alternative. ---
 
 \todo{Add: Why 2-connected? (Well, it's the question we're trying to answer, no?)}
 
+% --- COMMENT: The general meaning/relevance of 2-connected graphs should be established in the Background chapter, probably in the planned \section{Graphs}. The RQ-specific explanation of why the search is restricted to 2-connected graphs can be stated briefly in Methodology. This TODO should therefore be split into a theoretical explanation in Background and a research-question-specific justification here. ---
+
 During the year we suspected that most of the generated 2-connected graphs are hamiltonian. Since a hamiltonian graph has a cycle that goes through all vertices of the graph, this would mean that the graphs of order 13 and higher would not have circumference 11. We would thus like to avoid hamiltonian graphs completely. This is why, for RQ\ref{rq1}, we instead opted to use the Uniquely Hamiltonian Graphs generator~\cite{lib:UHG}, which holds a program \texttt{GenerateUHG} that allows us to generate graphs with a specific amount of hamiltonian cycles, in the \texttt{graph6} format. By setting that amount to 0, we only get non-hamiltonian graphs, which we suspect to have a lower quantity of graphs than 2-connected graphs. For larger $n$, these suspicions seem to be confirmed, as seen in Table~\ref{tab:2con-nonhamil}.
+
+% --- COMMENT: This is mixed. The general explanation of Hamiltonian/non-Hamiltonian graphs and the capabilities of GenerateUHG belong in Background. The actual decision to use GenerateUHG with zero Hamiltonian cycles for RQ1 belongs in Methodology. The numerical comparison in the table is evidence supporting a methodological search-space decision, so it can remain in Methodology, although the table itself could potentially be moved if it is intended as general context rather than an experiment-specific justification. ---
 
 \begin{table}
   \centering
@@ -51,15 +56,26 @@ During the year we suspected that most of the generated 2-connected graphs are h
   \end{tabular}
 \end{table}
 
+% --- COMMENT: KEEP IN METHODOLOGY if this table is being used to justify the actual computational search strategy. If the Background chapter discusses the general availability/size of graph classes, a shorter version or a reference to the data may be appropriate there, but the interpretation in terms of your RQ1 search should remain here. ---
+
 Using this generator instead reintroduced the problem of making sure the graphs are 2-connected, since the generator has no option to only generate 2-connected graphs. The \texttt{Nauty} package fortunately also contains the program \texttt{pickg},\todo{is this more formal?} which lets us filter the output of another program. It takes \texttt{graph6} strings as input, and only outputs those strings for which the graph is 2-connected, given the correct parameters \todo{include parameters}. This program is very efficient compared to generation and the rest of the algorithm\todo{proof}, and therefore the use of \texttt{GenerateUHG} with \texttt{pickg} seems to be a good choice for the graph generation of RQ\ref{rq1}.
+
+% --- COMMENT: KEEP IN METHODOLOGY, but shorten the general description of pickg if it is already introduced in Background. This paragraph is fundamentally about the actual pipeline and the methodological choice to combine GenerateUHG and pickg. The exact parameters belong here. The claim that pickg is "very efficient compared to generation and the rest of the algorithm" needs either benchmarking/evidence or should be softened. ---
 
 \subsection{plantri}
 
+% --- COMMENT: MOVE the general introduction to plantri and its capabilities to Background. KEEP the specific parameter choices and their methodological justification in Methodology. ---
+
 In the second research question RQ\ref{rq2}, only planar graphs are relevant, and as such, a planar graph generator seems to be the most interesting. The \texttt{plantri} package~\cite{lib:plantri} includes a suitable generator \texttt{plantri} for this. With the correct parameters, this package can generate 2-connected planar graphs with minimum degree 4. This generator only generates non-isomorphic 2-connected graphs where isomorphism is defined with reference to the embedding on a sphere, ``which means that outputs may be isomorphic as abstract graphs if the connectivity is less than 3''~\cite{lib:plantri}, i.e. there may be some duplicate 2-connected graphs. Despite this redundancy, generating planar graphs remains more efficient than generating 2-connected graphs and checking their planarity. 
 
+% --- COMMENT: SPLIT. The description of plantri's general behaviour, its notion of isomorphism, and the distinction between planar embeddings and abstract graph isomorphism belong in Background. The final methodological comparison ("generating planar graphs remains more efficient...") belongs in Methodology, but should ideally be supported by measurements or a citation. ---
 It has also been shown that all 3-connected planar graphs, with minimum degree 4, on at most 22 vertices are hamiltonian~\cite{article:hamiltonian-planar}. This means that up to 22 vertices, we simply have to generate graphs with connectivity 2, i.e. graphs which are 2-connected but not 3-connected. This reduces the search space even more, as seen in Table~\ref{tab:2con-planar}.
 
+% --- COMMENT: The cited theorem/result belongs in Background or Literature Study as prior research. The consequence for your actual search space ("we simply have to generate...") belongs in Methodology. Consider separating these two sentences so the Background establishes the result and Methodology explicitly states how you exploit it. ---
+
 The parameters used include the option \texttt{-p} to select general plane simple graphs, the option \texttt{-m4} to select graphs with minimum degree 4, the option \texttt{-c2x} to select exclusively 2-connected graphs and not 3-connected graphs. Lastly, the option \texttt{-g} is used which forces the outputted graphs to be in the \texttt{graph6} format.
+
+% --- COMMENT: KEEP IN METHODOLOGY. This is exactly the kind of implementation/configuration detail that should remain here. ---
 
 \begin{table}
   \centering
@@ -85,10 +101,19 @@ The parameters used include the option \texttt{-p} to select general plane simpl
   \end{tabular}
 \end{table}
 
+% --- COMMENT: KEEP IN METHODOLOGY if this table demonstrates the practical effect of the selected plantri parameters and justifies reducing the search space. If it is intended as a general fact about graph classes, it could instead be placed in Background, but the surrounding methodological interpretation should stay here. ---
 
 \subsection{Existing lists of graphs}
 
+% --- COMMENT: This section is partly Literature Study and partly Methodology. The existence and description of previously generated graph lists belong in Literature Study/Background. The specific fact that you use the list as an input to extend your computational search belongs in Methodology. ---
+
 During development on the second research question, we quickly noticed hamiltonian graphs are irrelevant. This is because, regardless of if a graph has a cycle of length $k$ in each of their vertex-deleted subgraphs, if the graph has a hamiltonian cycle, the statement of RQ\ref{rq2} is trivially true. A supervisor of this thesis, Jan Goedgebeur, had previously done research on nonhamiltonian 2-connected planar graphs with minimum degree 4, and had saved these graphs of up to 20 vertices~\cite{article:hamiltonian-planar}. By using this list, we could push the total amount of relevant graphs further than with only generation.
+
+% --- COMMENT: The first sentence and the logical explanation of why Hamiltonian graphs are irrelevant could fit in Background if it is a general consequence of the RQ's theoretical setup. The description of Goedgebeur's prior research belongs in Literature Study. The final sentence ("By using this list...") is Methodology because it explains how you actually used the prior work. ---
+
+% --- COMMENT: IMPORTANT: The planned Background section \section{Graphs} could contain a subsection on the relevant graph classes and properties used throughout the thesis: connected, 2-connected, 3-connected, planar, minimum degree, Hamiltonian, non-Hamiltonian, circumference, and possibly hypohamiltonian graphs. That would make many later methodological passages much easier to shorten. ---
+
+% --- COMMENT: The following commented-out LaTeX example is unrelated to the thesis methodology/background distinction. It can be left untouched if this is a template/example, but it does not need to be in the final chapter. ---
 
 %\subsection{An item}
 %Please don't abuse enumerations: short enumerations shouldn't use
@@ -111,31 +136,52 @@ During development on the second research question, we quickly noticed hamiltoni
 \section{Finding the Intersection of longest k-cycles}
 \label{sec:algorithms}
 
+% --- COMMENT: KEEP THIS SECTION IN METHODOLOGY. This is clearly a description of the algorithms developed/implemented for the research. The theoretical definitions needed to understand the algorithms (e.g. circumference, cycles, graph connectivity) should be introduced in Background, but the actual algorithm and its implementation belong here. ---
+
 \todo{Correctness tests}
+
+% --- COMMENT: KEEP IN METHODOLOGY. This is a methodological/validation TODO. ---
 
 \subsection{Intersection of cycles}
 
 One of the aims of this thesis is to create an algorithm that can determine if a graph has circumference 11, and has no vertex meeting every 11-cycle for RQ\ref{rq1}. Finding the longest cycle in a general graph, known as longest cycle problem, ``is well known as NP-complete.''~\cite{article:longest-cycle-np}, meaning there is no known polynomial algorithm for solving it and remains computationally expensive. In this thesis, the approach used is to enumerate all cycles, which lets us determine if a cycle of length 11 exists and no larger. This enumeration also provides an easy method for computing the required intersection, as we just take the intersection of all found 11-cycles. Thus, we need an algorithm for enumerating all cycles efficiently.
 
+% --- COMMENT: KEEP IN METHODOLOGY. The complexity result could potentially be mentioned briefly in Background as theoretical motivation, but this paragraph is mainly motivating your chosen algorithmic approach and should remain here. ---
+
 \subsubsection{Enumeration of all cycles once}
 
 The simplest approach to this problem is a depth-first search on the vertices. The algorithm goes as follows: take a starting vertex and add it to the current path. Then, repeat the following steps until the path is empty. Take an unvisited neighbor of the last vertex in the path, and consider that vertex as a candidate next vertex. If this candidate is the original starting vertex (and there are at least three vertices in the path), then we have found a cycle, and the vertices of the cycle are the visited vertices together with the starting vertex. The length of this cycle equal to the amount of vertices in the path. If the last vertex has no more unvisited edges, we can consider this vertex spent and pop it from the list of visited vertices, which also requires us to set its edges as unvisited again.
 
+% --- COMMENT: KEEP IN METHODOLOGY. This is the algorithmic procedure. It may need editing for clarity/correctness later, but that is separate from the chapter relocation. ---
+
 This algorithm by itself is not yet efficient, as during enumeration, each cycle is found once for every vertex it contains, times two. This because the algorithm takes every vertex of the cycle as a starting vertex, and discovers the cycle each time twice, in the two directions it can travel down the cycle. We can reduce this number by using a useful property of the way vertices of graphs are often represented in computer programs. In this thesis' source code, vertices are represented as integers, from 0 to $n-1$ with $n$ equal to the order of the graph. This provides us with the useful property that the vertices are \textit{ordered}.
+
+% --- COMMENT: KEEP IN METHODOLOGY. This explains an implementation-level optimization. The general mathematical notion of a total ordering could be introduced in Background only if needed, but the use of the ordering in your algorithm belongs here. ---
 
 The ordering of the vertices allows us to consider the starting vertex as the \textit{minimal} vertex, where we only allow new vertices to be candidates if they are higher in order than this starting vertex. The algorithm would then run starting from every This greatly reduces the number of times each cycle is enumerated, from twice for every vertex in both directions, to only twice from the minimal vertex of the cycle. Furthermore, we can also use the ordering of the vertices to force the cycle to only be enumerated in one of the two directions. This by requiring that the cycle's first and last vertex (other than the starting vertex) must be in, for example, ascending order, and ignoring found cycles which are in descending order. 
 
+% --- COMMENT: KEEP IN METHODOLOGY, but this passage needs correction independently of the Background move. There appears to be a missing phrase in "The algorithm would then run starting from every This greatly reduces..." and the exact relationship between the prose and Algorithm~\ref{alg:find-k-intersection} should be checked. ---
 \subsubsection{Halting cycle enumeration early}
 
 This algorithm allows us to enumerate all cycles of the graph exactly once, under the assumption the graph is connected. We can get an exact value of the circumference of the graph by setting the circumference equal to 0 at the start of the enumeration and, for each found cycle, taking the maximum of the current believed circumference and the length of the cycle. Note that for RQ\ref{rq1} we are only interested in the graphs with circumference 11. As a result, we can halt enumeration of the cycles early when a graph is found to have a cycle that is larger than 11, as said graph is no longer relevant for RQ\ref{rq1}.
 
+% --- COMMENT: KEEP IN METHODOLOGY. This is a concrete optimization based on the research question. ---
+
 Additionally, cycles that are smaller than 11 are also uninteresting. If no 11-cycle or larger is found, then the circumference of the graph is lower than 11, and again not relevant for RQ\ref{rq1}. Therefore, we can safely reduce the number of starting vertices, by skipping the 10 highest ordered nodes, as running DFS with these as minimal vertices can only result in cycles of length 10 or smaller.
+
+% --- COMMENT: KEEP IN METHODOLOGY. This is a specific algorithmic optimization. It may benefit from a more explicit proof/explanation, but does not need to move to Background. ---
 
 During enumeration, we must also compute the intersection of all 11-cycles. Set the initial intersection $I$ equal to all vertices of the graph $V(G)$ at the start of enumeration. Whenever an 11-cycle is enumerated, set $I$ equal to the intersection of $I$ and the vertices of the 11-cycle. The result at the end of the enumeration will be the intersection of all 11-cycles if there are any, or all vertices otherwise. If there are no 11-cycles, then the computed circumference is smaller than 11 (or larger if computation halted early due to a larger cycle), and therefore irrelevant for RQ\ref{rq1}.
 
+% --- COMMENT: KEEP IN METHODOLOGY. This describes the actual algorithmic computation. ---
+
 \todo{add explanation for why no direction in code, idea of comparison taking just as long or longer than the instructions}
 
+% --- COMMENT: KEEP IN METHODOLOGY. ---
+
 \todo{add chosen data structures}
+
+% --- COMMENT: KEEP IN METHODOLOGY. ---
 
 \begin{algorithm}
 \caption{\textsc{FindIntersectionK}$(G,k,\prec)$}
@@ -181,13 +227,19 @@ During enumeration, we must also compute the intersection of all 11-cycles. Set 
 \end{algorithmic}
 \end{algorithm}
 
+% --- COMMENT: KEEP IN METHODOLOGY. This is the central algorithm and should remain here. ---
+
 \section{Checking vertex-deleted subgraphs for k-cycles}
+
+% --- COMMENT: KEEP IN METHODOLOGY. ---
 
 \todo{Add RQ2 again for clarity}
 
-This section introduces the algorithm for RQ\ref{rq2}. The approach is similar to RQ\ref{rq1}: we generate planar graphs with minimum degree 4, and check for each graph if in every vertex-deleted subgraph there exists a $k$-cycle, that there then is a cycle larger than $k$. Trivially, if a vertex-deleted subgraph of a graph $G$ has a $k$-cycle, then the graph $G$ itself also has a $k$-cycle. As a result, for a graph $G$ can only be a negative example of RQ\ref{rq2}, there must be a $k$-cycle in every vertex-deleted subgraph of $G$ and $G$ must also have circumference $k$. From this, we decided to focus our algorithm on finding negative examples, as we can assume all other graphs to be positive examples.
+% --- COMMENT: KEEP IN METHODOLOGY. ---
 
-\todo{Something is missing here, in terms of circumference}
+This section introduces the algorithm for RQ\ref{rq2}. The approach is similar to RQ\ref{rq1}: we generate planar graphs with minimum degree 4, and check for each graph if in every vertex-deleted subgraph there exists a $k$-cycle, that there then is a cycle larger than $k$. Trivially, if a vertex-deleted subgraph of a graph $G$ has a $k$-cycle, then the graph $G$ itself also has a $k$-cycle. As a result, for a graph $G$ can only be a negative example of RQ\ref{rq2}, there must be a $k$-cycle in every vertex-deleted subgraph of $G$ and $G$ must also have circumference $k$. From this, we decided to focus our algorithm on finding negative examples, as we can assume all other graphs to be positive examples.
+% --- COMMENT: KEEP IN METHODOLOGY. This explains the computational strategy for RQ2. However, the definitions of vertex-deleted subgraphs, circumference, and relevant graph properties should be available in Background. ---
+
 \begin{theorem}
   \label{theorem:intersection-vertex-deletion}
   A graph $G$ has a $k$-cycle in every vertex-deleted subgraph, and no cycle larger than $k$ in $g$ if and only if the intersection of the vertices of all $k$-cycles in the graph is empty, and $G$ has circumference $k$.
@@ -205,27 +257,35 @@ This section introduces the algorithm for RQ\ref{rq2}. The approach is similar t
   We conclude that for a graph $G$, $G$ has a $k$-cycle in every vertex-deleted subgraph and has circumference $k$ if and only if the intersection of the vertices of all $k$-cycles in the graph is empty.
 \end{proof}
 
+% --- COMMENT: KEEP IN METHODOLOGY if this theorem is specifically the mathematical justification for the implemented algorithm. However, if the Literature Study chapter is intended to contain the theoretical development behind the research questions, the theorem could be moved to Background/Theory and Methodology could simply state that the algorithm exploits this equivalence. My preference: keep it here if you proved it yourself and use it directly to justify the implementation. ---
 
 This result allows us to reuse most of Algorithm~\ref{alg:find-k-intersection}. To adapt it to RQ\ref{rq2}, instead of keeping track of the intersection of all $k$-cycles for an arbitrary value $k$, we must keep track of the intersection of the longest currently found cycles of the graph. This means that during execution, if a longer cycle is found than the current length of the longest cycles found, instead of halting early, we simply set the intersection of the longest cycles to the vertices of that new cycle.
 
+% --- COMMENT: KEEP IN METHODOLOGY. This describes the adaptation of the algorithm for RQ2. ---
+
 Thomassen has shown~\cite{article:thomassen} that for every planar graph with minimum degree 4 of order $n$, if the graph has an $(n-1)$-cycle in every vertex-deleted subgraph, it must also be hamiltonian. This mean we can still halt the algorithm early, namely when a cycle is found of length $n-1$ or $n$.
+
+% --- COMMENT: The cited theorem itself belongs naturally in Background/Literature Study as prior theoretical work. The methodological consequence ("we can still halt the algorithm early") belongs here. Consider citing the theorem in Background and briefly invoking it here. ---
 
 \section{Study of Known Graphs}
 
+% --- COMMENT: THIS SECTION IS THE MOST LIKELY TO MOVE ENTIRELY TO THE LITERATURE STUDY/BACKGROUND CHAPTER, except for a short subsection describing how known graphs were used as inputs or comparison cases in your methodology. The Zamfirescu construction, the gadget, and the Petersen-based construction are all prior theoretical work/literature rather than methodology. ---
+
 The paper \textit{On a question of van Aardt et al. on destroying all longest cycles} by C. T. Zamfirescu~\cite{article:zamfirescu} constructs a family of graphs providing an answer for the values $k = 10, 13, 16$ to the open question posed by van Aardt et al. similar to RQ\ref{rq1}. We suspect that, if such a graph exists for $k=11$, then that graph may look similar to a graph from that family. Additionaly, some graphs in that family are also negative examples to RQ\ref{rq2}\todo{what values}. In this section, we will show this construction, how it has influenced our search space when running the programs, and how we intend to use this construction to potentially manually find interesting values for one of the two Research Questions.
+
+% --- COMMENT: MOVE the description of Zamfirescu's prior work and the construction's theoretical relevance to Literature Study/Background. KEEP only the methodological statement about how the construction influenced your search space or how you used it to guide computational/manual exploration. The sentence "In this section, we will show this construction" would then no longer belong in Methodology. ---
 
 \subsection{Construction by C. T. Zamfirescu}
 \label{sec:tube-graph}
 
+% --- COMMENT: MOVE ENTIRE SUBSECTION TO LITERATURE STUDY/BACKGROUND. This is a description of a known construction from prior literature. It is not a method developed or implemented by this thesis. If the construction is later used to motivate a search or experiment, Methodology can refer back to it. ---
+
 C. T. Zamfirescu showed~\cite{article:zamfirescu} that for every pair of integers $\ell \ge 2$ and $p \ge 4$, there exists a 2-connected graph G of order $()\ell+1) p$ and circumference $(\ell+1) (p-1) + 1$ whose intersection of all longest cycles is empty. We repeat the construction of the graph $G$ used in the proof here. Note that in this thesis, we use a different convention for $\ell$ than in the paper by C. Zamfirescu.
 Take two cycles $(a_0, a_1, ..., a_{p-1})$ and $(b_0, b_1, ..., b_{p-1})$, each of length $p$, and connect $(a_i, b_i)$ for all $i$. Then, insert vertices on each edge $(a_i, b_i)$ until each becomes a path of length $\ell$ (i.e., has $\ell$ edges or $\ell+1$ vertices, including the vertices $a_i$ and $b_i$). Denote these paths from $a_i$ to $b_i$ as $H_i$. If $p$ is even, remove the edges $a_{p-1}a_0$ and $b_{p-1}b_0$, and replace them with the edges $a_{p-1}b_0$ and $b_{p-1}a_0$. We denote the graph constructed in this way as $G_{p,\ell}$. C. Zamfirescu has shown~\cite{article:zamfirescu} that the cycle $C$ with vertices
-
 $$
 \bigcup_{i \neq 0} V(H_i) \cup {b_0}
 $$
-
 and edges
-
 $$
 \bigcup_{i \neq 0} E(H_i)
   \cup {(a_j,a_{j+1})}_{j \text{odd}}
@@ -235,8 +295,9 @@ $$
     (a_{p-1},b_0)\ \text{otherwise}
   \end{cases}
 $$
-
 is a longest cycle of the graph $G$ avoiding all vertices $v \in V(H_0) \setminus \{b_0\}$, and that a similar cycle can be constructed for all other vertices. Figure~\ref{fig:tube-graph-odd} shows the graph $G_{5,2}$ alongside one longest cycle in the graph, and similarly Figure~\ref{fig:tube-graph-even} shows the graph $G_{4,3}$ alongside one longest cycle.
+
+% --- COMMENT: MOVE to Literature Study/Background. This is exactly the sort of prior construction that belongs in the literature study. It may be worth placing it under a broader subsection such as "Known constructions relevant to the research questions". ---
 
 \begin{figure}
   \centering
@@ -274,6 +335,8 @@ is a longest cycle of the graph $G$ avoiding all vertices $v \in V(H_0) \setminu
   \label{fig:tube-graph-odd}
 \end{figure}
 
+% --- COMMENT: MOVE figure to Background/Literature Study together with the construction it illustrates. ---
+
 \begin{figure}
   \centering
   \begin{subfigure}{0.4\textwidth}
@@ -310,18 +373,30 @@ is a longest cycle of the graph $G$ avoiding all vertices $v \in V(H_0) \setminu
   \label{fig:tube-graph-even}
 \end{figure}
 
+% --- COMMENT: MOVE figure to Background/Literature Study. ---
+
 \subsection{Studying the Gadget}
 \label{sec:gadget}
 
+% --- COMMENT: This subsection should probably MOVE to Background/Literature Study if it primarily explains the known construction and its structural properties. If the "studying the gadget" work is genuinely a research method developed in this thesis, retain a shortened version in Methodology describing the procedure you used to investigate the gadget. The results/insights discovered from this study should then be presented in Results/Analysis rather than Methodology. ---
+
 The construction by C. T. Zamfirescu starts off from two identical cycles with respective vertices connected. This graph is then modified, resulting in graphs with the desired properties. Studying this base graph, which we call a gadget, and seeing what properties it has and how modifying it results in the desired graphs could lead to new insights as to how to modify it differently to find new results for RQ\ref{rq2}.
 
+% --- COMMENT: Likely Background/Literature Study if this is explaining the known construction. If it describes your research strategy, keep only the methodological part ("we study the base graph and modifications") in Methodology. ---
+
 In this thesis, we look deeper into the types of cycles that can be created from this gadget, and how inserting vertices on their edges changes the length of these cycles. It is this approach that has led to new negative results to the question of RQ\ref{rq2}.
+
+% --- COMMENT: The description of the approach can remain in Methodology, but the claim that it "has led to new negative results" is a result/conclusion and should probably be moved to the Results chapter. ---
 
 \subsection{Almost-solution to RQ1}
 
 \label{sec:modified-petersen}
 
-While a solution for RQ\ref{rq1} is unknown, we do have an upper bound for the smallest amount of vertices in the intersection of all 11-cycle. In \cite{article:zamfirescu}, it is shown that a graph of circumference 11 can be constructed in which all but one vertex avoid all longest 11-cycles. This graph exploits the properties of the Petersen's graph, which is a hypohamiltonian graph of order 10 and thus circumference 9, and extends all three edges incident on one of its vertices $v$ with one extra vertex each, say $x_1$, $x_2$, and $x_3$, as seen in Figure~\ref{fig:petersen-divided}. This extends all cycles through this vertex $v$ by either 1 or 2. One can prove that as a result, this new graph of order 13 has circumference 11, with only one vertex meeting every 11-cycle~\cite{article:zamfirescu}. Note that this graph has a maximal degree of 3.
+% --- COMMENT: MOVE this subsection to Literature Study/Background if the modified Petersen graph is entirely a known construction from Zamfirescu's paper. If you use it as a known benchmark or as inspiration for your search, Methodology can briefly state that you included/used the construction, while the detailed construction and its theoretical properties belong in Background/Literature Study. ---
+
+While a solution for RQ\ref{rq1} is unknown, we do have an upper bound for the smallest amount of vertices in the intersection of all 11-cycle. In \cite{article:zamfirescu}, it is shown that a graph of circumference 11 can be constructed in which all but one vertex avoid all longest 11-cycles. This graph exploits the properties of the Petersen graph, which is a hypohamiltonian graph of order 10 and thus circumference 9, and extends all three edges $(v,w_i)$ incident on one vertex $v$ with one extra vertex each, denoted $x_i$, as seen in Figure~\ref{fig:petersen-divided}. This extends all cycles through this vertex $v$ by 2. We denote this graph by $P$. One can prove that as a result, this new graph of order 13 has circumference 11, with only one vertex meeting every 11-cycle~\cite{article:zamfirescu}. Note that this graph has a maximum degree of 3.
+
+% --- COMMENT: MOVE to Literature Study/Background. This is prior work and a known construction. The fact that it gives an upper bound for RQ1 is useful literature context. If this construction directly informs a search procedure in Methodology, add a short methodological paragraph there referring back to this subsection. ---
 
 \begin{figure}
   \centering
@@ -374,11 +449,15 @@ While a solution for RQ\ref{rq1} is unknown, we do have an upper bound for the s
   \label{fig:petersen-divided}
 \end{figure}
 
+% --- COMMENT: MOVE figure to Background/Literature Study with the modified Petersen construction. ---
+
 \section{Conclusion}
 \todo{Conclusion}
 The final section of the chapter gives an overview of the important results
 of this chapter. This implies that the introductory chapter and the
 concluding chapter don't need a conclusion.
+
+% --- COMMENT: KEEP/REWORK IN METHODOLOGY. This is a chapter conclusion, although the current text is placeholder/template text and does not actually summarize this chapter. It should eventually summarize the methodology: selected graph generators and parameters, computational pipelines, algorithms, and validation/testing. ---
 
 \begin{figure}
   \centering
@@ -395,6 +474,8 @@ concluding chapter don't need a conclusion.
   \caption{The pipeline for RQ\ref{rq1}}
 \end{figure}
 
+% --- COMMENT: KEEP IN METHODOLOGY. This is an actual description of the computational pipeline. It should probably be introduced in General Structure and/or referenced from the generator-selection subsection. ---
+
 \begin{figure}
   \centering
   \label{fig:pipeline-2}
@@ -407,3 +488,34 @@ concluding chapter don't need a conclusion.
   \end{tikzpicture}
   \caption{The pipeline for RQ\ref{rq2}}
 \end{figure}
+
+% --- COMMENT: KEEP IN METHODOLOGY. This is an actual computational pipeline. ---
+
+% --- COMMENT: OVERALL STRUCTURAL RECOMMENDATION:
+% The Background/Literature Study chapter should probably absorb:
+%   1. General definition and purpose of graph generators.
+%   2. Overview of relevant generator packages and the graph classes they generate.
+%   3. General discussion of graph isomorphism and graph6, if needed.
+%   4. Definitions/properties of all relevant graph classes: connected, 2-connected, 3-connected, planar, minimum degree, Hamiltonian, non-Hamiltonian, hypohamiltonian, circumference, etc.
+%   5. The prior result about 3-connected planar graphs of minimum degree 4 up to 22 vertices.
+%   6. Prior work and known graph lists from Goedgebeur.
+%   7. Zamfirescu's construction and its figures.
+%   8. The gadget and known constructions derived from it, insofar as they are prior/theoretical background.
+%   9. The modified Petersen construction and its significance for RQ1.
+%  The Methodology chapter should then contain:
+%   1. General computational pipeline.
+%   2. Which generators were selected for each RQ and why.
+%   3. Exact generator parameters and filtering steps.
+%   4. How existing graph lists were incorporated into the search.
+%   5. The cycle-intersection algorithm.
+%   6. The RQ2 algorithm and its adaptation from RQ1.
+%   7. Algorithmic optimizations and data structures.
+%   8. Implementation language and implementation choices.
+%   9. Correctness tests and validation.
+%  This would align well with the intended Background TODO:
+%     \todo{Add all theoretical background here from other chapters}
+%     \section{Generators}
+%     \todo{maybe a section about the different generators that exist, citing JJ}
+%     \section{Graphs}
+%     \todo{maybe a section on all relevant graphs to this paper}
+%  In particular, the Background chapter can establish the "menu" of available generators and the relevant graph-theoretic concepts, while Methodology says: "Given this landscape, we selected X for RQ1 and Y for RQ2, configured them as follows, and connected them to our algorithms in these pipelines." This avoids duplicating the same explanations in both chapters.

@@ -10,11 +10,11 @@
 
 \todo{Number of results, timing, plotting the 1-vertex solutions}
 
-\subsubsection{Timing}
+\subsection{Timing}
 
-\subsubsection{Number of results}
+\subsection{Number of results}
 
-\subsubsection{Graphs with intersection 1}
+\subsection{Graphs with intersection 1}
 
 The smallest intersection found in any generated graph during execution had an intersection of one vertex. While these graphs are not solutions directly, they may give an insight to a potential solution. We already know of a graph with an intersection of 1 of order 13 with maximal degree 3, as shown in Section~\ref{sec:modified-petersen}, which we expect to be isomorphic to the only intersection 1 result found in the graphs of order 13 with maximal degree 3. A diagram of this result as in Figure~\ref{fig:d3n13i1} confirms this.
 
@@ -556,502 +556,49 @@ Let us consider modified Petersen's graph $G$ from Section~\ref{sec:modified-pet
   \label{fig:d4n14i1}
 \end{figure}
 
-% =============================================================================
 
-\section{Generated graphs for RQ2}
-
-\todo{Number of results, timing}
-
-\section{New Values for RQ2}
-
-Stuyding the gadget mentioned in section~\ref{sec:gadget} led to an insight in finding new negative examples to RQ\ref{rq2}. By expanding not only the inner edges between the cycles, but also expanding the edges of the cycles to a new length, graphs could be created with longest cycle that differ in length compared to the order of the graph than those already known. Similar to graphs of the form $G_{p,\ell}$, these graphs also have no vertex meeting every cycle. The construction of this graph depends on the integers $p$ and $\ell$, as well as on a new, ordered set of integers $D = (d_0,\ldots,d_{p-1})$.
-
-\todo{Expanding calculations for all $d_i$}
+\todo{proofread this generated text}
 
 \begin{theorem}
-  \label{theorem:d-extension}
-Take any integers $p \ge 4$, $\ell \ge 1$, and integers $(d_0,\ldots,d_{p-1}) = D$ where $d_i \ge 1$ for all $i$. Let $S = \sum_{i=0}^{p-1}d_i$. Then, if $S \le (p-3)\ell + 2\min(D)$, there exists a 2-connected graph with of order~$2S + p(\ell-1)$ and circumference~$(p-1)(\ell)+S$, whose intersection of all longest cycles is empty.
+For every integer $n \ge 13$, there exists a $2$-connected graph of order $n$, circumference $11$, and maximum degree $\Delta\in\{n-10,\ldots,n-1\}$ such that every longest cycle has exactly one common vertex.
 \end{theorem}
+
 \begin{proof}
-The proof takes inspiration from the proof of the similar Theorem 1 in~\cite{article:zamfirescu}.
-Take the graph $G_{p,\ell}$ from Section~\ref{sec:tube-graph}. For simplicity, from here on out, let $a_p = a_0$ and $a_{-1} = a_{p-1}$ for $p$ odd and analogous for the vertices $b_i$, and $a_p = b_0$ and $a_{-1} = b_{p-1}$ and vice versa for $p$ even. For all $i \in \{0,\ldots,p-1\}$, insert vertices on each of the edges $(a_i,a_{i+1})$ and $(b_i,b_{i+1})$ until each is a path of length $d_i$, i.e. has a total of $d_i+1$ vertices, including the original vertices. We denote this graph as $G_{p,\ell,D}$, and denote the path on these vertices from $a_i$ to $a_{i+1}$ by $D_{a,i}$, and similarly the path from $b_i$ to $b_{i+1}$ by $D_{b,i}$. Again for simplicity, let $D_{a,-1} = D_{a,p-1}$, $D_{a,p} = D_{a,0}$ and analogous for $D_{b,i}$ for $p$ odd, and $D_{a,-1} = D_{b,p-1}$, $D_{a,p} = D_{b,0}$ and vice versa for $p$ even.
-Figure~\ref{fig:g532} shows an example graph $G_{5,3,D}$ for $D=(2,2,2,2,2)$.
+Take the graph $P$
 
-\begin{figure}
-    \centering
-    \begin{tikzpicture}
-    \ExtendedTubeGraph{5}{3}{2}
-    \end{tikzpicture}
-    \caption{A graph $G_{p,\ell,D}$ with $p=5$,$\ell=3$,$D=(2,2,2,2,2)$}
-    \label{fig:g532}
-\end{figure}
-
-% S WITHOUT d_i:
-%   S - d_i
-% S WITHOUT min:
-%   S - \min(D)
-
-We also define the sets $X_i = \{a_i,b_i\}$, $A_i = \{a_i,a_{i+1}\}$, $B_i = \{b_i,b_{i+1}\}$, as each of these are vertex-cuts of the graph. Since these sets are vertex-cuts, any cycle going through an internal vertex or edge of $D_{a,i}$, $D_{b,i}$, or $H_i$ (i.e. traverses these subgraphs) must also contain $A_i$, $B_i$, resp. $X_i$. Furthermore, the only subgraphs incident on $a_i$ are $D_{a,i-1}$, $D_{a,i}$, and $H_i$, and thus every cycle containing $a_i$ must either continue through both adjacent $D_{a,i-1}$ and $D_{a,i}$ subgraphs, or through exactly one of the aforementioned subgraphs and $H_i$. An analogous reasoning can be used for cycles going through $b_i$.
-We now continue to show that there are only three types of candidate longest cycles, namely one type avoiding every $H_i$, and two types of cycles containing at least one $H_i$.
-
-\paragraph{Cycles avoiding $H_i$}
-For $p$ odd, if we were to remove all internal vertices and edges belonging to all $H_i$, we get two disjoint cycles. As such, the longest cycles which do not traverse any $H_i$ are contained within and equal to the two subgraphs
-$$
-\bigcup_{i \in \mathbb{Z}_p}D_{a,i}\; \text{and} \;
-\bigcup_{i \in \mathbb{Z}_p}D_{b,i}
-$$
-These cannot be the longest cycles of the graph, as one can create a longer cycle by picking any $i$, removing the internal vertices of $D_{a,i}$ resp. $D_{b,i}$, and creating a new cycle through $H_i$, $D_{b,i}$ resp. $D_{a,i}$, and $H_{i+1}$. The original cycle has length $S$, while this new cycle has length $S+2\ell$. This new cycle must be larger than the former cycle, since by construction $\ell > 0$. As a result, any longest cycle for $p$ odd must contain at least one $H_i$.
-
-For $p$ even, removing all internal vertices and edges belonging to all $H_i$, we get one cycle
-$$
-\bigcup_{i \in \mathbb{Z}_p}\left(D_{a,i} \cup D_{b,i}\right)
-$$
-with length $2S$. Trivially, this is the longest cycle avoiding all $H_i$ for $p$ even.
-
-If a cycle traverses an $H_i$, it must enter at $a_i$ from either $D_{a,i}$ or $D_{a,i-1}$, and leave at $b_i$ through either $D_{b,i}$ or $D_{b,i-1}$. We now show there are two types of cycles these options create.
-
-\paragraph{Same-direction cycles}
-A cycle can enter and leave an $H_i$ in the same direction, either through
-$D_{a,i-1}$ and $D_{b,i-1}$ or through $D_{a,i}$ and $D_{b,i}$. For simplicity,
-assume a cycle $C$ traverses $H_0$, $D_{a,0}$, and $D_{b,0}$. At $a_1$, there
-are two possibilities: to either traverse $H_1$, closing the cycle as in Figure
-\ref{fig:same-side:closed}, or to traverse $D_{a,1}$. The latter option
-disallows any traversal of $H_1$, and therefore forces the choice at $b_i$ to
-traverse $D_{b,1}$, as shown in Figure~\ref{fig:same-side:continued}. We then
-again have the same options for traversal at $a_2$. One can see this choice of
-traversing $D_{a,i}$ and $D_{b,i}$ instead of $H_i$ as extending the otherwise
-closed cycle with $2d_i$ vertices.
-Repeating this argument successively for $a_2$, $a_3$, \dots, $a_{p-1}$ yields
-the longest same-direction cycle through $H_0$, $D_{a,0}$, and $D_{b,0}$ with
-length $2(S - d_{p-1})+2\ell$, and traverses all vertices
-
-$$
-\bigcup_{i \in \mathbb{Z}_p \setminus \{p-1\}}V(D_{a,i})
-\;\cup\;
-\bigcup_{i \in \mathbb{Z}_p \setminus \{p-1\}}V(D_{b,i})
-\;\cup\; 
-V(H_0)
-\;\cup\; 
-V(H_{p-1})
-$$
-
-The reasoning for $D_{a,-1}$ and $D_{b,-1}$, and for other $H_i$'s, is
-analogous. The largest of these cycles is all cycles which avoid a subgraph pair $D_{a,i}$ and $D_{b,i}$ of minimal length, i.e. where $d_i = \min(D)$, with a cycle length of $2(S - \min(D))+2\ell$. Note that all vertices $a_i$ and $b_i$ meet all these cycles.
-
-\begin{figure}
-    \centering
-
-    %=========================================================
-    % Version (1)
-    %=========================================================
-    \begin{subfigure}{0.45\textwidth}
-    \centering
-    \resizebox{\linewidth}{!}{
-    \begin{tikzpicture}[line cap=round,line join=round]
-
-    %---------------------------------------------------------
-    % Main vertices
-    %---------------------------------------------------------
-    \node[vertex,draw=red,label=above:$a_0$] (a0) at (0,2) {};
-    \node[vertex,draw=red,label=above:$a_1$] (a1) at (2,2) {};
-    \node[vertex,draw=red,label=above:$a_2$] (a2) at (4,2) {};
-
-    \node[vertex,draw=red,label=below:$b_0$] (b0) at (0,0) {};
-    \node[vertex,draw=red,label=below:$b_1$] (b1) at (2,0) {};
-    \node[vertex,draw=red!40,label=below:$b_2$] (b2) at (4,0) {};
-
-    %---------------------------------------------------------
-    % Continuation edges
-    %---------------------------------------------------------
-    \draw[dashed,lightgray] (-0.8,2)--(a0);
-    \draw[dashed,lightgray] (a2)--(4.8,2);
-
-    \draw[dashed,lightgray] (-0.8,0)--(b0);
-    \draw[dashed,lightgray] (b2)--(4.8,0);
-
-    %---------------------------------------------------------
-    % Horizontal edges
-    %---------------------------------------------------------
-    % D_{a,0}
-    \draw[red,very thick] (a0)--(a1);
-    \node[fill=white,inner sep=1pt,text=red] at (1,2) {//};
-
-    % D_{a,1}
-    \draw[red,very thick] (a1)--(a2);
-    \node[fill=white,inner sep=1pt,text=red] at (3,2) {///};
-
-    % D_{b,0}
-    \draw[red,very thick] (b0)--(b1);
-    \node[fill=white,inner sep=1pt,text=red] at (1,0) {//};
-
-    % D_{b,1}
-    \draw[red!40,very thick] (b1)--(b2);
-    \node[fill=white,inner sep=1pt,text=red!40] at (3,0) {///};
-
-    %---------------------------------------------------------
-    % Vertical edges
-    %---------------------------------------------------------
-    % H_0
-    \draw[red,very thick] (a0)--(b0);
-    \node[fill=white,inner sep=1pt,rotate=90,text=red] at (0,1) {/};
-
-    % H_1
-    \draw (a1)--(b1);
-    \node[fill=white,inner sep=1pt,rotate=90] at (2,1) {/};
-
-    % H_2
-    \draw (a2)--(b2);
-    \node[fill=white,inner sep=1pt,rotate=90] at (4,1) {/};
-
-    \end{tikzpicture}
-    }
-    \caption{}
-    \label{fig:same-side:continued}
-    \end{subfigure}
-    \hfill
-    %=========================================================
-    % Version (2)
-    %=========================================================
-    \begin{subfigure}{0.45\textwidth}
-    \centering
-    \resizebox{\linewidth}{!}{
-    \begin{tikzpicture}[line cap=round,line join=round]
-
-    %---------------------------------------------------------
-    % Main vertices
-    %---------------------------------------------------------
-    \node[vertex,draw=red,label=above:$a_0$] (a0) at (0,2) {};
-    \node[vertex,draw=red,label=above:$a_1$] (a1) at (2,2) {};
-    \node[vertex,label=above:$a_2$] (a2) at (4,2) {};
-
-    \node[vertex,draw=red,label=below:$b_0$] (b0) at (0,0) {};
-    \node[vertex,draw=red,label=below:$b_1$] (b1) at (2,0) {};
-    \node[vertex,label=below:$b_2$] (b2) at (4,0) {};
-
-    %---------------------------------------------------------
-    % Continuation edges
-    %---------------------------------------------------------
-    \draw[dashed,lightgray] (-0.8,2)--(a0);
-    \draw[dashed,lightgray] (a2)--(4.8,2);
-
-    \draw[dashed,lightgray] (-0.8,0)--(b0);
-    \draw[dashed,lightgray] (b2)--(4.8,0);
-
-    %---------------------------------------------------------
-    % Horizontal edges
-    %---------------------------------------------------------
-    % D_{a,0}
-    \draw[red,very thick] (a0)--(a1);
-    \node[fill=white,inner sep=1pt,text=red] at (1,2) {//};
-
-    % D_{a,1}
-    \draw (a1)--(a2);
-    \node[fill=white,inner sep=1pt] at (3,2) {///};
-
-    % D_{b,0}
-    \draw[red,very thick] (b0)--(b1);
-    \node[fill=white,inner sep=1pt,text=red] at (1,0) {//};
-
-    % D_{b,1}
-    \draw (b1)--(b2);
-    \node[fill=white,inner sep=1pt] at (3,0) {///};
-
-    %---------------------------------------------------------
-    % Vertical edges
-    %---------------------------------------------------------
-    % H_0
-    \draw[red,very thick] (a0)--(b0);
-    \node[fill=white,inner sep=1pt,rotate=90,text=red] at (0,1) {/};
-
-    % H_1
-    \draw[red,very thick] (a1)--(b1);
-    \node[fill=white,inner sep=1pt,rotate=90,text=red] at (2,1) {/};
-
-    % H_2
-    \draw (a2)--(b2);
-    \node[fill=white,inner sep=1pt,rotate=90] at (4,1) {/};
-
-    \end{tikzpicture}
-    }
-    \caption{}
-    \label{fig:same-side:closed}
-    \end{subfigure}
-
-    \caption{A graph segment of $G_{p,\ell,D}$ with the two possibilities at $a_1$ for cycle through $H_0$, $D_{a,0}$, and $D_{a,1}$.}
-    \label{fig:same-side}
-\end{figure}
-
-\paragraph{Opposite-direction cycles}
-The only other option for a cycle traversing $H_i$ is to enter and leave
-$H_i$ in opposite directions, either through $D_{a,i-1}$ and $D_{b,i}$ or
-through $D_{a,i}$ and $D_{b,i-1}$.
-
-Say a cycle traversed $H_0$, $D_{a,0}$, and $D_{b,-1}$. There are again two possibilities at $a_1$: to traverse $D_{a,1}$, or to traverse $H_1$. In the latter option, the traversal of $D_{b,1}$ is forced, as the only other option to traverse $D_{b,0}$ would result in the same-side case from before. From then on, this option repeats: at any endpoint $b_i$, either $D_{b,i}$ is traversed, or $H_i$ and $D_{a,i}$ are traversed, and analogous for endpoints $a_i$, up until $i=p-1$. There, $D_{b,-1}$ must be traversed to complete the cycle, either from $a_{-1}$ through $H_{p-1}$, or directly from $b_{-1}$.\footnote{Remember that $a_{-1} = b_{p-1}$ if $p$ is even} In total, every $H_i$ traversed this way adds $d_i+\ell$ vertices to the cycle (including $H_0$, where $b_0$ is counted from the traversal of $D_{b,-1}$), while every $H_i$ avoided adds only $d_i$ vertices.
-
-By construction, a cycle in $G$ cannot traverse all $H_i$. Since $X_i$ is a vertex-cut in $G$, the subgraph $H_i$ can only be traversed by entering through $a_i$ and exiting through $b_i$. For a cycle to traverse all $H_i$, it must visit an even number of $H_i$'s if $p$ is odd, or an odd number of $H_i's$ if $p$ is even, a contradiction. Thus, at least one $H_i$ must be avoided, which means the largest opposite-side cycle must traverse (1) a maximal amount of $H_i$'s, and (2) at most all but one $H_i$. We can construct a cycle $C$ avoiding exactly one $H_i$, with length $(p-1)\ell + S$. Put
-
-$$
-C=
-\left(
-\bigcup_{i\neq0}H_i
-\right)
-\cup
-\left(
-\bigcup_{0 \le j <p\ \text{even}}D_{a,j}
-\right)
-\cup
-\left(
-\bigcup_{0 \le k <p\ \text{odd}}D_{b,k}
-\right).
-$$
-
-where $C$ omits all vertices $V(H_0)\setminus\{b_0\}$ and $V(D_{a,0})\setminus\{a_1\}$. Figure~\ref{fig:opposite-side:g532} shows this cycle for a graph $G_{5,3,D}$, and Figure~\ref{fig:opposite-side:g632} shows this cycle for a graph $G_{6,3,D}$ with $D=(2,2,2,2,2)$. For all other vertices, a cycle of length $(p-1)\ell + S$ can be constructed in the same way.
-
-\begin{figure}
-  \centering
-  \begin{tikzpicture}
-    \ExtendedTubeGraph{5}{3}{2}
-
-    \foreach \v in {
-    A1,DA1-1,A2,
-    H2-1,H2-2,B2,
-    DB2-1,B3,
-    H3-2,H3-1,A3,
-    DA3-1,A4,
-    H4-1,H4-2,B4,
-    DB4-1,B5,
-    H5-2,H5-1,A5,
-    DA5-1}{
-    \node[vertex,draw=red,fill=white] at (\v) {};
-    }
-    % Highlighted cycle
-    \draw[red, very thick]
-      (A1) --
-      (DA1-1) --
-      (A2) --
-      (H2-1) --
-      (H2-2) --
-      (B2) --
-      (DB2-1) --
-      (B3) --
-      (H3-2) --
-      (H3-1) --
-      (A3) --
-      (DA3-1) --
-      (A4) --
-      (H4-1) --
-      (H4-2) --
-      (B4) --
-      (DB4-1) --
-      (B5) --
-      (H5-2) --
-      (H5-1) --
-      (A5) --
-      (DA5-1) --
-      (A1);
-
-  \end{tikzpicture}
-  \caption{A longest opposite-direction cycle marked red in a graph $G_{5,3,D}$ with $D=(2,2,2,2,2)$.}
-  \label{fig:opposite-side:g532}
-\end{figure}
-
-\begin{figure}
-  \centering
-  \begin{tikzpicture}
-    \ExtendedTubeGraph{6}{3}{2}
-
-    \foreach \v in {
-    A1,DA1-1,A2,
-    H2-1,H2-2,B2,
-    DB2-1,B3,
-    H3-2,H3-1,A3,
-    DA3-1,A4,
-    H4-1,H4-2,B4,
-    DB4-1,B5,
-    H5-2,H5-1,A5,
-    DA5-1,A6,
-    H6-1,H6-2,
-    B6,DB6-1}{
-    \node[vertex,draw=red,fill=white] at (\v) {};
-    }
-    % Highlighted cycle
-    \draw[red, very thick]
-      (A1) --
-      (DA1-1) --
-      (A2) --
-      (H2-1) --
-      (H2-2) --
-      (B2) --
-      (DB2-1) --
-      (B3) --
-      (H3-2) --
-      (H3-1) --
-      (A3) --
-      (DA3-1) --
-      (A4) --
-      (H4-1) --
-      (H4-2) --
-      (B4) --
-      (DB4-1) --
-      (B5) --
-      (H5-2) --
-      (H5-1) --
-      (A5) --
-      (DA5-1) --
-      (A6) --
-      (H6-1) --
-      (H6-2) --
-      (B6) --
-      (DB6-1) --
-      (A1);
-
-  \end{tikzpicture}
-  \caption{A longest opposite-direction cycle marked red in a graph $G_{6,3,D}$ with $D=(2,2,2,2,2)$.}
-  \label{fig:opposite-side:g632}
-\end{figure}
-
-\paragraph{Length comparison}
-We've determined there are three types of cycles with the potential of being
-longest cycles, the length of which are $2S$ for $H_i$-avoiding cycles when $p$ is even, $(p-1)(2d)+2\ell$ for same-direction cycles and $(p-1)\ell + S$ for opposite-direction cycles. Only in the last case can we construct a cycle for every vertex avoiding that vertex. The opposite-side cycle is longer than the same-side cycle if
+Replacing an edge $vw_i$ by several internally disjoint length-$2$ paths
+does not create new long cycles. Indeed, every cycle using one path
+$vx_{i,a}w_i$ has an equivalent cycle obtained by replacing this path by
+$vx_{i,b}w_i$ for any other subdivision vertex on the same edge.
+Consequently, the only genuinely new cycles created are $4$-cycles of
+the form
 \[
-\begin{aligned}
-2(S-\min(D))+2\ell
-    &\le (p-1)\ell + S\\
-\iff\qquad
-S
-    &\le (p-3)\ell + 2\min(D)
-\end{aligned}
-\]
-while the opposite-side cycle is longer than the $H_i$ avoiding cycle if
-\[
-\begin{aligned}
-2S
-    &\le (p-1)\ell + S\\
-\iff\qquad
-S
-    &\le (p-1)\ell
-\end{aligned}
+v-x_{i,a}-w_i-x_{i,b}-v.
 \]
 
-As a result, there exists a 2-connected graph $G$ of order $2S + p(\ell-1)$ with circumference $(p-1)\ell + S$ for which no vertex meets every longest cycle if $S\le (p-3)\ell + 2\min(D)$ and, if $p$ is even, $S\le (p-1)\ell$.
+Similarly, adding edges incident with $v$ cannot create cycles longer
+than $11$, since any cycle using such an edge can traverse at most one
+subdivided edge and therefore omits at least two subdivision vertices.
 
+Hence, the graph has circumference $11$. Furthermore, every $11$-cycle is
+obtained from a longest cycle of the modified Petersen graph by choosing
+one representative subdivision vertex on each subdivided edge. In
+particular, every longest cycle contains $v$.
+
+Finally, the degree of $v$ equals
+\[
+k_1+k_2+k_3+t,
+\]
+where $t\in\{0,\ldots,9\}$ is the number of additional edges incident
+with $v$. Since
+\[
+k_1+k_2+k_3=n-10,
+\]
+we obtain
+\[
+\Delta(v)=n-10+t\in\{n-10,\ldots,n-1\},
+\]
+proving the claim.
 \end{proof}
 
-Theorem~\ref{theorem:d-extension} provides us with new graphs that we can expand on in the same way as done in~\cite{article:zamfirescu} to find new negative values for RQ\ref{rq2}. First, observe that all graphs $G_{p,\ell,D}$ are planar if $p$ is odd. To prove the existence of new negative values, we must show we can add edges to some of these graphs to ensure minimum degree 4.
-
-\begin{theorem}
-  Take integers $p\ge5$ odd, $\ell\ge5$, and integers $(d_0,\dots,d_{p-1})=D$ where $d_i = 0$ or $d_i\ge5$ with $S=\sum_{i=0}^{p-1}d_i$. If $S\le (p-3)\ell + 2\min(D)$, there exists a 2-connected, planar graph of minimum degree~4 of order~$2S + p(\ell-1)$ and circumference~$k=(p-1)\ell + S$, in which every vertex-deleted subgraph contains a $k$-cycle.
-\end{theorem}
-\begin{proof}
-The proof takes inspiration from the proof of the similar Proposition 1 in~\cite{article:zamfirescu}.
-Let $G$ be a graph $G_{p,\ell,D}$. Observe that that in each $D_{a,i}$, $D_{b,i}$, and $H_i$, we may add edges as desired within each respective subgraph (but without adding edges between internal nodes of different subgraphs) without altering the fact that the intersection of all longest cycles remains empty. We denote these modified paths with additional edges as $D_{a,i}'$, $D_{b,i}'$, respectively $H_i'$.
-
-Trivially, if we choose $D_{a,i}'$ and $D_{b,i}'$ to each be the path $P_{d_i}^2$, i.e. a path of length $d_i$ with an additional edge between all vertices at distance 2 as in Figure~\ref{fig:path-2}, and similarly choose $H_i'$ to be the path $P_\ell^2$, then $G$ remains planar. Observe that, for each of these subgrahs, all internal vertices except two have degree 4, and two internal vertices, say $w$ and $w'$, have degree 3. These vertices $w$ and $w'$ are adjacent to an endpoint of the (modified) paths, say $x$ and $y$. Adding the edges $wx$ and $w'y$ when $d_i$ (resp. $\ell$) is odd as in Figure~\ref{fig:degree-4-opposite-side}, and adding the edge $ww'$ when $d_i$ (resp. $\ell$) is even as in Figure~\ref{fig:degree-4-same-side}, provides a graph $G$ with minimum degree 4 when $\ell,d_i \ge 5$.
-
-We conclude with the statement that for the resulting graph $G$, the intersection of all longest cycles is empty. Theorem~{theorem:intersection-vertex-deletion} has shown that this empty intersection is equivalent to claiming the graph $G$ is has a $k$-cycle in every vertex-deleted subgraph, and no larger cycle than $k$ exists in $G$. As such, we have shown that $G$ is a planar graph with minimum degree 4, with a $k$-cycle in every vertex-deleted subgraph, with no cycle larger than $k$.
-
-\begin{figure}[ht]
-  \centering
-
-  % First graph
-  \begin{tikzpicture}[>=stealth]
-    % Nodes
-    \node[vertex, label=left:$x$] (v1) at (0,0) {};
-    \node[vertex] (v2) at (1,1) {};
-    \node[vertex] (v3) at (2,0) {};
-    \node[vertex] (v4) at (3,1) {};
-    \node[vertex] (v5) at (4,0) {};
-    \node[vertex, label=right:$y$] (v6) at (5,1) {};
-
-    % Path edges
-    \draw (v1) -- (v2) -- (v3) -- (v4) -- (v5) -- (v6);
-
-    % Edges between vertices at distance 2
-    \draw (v1) -- (v3);
-    \draw (v2) -- (v4);
-    \draw (v3) -- (v5);
-    \draw (v4) -- (v6);
-  \end{tikzpicture}
-  \caption{A path $P_5^2$ with endpoints $x$ and $y$.}
-  \label{fig:path-2}
-\end{figure}
-
-\begin{figure}
-  \centering
-  \begin{tikzpicture}[>=stealth]
-    % Nodes
-    \node[vertex, label=left:$x$] (v1) at (0,0.5) {};
-    \node[vertex] (v2) at (1,1) {};
-    \node[vertex] (v3) at (2,0) {};
-    \node[vertex] (v4) at (3,1) {};
-    \node[vertex] (v5) at (4,0) {};
-    \node[vertex, label=right:$y$] (v6) at (5,0.5) {};
-
-    % Path edges
-    \draw (v1) -- (v2) -- (v3) -- (v4) -- (v5) -- (v6);
-
-    % Edges between vertices at distance 2
-    \draw (v1) -- (v3);
-    \draw (v2) -- (v4);
-    \draw (v3) -- (v5);
-    \draw (v4) -- (v6);
-
-    % Additional endpoint edges
-    \draw[lightgray] (v1) -- (-0.5,-0.5);
-    \draw[lightgray] (v1) -- (-0.5,1.5);
-    \draw[lightgray] (v6) -- (5.5,-0.5);
-    \draw[lightgray] (v6) -- (5.5,1.5);
-
-    % Additional red edges
-    \draw[red] (v2) to[bend left=25] (v6);
-    \draw[red] (v5) to[bend left=25] (v1);
-  \end{tikzpicture}
-  \caption{The additional edges (marked in red) placed on either $D_{a,i}'$, $D_{b,i}'$, or $H_i'$ when $d$ or $l$ $=5$ odd.}
-  \label{fig:degree-4-opposite-side}
-\end{figure}
-
-
-\begin{figure}
-  \centering
-  \begin{tikzpicture}[>=stealth]
-    % Nodes
-    \node[vertex, label=left:$x$] (v1) at (0,0.5) {};
-    \node[vertex] (v2) at (1,1) {};
-    \node[vertex] (v3) at (2,0) {};
-    \node[vertex] (v4) at (3,1) {};
-    \node[vertex] (v5) at (4,0) {};
-    \node[vertex] (v6) at (5,1) {};
-    \node[vertex, label=right:$y$] (v7) at (6,0.5) {};
-
-    % Path edges
-    \draw (v1) -- (v2) -- (v3) -- (v4) -- (v5) -- (v6) -- (v7);
-
-    % Edges between vertices at distance 2
-    \draw (v1) -- (v3);
-    \draw (v2) -- (v4);
-    \draw (v3) -- (v5);
-    \draw (v4) -- (v6);
-    \draw (v5) -- (v7);
-
-    % Additional endpoint edges
-    \draw[lightgray] (v1) -- (-0.5,-0.5);
-    \draw[lightgray] (v1) -- (-0.5,1.5);
-    \draw[lightgray] (v7) -- (6.5,-0.5);
-    \draw[lightgray] (v7) -- (6.5,1.5);
-
-    % Additional red edge
-    \draw[red] (v2) to[bend left=25] (v6);
-  \end{tikzpicture}
-  \caption{The additional edges (marked in red) placed on either $D_{a,i}'$, $D_{b,i}'$, or $H_i'$ when $d$ or $l$ $=6$ even.}
-  \label{fig:degree-4-same-side}
-\end{figure}
-
-\end{proof}
-
-\todo{example graphs with new values}
-
-\section{Conclusion}
-\todo{conclusion}
-The final section of the chapter gives an overview of the important results
-of this chapter. This implies that the introductory chapter and the
-concluding chapter don't need a conclusion.
+\todo{--end proofread}

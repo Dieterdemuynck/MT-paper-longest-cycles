@@ -1,5 +1,6 @@
 temp/
 thesis.pdf
+.vscode/
 ### TeX files:
 
 ## Core latex/pdflatex auxiliary files:

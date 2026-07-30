@@ -118,7 +118,7 @@ A \textbf{subgraph} $F$ of a graph $G$ is a graph for which $V(F) \subseteq V(G)
 Two graphs are \textbf{isomorphic} if one can rearrange and rename the vertices of either graph, without adding or removing vertices or edges, to get the other graph as a result. More formally, graphs $G$ and $H$ are isomorphic if there exist a bijection $\theta : V(G) \rightarrow V(H)$ such that for all vertices $v_0, v_1 \in V(G)$ that $(v_0,v_1) \in E(G)$ if and only if $(\theta(v_0),\theta(v_1)) \in E(H)$. 
 
 % Cycle explanation
-A \textbf{path} is a simple graph whose vertices can be arranged in a linear sequence such that two vertices are adjacent if and only if they are consecutive in the sequence, as shown in Figure~\ref{fig:example-path}. Similarly, a \textbf{cycle} in a graph is a simple graph whose vertices can be arranged in a linear sequence, with at least three vertices, such that two vertices are adjacent if and only if they are consecutive in the sequence, or they are the first and last vertex in the sequence. The length of a path or cycle is equal to the amount of edges. If a path (cycle) has length $k$, we call it a $k$-path ($k$-cycle). The \textbf{circumference} of a graph is equal to the length of the longest cycle in the graph, should this graph have at least one cycle. We define the circumference of a cycle-free graph as $0$. Note that there may be multiple distinct longest cycles. Figure~\ref{fig:example-cycle} shows one such longests cycle of the graph in Figure~\ref{fig:example-simple}. If a graph has a cycle which goes through every vertices in the graph, it is called \textbf{hamiltonian}. If a graph is not hamiltonian, but every vertex-deleted subgraph is, then it is called \textbf{hypohamiltonian}~\cite{book:bondy-definitions}.
+A \textbf{path} is a simple graph whose vertices can be arranged in a linear sequence such that two vertices are adjacent if and only if they are consecutive in the sequence, as shown in Figure~\ref{fig:example-path}. Similarly, a \textbf{cycle} in a graph is a simple graph whose vertices can be arranged in a linear sequence, with at least three vertices, such that two vertices are adjacent if and only if they are consecutive in the sequence, or they are the first and last vertex in the sequence. The length of a path or cycle is equal to the amount of edges. If a path (cycle) has length $k$, we call it a $k$-path ($k$-cycle). The \textbf{circumference} of a graph is equal to the length of the longest cycle in the graph, should this graph have at least one cycle. We define the circumference of a cycle-free graph as $0$. Note that there may be multiple distinct longest cycles. Figure~\ref{fig:example-cycle} shows one such longest cycle of the graph in Figure~\ref{fig:example-simple}. If a graph has a cycle which goes through every vertex in the graph, it is called \textbf{Hamiltonian}. If a graph is not Hamiltonian, but every vertex-deleted subgraph is, then it is called \textbf{hypohamiltonian}~\cite{book:bondy-definitions}.
 
 \todo{explain/motivate why hypohamil interesting}
 
@@ -153,16 +153,32 @@ Thomassen showed~\cite{article:thomassen} that the aforementioned statement is t
 \todo{More literature, more papers}
 
 The aim of this thesis is to solve RQ\ref{rq1} by exhaustively generating $2$-connected graphs of a certain class % TODO: Class? Set? Specification?
-with circumference $11$ using a graph generator, and writing an algorithm which will check the circumference of a graph, and if it is equal to $11$, to find the intersection of all its (longest) $11$-cycles, and outputting all solutions and potentially interesting graphs (such as graphs with a very small intersection) and relevant values. Should no solution be found, the outputted interesting graphs could be studied to potentially find patterns that could lead to a solution, or an attempt could be made for a proof of the inexistance of such a graph.
+with circumference $11$ using a graph generator, and writing an algorithm which will check the circumference of a graph, and if it is equal to $11$, to find the intersection of all its (longest) $11$-cycles, and outputting all solutions and potentially interesting graphs (such as graphs with a very small intersection) and relevant values. Should no solution be found, the outputted interesting graphs could be studied to potentially find patterns that could lead to a solution, or an attempt could be made for a proof of the nonexistence of such a graph.
 
 To solve RQ\ref{rq2}, a similar approach is used, namely by exhaustively generating graphs which are planar with minimum degree at least $4$, and creating an algorithm which checks the circumference $k$ of a graph and then finds if there exists a $k$-cycle in all vertex-deleted subgraphs. If the answer to this last question is yes, output these graphs (which are negative examples for RQ\ref{rq2}) and their relevant $k$ value. 
 
 
 \todo{Add all theoretical background here from other chapters}
 
-\section{Generators}
 
-\todo{maybe a section about the different generators that exist, citing JJ}
+\section{Graph Generators}
+\label{sec:generators}
+
+\todo{This section was moved from methodology, check if all content still accurate and complete}
+
+Computer-assisted graph theory has become 
+
+In order to exhaustively check each graph from a class of graphs for a specific set of properties, one needs a way to generate these graphs in a way they can be certain no graph was skipped.
+
+% --- COMMENT: MOVE THIS TODO/concept to Background. The definition of a graph generator belongs in the theoretical background. ---
+
+\todo{More examples of generators, and their intended graph classes (algemene grafen geng (nauty), kubische grafen snarkhunter, planaire grafen plantri)}
+
+% --- COMMENT: MOVE THIS TODO to Background. This directly corresponds to the Background TODO "maybe a section about the different generators that exist, citing JJ". This is where the broader survey of generators should go. You can discuss Nauty/geng, snarkhunter, plantri, and other relevant generators here. Methodology should not become a catalogue of available generators. ---
+
+Efficient but exhaustive graph generation is a difficult problem to solve. A graph generator needs to be exhaustive (i.e. generate every graph in a certain category), while also avoiding generating isomorphic graphs. If not much care is put into generating each graph once, the same graph can easily be generated multiple times as isomorphic graphs, resulting in redundant computations. Many graph generators have already been made, each of which already took a lot of research~\cite{article:jorik-jooken}. That is why, rather than making an attempt at our own graph generator specific for this problem, we use existing graph generators in this thesis.
+
+% --- COMMENT: MOVE TO BACKGROUND, with possible small revision. The first three sentences are general theoretical/background motivation for graph generation and isomorphism avoidance. The final sentence is the methodological decision ("we use existing graph generators in this thesis") and can remain in Methodology, but should probably be rewritten there after the move as a short transition: the Background explains the available generators; Methodology explains which ones were selected for this research and why. ---
 
 \section{Graphs}
 
