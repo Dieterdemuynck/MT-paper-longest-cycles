@@ -16,11 +16,13 @@
 
 \subsection{Graphs with intersection 1}
 
-The smallest intersection found in any generated graph during execution had an intersection of one vertex. While these graphs are not solutions directly, they may give an insight to a potential solution. We already know of a graph with an intersection of 1 of order 13 with maximal degree 3, as shown in Section~\ref{sec:modified-petersen}, which we expect to be isomorphic to the only intersection 1 result found in the graphs of order 13 with maximal degree 3. A diagram of this result as in Figure~\ref{fig:d3n13i1} confirms this.
+The smallest intersection found in any generated graph during execution had an intersection of one vertex. While these graphs are not solutions directly, they may give an insight to a potential solution. We already know of a graph $P$ with an intersection of 1 of order 13 with maximal degree 3, as shown in Section~\ref{sec:modified-petersen}, which we expect to be isomorphic to the only intersection 1 result found in the graphs of order 13 with maximal degree 3. A diagram of this result as in Figure~\ref{fig:d3n13i1} confirms this.
 
-Increasing the upper bound for the maximal degree to 4 gives two new graphs with intersection 1 distinct from the known graph with a single vertex intersection, shown in Figure~\ref{fig:d4n13i1}. Increasing this upper bound to 5 gives six new graphs, shown in Figure~\ref{fig:d5n13i1}. Additionally, increasing the order of the graph to 14 at maximal degree 4 gives us one new graph with intersection 1, shown in Figure~\ref{fig:d4n14i1}.
+Increasing the upper bound for the maximal degree to 4 gives two new graphs with intersection 1 distinct from the known graph with a single vertex intersection, shown in Figure~\ref{fig:d4n13i1}. Increasing this upper bound to 5 gives six new graphs, shown in Figure~\ref{fig:d5n13i1}. The figures show that the new graphs on 13 nodes are the graph $P$ with one or more additional edges, all incident on the vertex $v$.
 
-Let us consider modified Petersen's graph $G$ from Section~\ref{sec:modified-petersen}. The diagrams show that the new graphs on 13 nodes are the graph $G$ with one or more additional edges, all incident on the vertex $v$.
+Additionally, increasing the order of the graph to 14 at maximal degree 4 gives us one new graph with intersection 1, shown in Figure~\ref{fig:d4n14i1}. This figure shows that this is the graph $P$ with a duplicated subdivided edge, i.e. the path $(v, x_1', w_1)$ was inserted into the graph.
+
+
 
 \begin{figure}
   \centering
@@ -560,14 +562,14 @@ Let us consider modified Petersen's graph $G$ from Section~\ref{sec:modified-pet
 \todo{proofread this generated text}
 
 \begin{theorem}
-For every integer $n \ge 13$, there exists a $2$-connected graph of order $n$, circumference $11$, and maximum degree $\Delta\in\{n-10,\ldots,n-1\}$ such that every longest cycle has exactly one common vertex.
+For every integer $n \ge 13$, there exists a $2$-connected graph of order $n$, circumference $11$, and maximum degree $\Delta\in\{n-10,\ldots,n-1\}$ such that exactly one vertex meets every longest cycle.
 \end{theorem}
 
 \begin{proof}
-Take the graph $P$
+Take the graph $P$ from Section~\ref{sec:modified-petersen}, where $x_1$, $x_2$, and $x_3$ are the three vertices of degree 2, incident on the common vertex $v$, and the vertices $w_1$, $w_2$, and $w_3$ respectively. Set $Y = V(P) \setminus \{v, x_1, x_2, x_3\}$. $P$ has order 13 and circumference 11, with one vertex meeting every (longest) 11-cycle. We now show that we can add any vertex $x_{i,j}$ adjacent only to $v$ and $w_i$, and add any edge $(v,y)$ with $y \in Y$ to $P$, without changing its circumference or 11-cycle intersection.
 
 Replacing an edge $vw_i$ by several internally disjoint length-$2$ paths
-does not create new long cycles. Indeed, every cycle using one path
+does not create new longest cycles. Indeed, every cycle using one path
 $vx_{i,a}w_i$ has an equivalent cycle obtained by replacing this path by
 $vx_{i,b}w_i$ for any other subdivision vertex on the same edge.
 Consequently, the only genuinely new cycles created are $4$-cycles of

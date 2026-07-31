@@ -14,11 +14,174 @@ Studying the gadget mentioned in section~\ref{sec:gadget} led to an insight in f
 
 \begin{theorem}
   \label{theorem:d-extension}
-Take any integers $p \ge 4$, $\ell \ge 1$, and integers $(d_0,\ldots,d_{p-1}) = D$ where $d_i \ge 1$ for all $i$. Let $S = \sum_{i=0}^{p-1}d_i$. Then, if $S \le (p-3)\ell + 2\min(D)$, there exists a 2-connected graph of order~$2S + p(\ell-1)$ and circumference~$(p-1)\ell+S$, whose intersection of all longest cycles is empty.
+Take any integers $p \ge 4$, $\ell \ge 1$, and integers $(d_0,\ldots,d_{p-1}) = D$ where $d_i \ge 1$ for all $i$. Let $\sigma = \sum_{i=0}^{p-1}d_i$. Then, if $\sigma \le (p-3)\ell + 2\min(D)$, there exists a 2-connected graph $G$ of order~$2\sigma + p(\ell-1)$ and circumference~$(p-1)\ell+\sigma$, whose intersection of all longest cycles is empty.
 \end{theorem}
 \begin{proof}
-The proof takes inspiration from the proof of the similar Theorem 1 in~\cite{article:zamfirescu}.
-Take the graph $G_{p,\ell}$ from Section~\ref{sec:tube-graph}. For simplicity, from here on out, let $a_p = a_0$ and $a_{-1} = a_{p-1}$ for $p$ odd and analogous for the vertices $b_i$, and $a_p = b_0$ and $a_{-1} = b_{p-1}$ and vice versa for $p$ even. For all $i \in \{0,\ldots,p-1\}$, insert vertices on each of the edges $(a_i,a_{i+1})$ and $(b_i,b_{i+1})$ until each is a path of length $d_i$, i.e. has a total of $d_i+1$ vertices, including the original vertices. We denote this graph as $G_{p,\ell,D}$, and denote the path on these vertices from $a_i$ to $a_{i+1}$ by $D_{a,i}$, and similarly the path from $b_i$ to $b_{i+1}$ by $D_{b,i}$. Again for simplicity, let $D_{a,-1} = D_{a,p-1}$, $D_{a,p} = D_{a,0}$ and analogous for $D_{b,i}$ for $p$ odd, and $D_{a,-1} = D_{b,p-1}$, $D_{a,p} = D_{b,0}$ and vice versa for $p$ even. Informally, the index -1 and $p$ represent looping back around the graph, crossing over to the other cycle if $p$ is even.
+The proof takes inspiration from the proof of the similar Theorem 1 in~\cite{article:zamfirescu}. We will first construct a graph $G$, after which we will determine the types of cycles $G$ can have, alongside their length, and show that the intersection of the cycles of one type is empty. Lastly, we will compare the lengths of these cycles, and show that the empty-intersection cycles become the longest cycles per the condition.
+
+\paragraph{Construction of $G$}
+Take the graph $G_{p,\ell}$ from Section~\ref{sec:tube-graph}, with $a_i$ and $b_i$ defined as before. We use the following convention for the indices past 0 and $p-1$, to more intuitively represent the cyclical construction. For odd $p$, the continuation preserves the $a$- and $b$-cycles, giving
+\[
+a_{-1}=a_{p-1}, \qquad a_p=a_0,
+\]
+and, analogously,
+\[
+b_{-1}=b_{p-1}, \qquad b_p=b_0.
+\]
+For even $p$, the continuation crosses over to the other base cycle, giving
+\[
+a_{-1}=b_{p-1}, \qquad a_p=b_0,
+\]
+and, analogously,
+\[
+b_{-1}=a_{p-1}, \qquad b_p=a_0.
+\]
+These identifications are illustrated in Figure~\ref{fig:loop-around}.
+
+\begin{figure}[ht]
+    \centering
+
+    %=========================================================
+    % (a) p odd
+    %=========================================================
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \begin{tikzpicture}[line cap=round,line join=round]
+
+        %-----------------------------------------------------
+        % Main vertices
+        %-----------------------------------------------------
+        \node[vertex] (aL) at (0,2) {};
+        \node[vertex] (aR) at (2,2) {};
+
+        \node[vertex] (bL) at (0,0) {};
+        \node[vertex] (bR) at (2,0) {};
+
+        %-----------------------------------------------------
+        % Continuation edges
+        %-----------------------------------------------------
+        \draw[dashed,lightgray] (-0.8,2)--(aL);
+        \draw[dashed,lightgray] (aR)--(2.8,2);
+
+        \draw[dashed,lightgray] (-0.8,0)--(bL);
+        \draw[dashed,lightgray] (bR)--(2.8,0);
+
+        %-----------------------------------------------------
+        % Horizontal edges
+        %-----------------------------------------------------
+        \draw (aL)--(aR);
+        \draw (bL)--(bR);
+
+        %-----------------------------------------------------
+        % Vertical edges
+        %-----------------------------------------------------
+        \draw (aL)--(bL);
+        \node[fill=white,inner sep=1pt,rotate=90] at (0,1) {/};
+
+        \draw (aR)--(bR);
+        \node[fill=white,inner sep=1pt,rotate=90] at (2,1) {/};
+
+        %-----------------------------------------------------
+        % Vertex labels
+        %-----------------------------------------------------
+        \node[above=3pt,align=center] at (0,2)
+            {$a_{p-1}$\\[-2pt]\textcolor{gray}{\scriptsize $a_{-1}$}};
+
+        \node[above=3pt,align=center] at (2,2)
+            {$a_0$\\[-2pt]\textcolor{gray}{\scriptsize $a_p$}};
+
+        \node[below=3pt,align=center] at (0,0)
+            {$b_{p-1}$\\[-2pt]\textcolor{gray}{\scriptsize $b_{-1}$}};
+
+        \node[below=3pt,align=center] at (2,0)
+            {$b_0$\\[-2pt]\textcolor{gray}{\scriptsize $b_p$}};
+
+        \end{tikzpicture}
+        \caption{$p$ odd}
+        \label{fig:parity-odd}
+    \end{subfigure}
+    \hfill
+    %=========================================================
+    % (b) p even
+    %=========================================================
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \begin{tikzpicture}[line cap=round,line join=round]
+
+        %-----------------------------------------------------
+        % Main vertices
+        %-----------------------------------------------------
+        \node[vertex] (aL) at (0,2) {};
+        \node[vertex] (aR) at (2,2) {};
+
+        \node[vertex] (bL) at (0,0) {};
+        \node[vertex] (bR) at (2,0) {};
+
+        %-----------------------------------------------------
+        % Continuation edges
+        %-----------------------------------------------------
+        \draw[dashed,lightgray] (-0.8,2)--(aL);
+        \draw[dashed,lightgray] (aR)--(2.8,2);
+
+        \draw[dashed,lightgray] (-0.8,0)--(bL);
+        \draw[dashed,lightgray] (bR)--(2.8,0);
+
+        %-----------------------------------------------------
+        % Diagonal edges
+        %-----------------------------------------------------
+        \draw (aL)--(bR);
+        \draw (bL)--(aR);
+
+        %-----------------------------------------------------
+        % Vertical edges
+        %-----------------------------------------------------
+        \draw (aL)--(bL);
+        \node[fill=white,inner sep=1pt,rotate=90] at (0,1) {/};
+
+        \draw (aR)--(bR);
+        \node[fill=white,inner sep=1pt,rotate=90] at (2,1) {/};
+
+        %-----------------------------------------------------
+        % Vertex labels
+        %-----------------------------------------------------
+        \node[above=3pt,align=center] at (0,2)
+            {$a_{p-1}$\\[-2pt]\textcolor{gray}{\scriptsize $b_{-1}$}};
+
+        \node[above=3pt,align=center] at (2,2)
+            {$a_0$\\[-2pt]\textcolor{gray}{\scriptsize $b_p$}};
+
+        \node[below=3pt,align=center] at (0,0)
+            {$b_{p-1}$\\[-2pt]\textcolor{gray}{\scriptsize $a_{-1}$}};
+
+        \node[below=3pt,align=center] at (2,0)
+            {$b_0$\\[-2pt]\textcolor{gray}{\scriptsize $a_p$}};
+
+        \end{tikzpicture}
+        \caption{$p$ even}
+        \label{fig:parity-even}
+    \end{subfigure}
+    
+    \caption{Graphical definition for indices -1 and $p$ depending on parity of $p$.}
+    \label{fig:loop-around}
+\end{figure}
+
+
+For all $i \in \{0,\ldots,p-1\}$, insert vertices on each of the edges $(a_i,a_{i+1})$ and $(b_i,b_{i+1})$ until each is a path of length $d_i$, i.e. has a total of $d_i+1$ vertices, including the original vertices. We denote this graph as $G_{p,\ell,D}$, and denote the path on these vertices from $a_i$ to $a_{i+1}$ by $D_{a,i}$, and similarly the path from $b_i$ to $b_{i+1}$ by $D_{b,i}$. We use the same convention for the indices $p$ and $-1$, where for $p$ odd
+\[
+D_{a,-1}=D_{a,p-1}, \qquad D_{a,p}=D_{a,0},
+\]
+and
+\[
+D_{b,-1}=D_{b,p-1}, \qquad D_{b,p}=D_{b,0}.
+\]
+For even $p$, the continuation crosses over to the other base cycle, giving
+\[
+D_{a,-1}=D_{b,p-1}, \qquad D_{a,p}=D_{b,0},
+\]
+and
+\[
+D_{b,-1}=D_{a,p-1}, \qquad D_{b,p}=D_{a,0}.
+\]
 Figure~\ref{fig:g532} shows an example graph $G_{5,3,D}$ for $D=(2,2,2,2,2)$.
 
 \begin{figure}
@@ -35,22 +198,22 @@ Figure~\ref{fig:g532} shows an example graph $G_{5,3,D}$ for $D=(2,2,2,2,2)$.
 % S WITHOUT min:
 %   S - \min(D)
 
-We also define the sets $X_i = \{a_i,b_i\}$, $A_i = \{a_i,a_{i+1}\}$, $B_i = \{b_i,b_{i+1}\}$, as each of these are vertex-cuts of the graph. Since these sets are vertex-cuts, any cycle going through an internal vertex or edge of $D_{a,i}$, $D_{b,i}$, or $H_i$ (i.e. traverses these subgraphs) must also contain $A_i$, $B_i$, or $X_i$ respectively. Furthermore, the only subgraphs incident on $a_i$ are $D_{a,i-1}$, $D_{a,i}$, and $H_i$, and thus every cycle containing $a_i$ must either continue through both adjacent $D_{a,i-1}$ and $D_{a,i}$ subgraphs, or through exactly one of the aforementioned subgraphs and $H_i$. An analogous reasoning can be used for cycles going through $b_i$.
+We also define the sets $X_i = \{a_i,b_i\}$, $A_i = \{a_i,a_{i+1}\}$, $B_i = \{b_i,b_{i+1}\}$. Since these sets are vertex-cuts, any cycle going through an internal vertex or edge of $D_{a,i}$, $D_{b,i}$, or $H_i$ (i.e. traverses these subgraphs) must also contain $A_i$, $B_i$, or $X_i$ respectively. Furthermore, the only subgraphs incident on $a_i$ are $D_{a,i-1}$, $D_{a,i}$, and $H_i$, and thus every cycle containing $a_i$ must either continue through both adjacent $D_{a,i-1}$ and $D_{a,i}$ subgraphs, or through exactly one of the aforementioned subgraphs and $H_i$. An analogous reasoning can be used for cycles going through $b_i$.
 We now continue to show that there are only three types of candidate longest cycles, namely one type avoiding every $H_i$, and two types of cycles containing at least one $H_i$.
 
 \paragraph{Cycles avoiding $H_i$}
-For $p$ odd, if we were to remove all internal vertices and edges belonging to all $H_i$, we get two disjoint cycles. As such, the longest cycles which do not traverse any $H_i$ are contained within and equal to the two subgraphs
+Here we discuss the cycles avoiding every $H_i$, i.e. cycles not traversing any internal edges of any $H_i$. For $p$ odd, if we were to remove all internal vertices and edges belonging to all $H_i$, we get two disjoint cycles. As such, the longest cycles which do not traverse any $H_i$ are contained within and equal to the two subgraphs
 $$
 \bigcup_{i \in \{0,\dots,p-1\}}D_{a,i}\; \text{and} \;
 \bigcup_{i \in \{0,\dots,p-1\}}D_{b,i}
 $$
-These cannot be the longest cycles of the graph, as one can create a longer cycle by picking any $i$, removing the internal vertices of $D_{a,i}$ (or $D_{b,i}$), and creating a new cycle through $H_i$, $D_{b,i}$ (or $D_{a,i}$ respectively), and $H_{i+1}$. The original cycle has length $S$, while this new cycle has length $S+2\ell$. This new cycle must be larger than the former cycle, since by construction $\ell > 0$. As a result, any longest cycle for $p$ odd must contain at least one $H_i$.
+These cannot be the longest cycles of the graph, as one can create a longer cycle by picking any $i$, removing the internal vertices of $D_{a,i}$ (or $D_{b,i}$), and creating a new cycle through $H_i$, $D_{b,i}$ (or $D_{a,i}$ respectively), and $H_{i+1}$. The original cycle has length $\sigma = \sum_{i=0}^{p-1}d_i$, while this new cycle has length $\sigma+2\ell$. This new cycle must be larger than the former cycle, since by construction $\ell > 0$. As a result, any longest cycle for $p$ odd must contain at least one $H_i$.
 
 For $p$ even, removing all internal vertices and edges belonging to all $H_i$, we get one cycle
 $$
 \bigcup_{i \in \{0,\dots,p-1\}}\left(D_{a,i} \cup D_{b,i}\right)
 $$
-with length $2S$. Trivially, this is the longest cycle avoiding all $H_i$ for $p$ even.
+with length $2\sigma$. Trivially, this is the longest cycle avoiding all $H_i$ for $p$ even.
 
 If a cycle traverses an $H_i$, it must enter at $a_i$ from either $D_{a,i}$ or $D_{a,i-1}$, and leave at $b_i$ through either $D_{b,i}$ or $D_{b,i-1}$. We now show there are two types of cycles these options create.
 
@@ -67,12 +230,12 @@ traversing $D_{a,i}$ and $D_{b,i}$ instead of $H_i$ as extending the otherwise
 closed cycle with $2d_i$ vertices.
 Repeating this argument successively for $a_2$, $a_3$, \dots, $a_{p-1}$ yields
 the longest same-direction cycle through $H_0$, $D_{a,0}$, and $D_{b,0}$ with
-length $2(S - d_{p-1})+2\ell$, and traverses all vertices
+length $2(\sigma - d_{p-1})+2\ell$, and traverses all vertices
 
 $$
-\bigcup_{i \in \{0,\dots,p-1\} \setminus \{p-1\}}V(D_{a,i})
+\bigcup_{i \in \{0,\dots,p-2\}}V(D_{a,i})
 \;\cup\;
-\bigcup_{i \in \{0,\dots,p-1\} \setminus \{p-1\}}V(D_{b,i})
+\bigcup_{i \in \{0,\dots,p-2\}}V(D_{b,i})
 \;\cup\; 
 V(H_0)
 \;\cup\; 
@@ -80,7 +243,7 @@ V(H_{p-1})
 $$
 
 The reasoning for $D_{a,-1}$ and $D_{b,-1}$, and for other $H_i$'s, is
-analogous. The largest of these cycles is all cycles which avoid a subgraph pair $D_{a,i}$ and $D_{b,i}$ of minimal length, i.e. where $d_i = \min(D)$, with a cycle length of $2(S - \min(D))+2\ell$. Note that all vertices $a_i$ and $b_i$ meet all these cycles.
+analogous. The largest of these cycles is all cycles which avoid a subgraph pair $D_{a,i}$ and $D_{b,i}$ of minimal length, i.e. where $d_i = \min(D)$, with a cycle length of $2(\sigma - \min(D))+2\ell$. Note that all vertices $a_i$ and $b_i$ meet all these cycles.
 
 \begin{figure}
     \centering
@@ -230,24 +393,26 @@ The only other option for a cycle traversing $H_i$ is to enter and leave
 $H_i$ in opposite directions, either through $D_{a,i-1}$ and $D_{b,i}$ or
 through $D_{a,i}$ and $D_{b,i-1}$.
 
-Say a cycle traversed $H_0$, $D_{a,0}$, and $D_{b,-1}$. There are again two possibilities at $a_1$: to traverse $D_{a,1}$, or to traverse $H_1$. In the latter option, the traversal of $D_{b,1}$ is forced, as the only other option to traverse $D_{b,0}$ would result in the same-side case from before. From then on, this option repeats: at any endpoint $b_i$, either $D_{b,i}$ is traversed, or $H_i$ and $D_{a,i}$ are traversed, and analogous for endpoints $a_i$, up until $i=p-1$. There, $D_{b,-1}$ must be traversed to complete the cycle, either from $a_{-1}$ through $H_{p-1}$, or directly from $b_{-1}$.\footnote{Remember that $a_{-1} = b_{p-1}$ if $p$ is even} In total, every $H_i$ traversed this way adds $d_i+\ell$ vertices to the cycle (including $H_0$, where $b_0$ is counted from the traversal of $D_{b,-1}$), while every $H_i$ avoided adds only $d_i$ vertices.
+Say a cycle traversed $H_0$, $D_{a,0}$, and $D_{b,-1}$. There are again two possibilities at $a_1$: to traverse $D_{a,1}$, or to traverse $H_1$. In the latter option, the traversal of $D_{b,1}$ is forced. This is because the only other option, to traverse $D_{b,0}$, would result in the same-direction case from before, which results in a cycle where an $H_i$ being exited in opposite directions is not possible. 
 
-By construction, a cycle in $G$ cannot traverse all $H_i$. Since $X_i$ is a vertex-cut in $G$, the subgraph $H_i$ can only be traversed by entering through $a_i$ and exiting through $b_i$. For a cycle to traverse all $H_i$, it must visit an even number of $H_i$'s if $p$ is odd to close the cycle on the same base cycle it started, or an odd number of $H_i's$ if $p$ is even, a contradiction. Thus, at least one $H_i$ must be avoided, which means the largest opposite-side cycle must traverse (1) a maximal amount of $H_i$'s, and (2) at most all but one $H_i$. We can construct a cycle $C$ avoiding exactly one $H_i$, with length $(p-1)\ell + S$. Put
-$$
+From then on, this option repeats: at any endpoint $b_i$, either $D_{b,i}$ is traversed, or $H_i$ and $D_{a,i}$ are traversed, and analogous for endpoints $a_i$, up until $i=p-1$. There, $D_{b,-1}$ must be traversed to complete the cycle, either from $a_{-1}$ through $H_{p-1}$, or directly from $b_{-1}$.\footnote{Remember that $a_{-1} = b_{p-1}$ if $p$ is even} In total, every $H_i$ traversed this way adds $d_i+\ell$ vertices to the cycle (including $H_0$, where $b_0$ is counted from the traversal of $D_{b,-1}$), while every $H_i$ avoided adds only $d_i$ vertices.
+
+By construction, a cycle in $G$ cannot traverse all $H_i$. Since $X_i$ is a vertex-cut in $G$, the subgraph $H_i$ can only be traversed by entering through $a_i$ and exiting through $b_i$. For a cycle to traverse all $H_i$, it must visit an even number of $H_i$'s if $p$ is odd to close the cycle on the same base cycle it started, or an odd number of $H_i's$ if $p$ is even, a contradiction. Thus, at least one $H_i$ must be avoided, which means the largest opposite-side cycle must traverse (1) a maximal amount of $H_i$'s, and (2) at most all but one $H_i$. We can construct a cycle $C$ avoiding exactly one $H_i$, with length $(p-1)\ell + \sigma$. Put
+\[
 C=
 \left(
-\bigcup_{i\neq0}H_i
+\bigcup_{i\neq 0} H_i
 \right)
 \cup
 \left(
-\bigcup_{0 \le j <p\ \text{even}}D_{a,j}
+\bigcup_{\substack{0\leq j\leq p-1\\[2pt] j\ \mathrm{even}}} D_{a,j}
 \right)
 \cup
 \left(
-\bigcup_{0 \le k <p\ \text{odd}}D_{b,k}
+\bigcup_{\substack{0\leq k\leq p-1\\[2pt] k\ \mathrm{odd}}} D_{b,k}
 \right)
-$$
-where $C$ omits all vertices $V(H_0)\setminus\{b_0\}$ and $V(D_{a,0})\setminus\{a_1\}$. Figure~\ref{fig:opposite-side:g532} shows this cycle for a graph $G_{5,3,D}$, and Figure~\ref{fig:opposite-side:g632} shows this cycle for a graph $G_{6,3,D}$ with $D=(2,2,2,2,2)$. For all other vertices, a cycle of length $(p-1)\ell + S$ can be constructed in the same way.
+\]
+where $C$ omits all vertices $V(H_0)\setminus\{b_0\}$ and $V(D_{a,0})\setminus\{a_1\}$. For all other vertices $v \in V(G)$, a cycle of length $(p-1)\ell + \sigma$ can be constructed in the same way. Figure~\ref{fig:opposite-side:g532} shows this cycle for a graph $G_{5,3,D}$, and Figure~\ref{fig:opposite-side:g632} shows this cycle for a graph $G_{6,3,D}$ with $D=(2,2,2,2,2)$.
 
 \begin{figure}
   \centering
@@ -354,46 +519,48 @@ where $C$ omits all vertices $V(H_0)\setminus\{b_0\}$ and $V(D_{a,0})\setminus\{
 
 \paragraph{Length comparison}
 We've determined there are three types of cycles with the potential of being the
-longest cycles, the length of which are $2S$ for $H_i$-avoiding cycles when $p$ is even, $(p-1)(2d)+2\ell$ for same-direction cycles and $(p-1)\ell + S$ for opposite-direction cycles. Only in the last case can we construct a cycle for every vertex avoiding that vertex. The opposite-side cycle is longer than the same-side cycle if
+longest cycles, the length of which are $2\sigma$ for $H_i$-avoiding cycles when $p$ is even, $(p-1)(2d)+2\ell$ for same-direction cycles and $(p-1)\ell + \sigma$ for opposite-direction cycles. Only in the last case can we construct a cycle for every vertex avoiding that vertex. The opposite-side cycle is longer than the same-side cycle if
 \[
 \begin{aligned}
-2(S-\min(D))+2\ell
-    &\le (p-1)\ell + S\\
+2(\sigma-\min(D))+2\ell
+    &\le (p-1)\ell + \sigma\\
 \iff\qquad
-S
+\sigma
     &\le (p-3)\ell + 2\min(D)
 \end{aligned}
 \]
 while the opposite-side cycle is longer than the $H_i$ avoiding cycle if
 \[
 \begin{aligned}
-2S
-    &\le (p-1)\ell + S\\
+2\sigma
+    &\le (p-1)\ell + \sigma\\
 \iff\qquad
-S
+\sigma
     &\le (p-1)\ell
 \end{aligned}
 \]
 
-We can show that the condition that $S\le (p-3)\ell + 2\min(D)$ implies the condition $S\le (p-1)\ell$.
+We can show that the condition that $\sigma \le (p-3)\ell + 2\min(D)$ implies the condition $\sigma \le (p-1)\ell$.
+
 First assume that $\min(D) \le \ell$. Then $(p-3)\ell + 2\min(D) \le (p-3)\ell + 2\ell = (p-1)\ell$, thus if the first condition is true, the second must be as well. 
-Now assume instead that $\min(D) > \ell$. Then, $(p-3)\ell + 2\min(D) > (p-1)\ell$. However, we also have that $S \ge p \min(D) = (p-3)\min(D) + 3\min(D)$. Since for all $d_i$ we have that $d_i\ge1$, we know that $S > (p-3)\min(D) + 2\min(D)$, which after applying the assumptions gives us $S > (p-3)\ell + 2\min(D)$ and thus $S > (p-1)\ell$. This means that in this case, neither assumption can be true.
+
+Now assume instead that $\min(D) > \ell$. Then, $(p-3)\ell + 2\min(D) > (p-1)\ell$. However, we also have that $\sigma \ge p \min(D) = (p-3)\min(D) + 3\min(D)$. Since for all $d_i$ we have that $d_i\ge1$, we know that $\sigma > (p-3)\min(D) + 2\min(D)$, which after applying the assumptions gives us $\sigma > (p-3)\ell + 2\min(D)$ and, since $\min(D) > \ell$, we have $\sigma > (p-1)\ell$. This means that in this case, neither assumption can be true.
 
 \paragraph{Conclusion}
-As a result, there exists a 2-connected graph $G$ of order $2S + p(\ell-1)$ with circumference $(p-1)\ell + S$ for which no vertex meets every longest cycle if $S\le (p-3)\ell + 2\min(D)$.
+As a result, there exists a 2-connected graph $G$ of order $2\sigma + p(\ell-1)$ with circumference $(p-1)\ell + \sigma$ for which no vertex meets every longest cycle if $\sigma \le (p-3)\ell + 2\min(D)$.
 
 \end{proof}
 
 Theorem~\ref{theorem:d-extension} provides us with new graphs that we can expand on in the same way as done in~\cite{article:zamfirescu} to find new negative values for RQ\ref{rq2}. First, observe that all graphs $G_{p,\ell,D}$ are planar if $p$ is odd. To prove the existence of new negative values, we must show we can add edges to some of these graphs to ensure minimum degree 4.
 
 \begin{theorem}
-  Take integers $p\ge5$ odd, $\ell\ge5$, and integers $(d_0,\dots,d_{p-1})=D$ where $d_i = 1$ or $d_i\ge5$ with $S=\sum_{i=0}^{p-1}d_i$. If $S\le (p-3)\ell + 2\min(D)$, there exists a 2-connected, planar graph of minimum degree~4 with order~$2S + p(\ell-1)$ and circumference~$k=(p-1)\ell + S$, in which every vertex-deleted subgraph contains a $k$-cycle.
+  Take integers $p\ge5$ odd, $\ell\ge5$, and integers $(d_0,\dots,d_{p-1})=D$ where $d_i = 1$ or $d_i\ge5$ with $\sigma=\sum_{i=0}^{p-1}d_i$. If $\sigma \le (p-3)\ell + 2\min(D)$, there exists a 2-connected, planar graph of minimum degree~4 with order~$2\sigma + p(\ell-1)$ and circumference~$k=(p-1)\ell + \sigma$, in which every vertex-deleted subgraph contains a $k$-cycle.
 \end{theorem}
 \begin{proof}
 The proof takes inspiration from the proof of the similar Proposition 1 in~\cite{article:zamfirescu}.
 Let $G$ be a graph $G_{p,\ell,D}$. Observe that in each $D_{a,i}$, $D_{b,i}$, and $H_i$, we may add edges as desired within each respective subgraph (but without adding edges between internal nodes of different subgraphs) without altering the fact that the intersection of all longest cycles remains empty. We denote these modified paths with additional edges as $D_{a,i}'$, $D_{b,i}'$, respectively $H_i'$.
 
-Trivially, if we choose $D_{a,i}'$ and $D_{b,i}'$ to each be the path $P_{d_i}^2$, i.e. a path of length $d_i$ with an additional edge between all vertices at distance 2 as in Figure~\ref{fig:path-2}, and similarly choose $H_i'$ to be the path $P_\ell^2$, then $G$ remains planar. Observe that, for each of these subgraphs, all internal vertices except two have degree 4, and two internal vertices, say $w$ and $w'$, have degree 3. These vertices $w$ and $w'$ are adjacent to an endpoint of the (modified) paths, say $x$ and $y$. Adding the edges $wx$ and $w'y$ when $d_i$ (respectively $\ell$) is odd as in Figure~\ref{fig:degree-4-opposite-side}, and adding the edge $ww'$ when $d_i$ (respectively $\ell$) is even as in Figure~\ref{fig:degree-4-same-side}, provides a graph $G$ with minimum degree 4 when $\ell,d_i \ge 5$.
+Trivially, if we choose $D_{a,i}'$ and $D_{b,i}'$ to each be the path $P_{d_i}^2$, i.e. a path of length $d_i$ with an additional edge between all vertices at distance 2 as in Figure~\ref{fig:path-2}, and similarly choose $H_i'$ to be the path $P_\ell^2$, then $G$ remains planar. Observe that, for each of these subgraphs, two internal vertices, say $w$ and $w'$, have degree 3, while all other internal vertices have degree 4. These vertices $w$ and $w'$ are adjacent to an endpoint of the (modified) paths, say $x$ and $y$ respectively. Adding the edges $w'x$ and $wy$ when $d_i$ (respectively $\ell$) is odd as in Figure~\ref{fig:degree-4-opposite-side}, and adding the edge $ww'$ when $d_i$ (respectively $\ell$) is even as in Figure~\ref{fig:degree-4-same-side}, provides a graph $G$ with minimum degree 4 when $\ell,d_i \ge 5$.
 
 We conclude with the statement that for the resulting graph $G$, the intersection of all longest cycles is empty. Theorem~\ref{theorem:intersection-vertex-deletion} has shown that this empty intersection is equivalent to claiming the graph $G$ has a $k$-cycle in every vertex-deleted subgraph, and no larger cycle than $k$ exists in $G$. As such, we have shown that $G$ is a planar graph with minimum degree 4, with a $k$-cycle in every vertex-deleted subgraph, with no cycle larger than $k$.
 
