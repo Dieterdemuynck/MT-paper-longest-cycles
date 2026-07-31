@@ -558,35 +558,49 @@ Additionally, increasing the order of the graph to 14 at maximal degree 4 gives 
   \label{fig:d4n14i1}
 \end{figure}
 
-
-\todo{Proofread this generated text}
-
 \begin{theorem}
-For every integer $n \ge 13$, there exists a $2$-connected graph of order $n$, circumference $11$, and maximum degree $\Delta\in\{n-10,\ldots,n-1\}$ such that exactly one vertex meets every longest cycle.
+For every integer $n \ge 13$ and every $d \in\{n-10,\ldots,n-1\}$, there exists a $2$-connected graph $G$ of order $n$, circumference $11$, maximum degree $\Delta(G) = d$, and minimum degree $\delta(G) = 2$, such that exactly one vertex meets every longest cycle.
 \end{theorem}
 
 \begin{proof}
-Take the graph $P$ from Section~\ref{sec:modified-petersen}, where $x_1$, $x_2$, and $x_3$ are the three vertices of degree 2, incident on the common vertex $v$, and the vertices $w_1$, $w_2$, and $w_3$ respectively. Set $Y = V(P) \setminus \{v, x_1, x_2, x_3\}$. $P$ has order 13 and circumference 11, with one vertex meeting every (longest) 11-cycle. We now show that we can add any edge $(v,y)$ with $y \in Y$ to $P$, and (subject to that condition) add any number of vertices $x_{i,j}$ adjacent only to $v$ and $w_i$, and the resulting graph will remain 2-connected, without changing its circumference of 11, or its 11-cycle intersection.
+Take the graph $P$ from Section~\ref{sec:modified-petersen}, where $x_1$, $x_2$, and $x_3$ are the three vertices of degree 2, incident on the common vertex $v$, and the vertices $w_1$, $w_2$, and $w_3$ respectively. Set 
+$$
+Y = V(P) \setminus \{v, x_1, x_2, x_3\}.
+$$
+$P$ has order 13 and circumference 11, with one vertex $v$ meeting every 11-cycle, as shown in~\cite{article:zamfirescu}. We now show that we can add any edge $(v,y)$ with $y \in Y$ to $P$, and (subject to that condition) add any number of vertices $x_{i,j}$ adjacent only to $v$ and $w_i$, and the resulting graph $G$ will remain 2-connected, with circumference 11, and $v$ the only vertex in the intersection of all 11-cycles.
 
-Since extending the graph with new vertices and edges without removing any does not remove any existing 11-cycles, we are guaranteed that the intersection of all 11-cycles remains empty. Additionally, adding new edges does not remove any existing paths, and thus using Menger's Theorem~\cite{article:van-aardt} the graph remains 2-connected. Therefore, it is sufficient to prove that adding these edges and vertices does not change the circumference, i.e. creates no cycles with length greater than 11, and that the graph remains 2-connected after adding any number of paths $(v, x_{i,j}, w_i)$.  
+Additionally, since adding edges also does not remove any existing cycles, all $11$-cycles of $P$ remain present in the resulting graph, and hence $v$ is still contained in every original $11$-cycle.
+
+To conclude that $v$ lies in every $11$-cycle of the final graph, it therefore suffices to show that no new $11$-cycle avoiding $v$ is created. In addition, to ensure that the circumference remains $11$, it is enough to prove that no cycle of length greater than $11$ is introduced by the added edges and vertices. Finally, we must also verify that the graph remains $2$-connected after addition of the paths $(v, x_{i,j}, w_i)$.
 
 \paragraph{Adding an edge $(v,y)$}
-% \todo{This distinction is likely unnecessary.}
-% When $y \in \{w_1, w_2, w_3\}$, first observe that $\{v,w_i\}$ is a vertex-cut of the graph $P$, splitting the graph into two components where one is the singular vertex $x_i$. As a result, every cycle through $x_i$ must enter through $v$ and exit through $w_i$. From this, we can conclude that every cycle through $x_i$ must enter the path $(v, x_i, w_i)$ through $v$ and exit through $w_i$. This does not change after adding the edge $(v,w_i)$ to the graph $G$. 
+We proceed by induction on the number of edges of the form $(v,y)$ with $y\in Y$ that have been added. Suppose $G'$ is a graph constructed by adding $0 \le k < |Y|$ distinct edges $(v,y')$ for $y' \in Y$ to $P$. Also assume that $G'$ is 2-connected with circumference 11 and an 11-cycle intersection equal to ${v}$. Now consider adding the new edge where $(v,y)\notin E(G')$ for $y \in Y$,creating a new graph $G''$.
 
-% As such, any cycle that takes the edge $(v, w_i)$, other than the cycle $(v, x_i, w_i, v)$, can be made longer by removing $(v, w_i)$ from the cycle and taking the path $(v, x_i, w_i)$ instead. This longer cycle is in $G \setminus (v, w_i)$, which by our induction hypothesis must have a length of at most 11.
+First, consider a cycle $C$ in $G''$ containing the newly added edge $(v,y)$. Since $C$ contains $(v,y)$, it can use at most one further edge incident with $v$. In particular, $C$ can contain at most one of the three vertices $x_1,x_2,x_3$. This is because, for each $i\in\{1,2,3\}$, $\{v,w_i\}$ is a vertex-cut separating $x_i$ from the rest of the graph. Thus, any cycle containing $x_i$ must enter through $v$ and leave through $w_i$. A cycle containing $(v,y)$ can contain at most one of the three paths
+\[
+(v,x_1,w_1),\qquad (v,x_2,w_2),\qquad (v,x_3,w_3).
+\]
+Consequently, it follows that $C$ avoids at least two of the three vertices $x_1,x_2,x_3$.
 
-\todo{Any cycle taking this edge can go through at most 1 of the subdivided edges (which are adjacent to $v$), and thus must avoid all but one subdivided edge. Due to order of graph $= 13$, this results in circumference $\le 11$.}
-For $y \in Y$...
+Because $G''$ has 13 vertices, the length of $C$ can therefore be at most 11. Secondly, by definition, $C$ must contain the vertex $v$. Additionally, any cycle $C'$ not containing the edge $(v,y)$ is also a cycle of the graph $G'$, where we know the intersection of all 11-cycles is $\{v\}$. Thus, the intersection of all 11-cycles in $G''$ remains $\{v\}$, and the circumference of $G''$ is 11. Lastly, adding edges does not remove any existing paths, so by Menger's Theorem~\cite{article:van-aardt}, the graph $G''$ is also 2-connected.
+
+We know that $P$ is a 2-connected graph of circumference 11, where the 11-cycle intersection equals $\{v\}$. By induction, we've shown that one can add any number $\le n-4$ of distinct edges $(v,y)$ with $y \in Y$ to $P$ such that the resulting graph $P'$ is 2-connected, has circumference 11, and has $v$ as the only vertex in the intersection of all 11-cycles.
 
 \paragraph{Adding a path $(v, x_{i,j}, w_i)$}
-\todo{Use induction on j. Assume for other i any number is already proven.}
-\todo{2-connected: graph with $x_{i,j}$ without $x_i$ is isomorphic to graph with $x_i$ which is known to be 2-connected (induction hypothesis), and thus there exists a path to every vertex $v \in V(G) \setminus \{x_i\}$. Two paths exist to $x_i$, namely one through $v$ and one through $w_i$. Thus, 2-connected}
-\todo{Circumference 11: $\{v,w_i\}$ vertex cut. Thus, only cycle through both $x_{i,j}$ has length 4. Cycles through one (note:isomorphism) are known to have length at most 11, induction hypothesis.}
+Take any graph $P'$ obtained from $P$ by adding any number of distinct
+edges $(v,y)$ with $y \in Y$. We again use induction on the total number $j$ of additional vertices $x_{i,j}$, assuming that any graph $P'$ with less than $j$ additional paths $(v, x_{i,j}, w_i)$ has already been established to be 2-connected, have circumference 11, and an 11-cycle intersection equal to $\{v\}$. Choose any graph $G'$ with $j-1$ of these additional paths, and choose any $i\in\{1,2,3\}$. Now consider the addition of $x_{i,j}$, resulting in the graph $G''$.
+
+To show that the resulting graph is $2$-connected, first consider the vertex-deleted subgraph $G'' \setminus \{x_i\}$ and denote it as $G'''$. Observe that this graph is isomorphic to $G'$, as one can map $x_{i,j}$ and its incident edges onto $x_i$ and the respective edges, and map every other vertex and edge onto itself. By the induction hypothesis, $G'$ is $2$-connected and therefore $G'''$ is too. Thus, by Menger's Theorem~\cite{article:van-aardt}, for every vertex $u\in V(G'')\setminus\{x_i,x_{i,j}\}$, there are two internally vertex-disjoint paths from $x_{i,j}$ to $u$ in $G''\setminus\{x_i\}$, and hence in $G''$. Trivially, one can construct two internally vertex-disjoint paths from $x_{i,j}$ to $x_i$ in $G''$, namely $(x_{i,j},v,x_i)$ and $(x_{i,j},w_i,x_i)$. Since $G'$ is 2-connected, we have that $G''$ must also be 2-connected.
+
+For the circumference, observe that $\{v,w_i\}$ is a vertex-cut separating the vertices $x_i$ and $x_{i,j}$ from the rest of the graph. Therefore, any cycle containing $x_i$ or $x_{i,j}$ must pass through the vertices $v$ and $w_i$. Since these are the only vertices adjacent to the vertex $x_i$ and similarly to $x_{i,j}$, we have that the only cycle containing both is the cycle
+\[
+(v,x_i,w_i,x_{i,j},v)
+\]
+which has length $4$, and consequently not a longest cycle of the graph $G''$. Any cycle going through $x_{i,j}$ and not $x_i$ is entirely contained within $G'''$, which we know is isomorphic to $G'$, and therefore by the induction hypothesis has length at most 11 and must go through the vertex $v$. Any cycle which includes only $x_i$ or neither $x_i$ nor $x_{i,j}$ is entirely contained within $G'$, and by the induction hypothesis has at most length 11, with the intersection of all such 11-cycle equaling $\{v\}$. In conclusion, the graph $G''$ has circumference 11, and the intersection of all 11-cycles is $\{v\}$.
+
+We know that $P'$ is a 2-connected graph, with circumference 11, with an 11-cycle intersection equal to $\{v\}$. By induction, we have proven that adding any number $j$ of paths $(v,x_{i,j},w_i)$ to $P'$ results in a 2-connected graph with circumference 11, with an 11-cycle intersection equal to $\{v\}$. Since $P'$ was chosen at random, this counts for all graphs $P'$ which are the result of adding any number of distinct edges $(v,y)$ for $y \in Y$ to the graph $P$.
 
 \paragraph{Conclusion}
-\todo{conclusion}
+Starting with $P$, we may add any number of vertices $x_{i,j}$ for each $i\in\{1,2,3\}$, and any number of edges $(v,y)$ with $y\in Y$, while preserving $2$-connectivity, circumference 11, and the 11-cycle intersection $\{v\}$. Observe that in $P$, the maximum degree is 3, and $v$ has a degree of 3. Also observe that every addition of an edge or path as before increases the degree of $v$ and one other vertex by exactly 1. All vertices $x_i$ and the inserted vertices $x_{i,j}$ all have degree 2. As a result, $v$ must have the maximum degree of all vertices. There are 9 vertices in $Y$, and adding a path as before increases the order of the graph by 1. Thus, we conclude that a graph $G$ can be constructed with order $r + 13$ for all $r \ge 0$, and maximum degree $\Delta(G) = n-10+k$ for all $k \in \{0,\dots,9\}$, with minimum degree 2, by adding $r$ distinct paths $(v,x_{i,j},w_i)$ and adding $k$ distinct edges $(v,y)$ with $y \in Y$, to $P$, where $G$ is 2-connected, has circumference 11, and has an 11-cycle intersection $\{v\}$.
 
 \end{proof}
-
-\todo{--end proofread}
