@@ -559,48 +559,34 @@ Additionally, increasing the order of the graph to 14 at maximal degree 4 gives 
 \end{figure}
 
 
-\todo{proofread this generated text}
+\todo{Proofread this generated text}
 
 \begin{theorem}
 For every integer $n \ge 13$, there exists a $2$-connected graph of order $n$, circumference $11$, and maximum degree $\Delta\in\{n-10,\ldots,n-1\}$ such that exactly one vertex meets every longest cycle.
 \end{theorem}
 
 \begin{proof}
-Take the graph $P$ from Section~\ref{sec:modified-petersen}, where $x_1$, $x_2$, and $x_3$ are the three vertices of degree 2, incident on the common vertex $v$, and the vertices $w_1$, $w_2$, and $w_3$ respectively. Set $Y = V(P) \setminus \{v, x_1, x_2, x_3\}$. $P$ has order 13 and circumference 11, with one vertex meeting every (longest) 11-cycle. We now show that we can add any vertex $x_{i,j}$ adjacent only to $v$ and $w_i$, and add any edge $(v,y)$ with $y \in Y$ to $P$, without changing its circumference or 11-cycle intersection.
+Take the graph $P$ from Section~\ref{sec:modified-petersen}, where $x_1$, $x_2$, and $x_3$ are the three vertices of degree 2, incident on the common vertex $v$, and the vertices $w_1$, $w_2$, and $w_3$ respectively. Set $Y = V(P) \setminus \{v, x_1, x_2, x_3\}$. $P$ has order 13 and circumference 11, with one vertex meeting every (longest) 11-cycle. We now show that we can add any edge $(v,y)$ with $y \in Y$ to $P$, and (subject to that condition) add any number of vertices $x_{i,j}$ adjacent only to $v$ and $w_i$, and the resulting graph will remain 2-connected, without changing its circumference of 11, or its 11-cycle intersection.
 
-Replacing an edge $vw_i$ by several internally disjoint length-$2$ paths
-does not create new longest cycles. Indeed, every cycle using one path
-$vx_{i,a}w_i$ has an equivalent cycle obtained by replacing this path by
-$vx_{i,b}w_i$ for any other subdivision vertex on the same edge.
-Consequently, the only genuinely new cycles created are $4$-cycles of
-the form
-\[
-v-x_{i,a}-w_i-x_{i,b}-v.
-\]
+Since extending the graph with new vertices and edges without removing any does not remove any existing 11-cycles, we are guaranteed that the intersection of all 11-cycles remains empty. Additionally, adding new edges does not remove any existing paths, and thus using Menger's Theorem~\cite{article:van-aardt} the graph remains 2-connected. Therefore, it is sufficient to prove that adding these edges and vertices does not change the circumference, i.e. creates no cycles with length greater than 11, and that the graph remains 2-connected after adding any number of paths $(v, x_{i,j}, w_i)$.  
 
-Similarly, adding edges incident with $v$ cannot create cycles longer
-than $11$, since any cycle using such an edge can traverse at most one
-subdivided edge and therefore omits at least two subdivision vertices.
+\paragraph{Adding an edge $(v,y)$}
+% \todo{This distinction is likely unnecessary.}
+% When $y \in \{w_1, w_2, w_3\}$, first observe that $\{v,w_i\}$ is a vertex-cut of the graph $P$, splitting the graph into two components where one is the singular vertex $x_i$. As a result, every cycle through $x_i$ must enter through $v$ and exit through $w_i$. From this, we can conclude that every cycle through $x_i$ must enter the path $(v, x_i, w_i)$ through $v$ and exit through $w_i$. This does not change after adding the edge $(v,w_i)$ to the graph $G$. 
 
-Hence, the graph has circumference $11$. Furthermore, every $11$-cycle is
-obtained from a longest cycle of the modified Petersen graph by choosing
-one representative subdivision vertex on each subdivided edge. In
-particular, every longest cycle contains $v$.
+% As such, any cycle that takes the edge $(v, w_i)$, other than the cycle $(v, x_i, w_i, v)$, can be made longer by removing $(v, w_i)$ from the cycle and taking the path $(v, x_i, w_i)$ instead. This longer cycle is in $G \setminus (v, w_i)$, which by our induction hypothesis must have a length of at most 11.
 
-Finally, the degree of $v$ equals
-\[
-k_1+k_2+k_3+t,
-\]
-where $t\in\{0,\ldots,9\}$ is the number of additional edges incident
-with $v$. Since
-\[
-k_1+k_2+k_3=n-10,
-\]
-we obtain
-\[
-\Delta(v)=n-10+t\in\{n-10,\ldots,n-1\},
-\]
-proving the claim.
+\todo{Any cycle taking this edge can go through at most 1 of the subdivided edges (which are adjacent to $v$), and thus must avoid all but one subdivided edge. Due to order of graph $= 13$, this results in circumference $\le 11$.}
+For $y \in Y$...
+
+\paragraph{Adding a path $(v, x_{i,j}, w_i)$}
+\todo{Use induction on j. Assume for other i any number is already proven.}
+\todo{2-connected: graph with $x_{i,j}$ without $x_i$ is isomorphic to graph with $x_i$ which is known to be 2-connected (induction hypothesis), and thus there exists a path to every vertex $v \in V(G) \setminus \{x_i\}$. Two paths exist to $x_i$, namely one through $v$ and one through $w_i$. Thus, 2-connected}
+\todo{Circumference 11: $\{v,w_i\}$ vertex cut. Thus, only cycle through both $x_{i,j}$ has length 4. Cycles through one (note:isomorphism) are known to have length at most 11, induction hypothesis.}
+
+\paragraph{Conclusion}
+\todo{conclusion}
+
 \end{proof}
 
 \todo{--end proofread}
