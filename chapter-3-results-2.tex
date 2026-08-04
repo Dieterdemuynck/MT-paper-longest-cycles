@@ -10,7 +10,7 @@
 
 \section{New Values for RQ2}
 
-Studying the gadget mentioned in section~\ref{sec:gadget} led to an insight in finding new negative examples to RQ\ref{rq2}. By expanding not only the inner edges between the cycles, but also expanding the edges of the cycles to a new length, graphs could be created with longest cycles that differ in length compared to the order of the graph than those already known. Similar to graphs of the form $G_{p,\ell}$, these graphs also have no vertex meeting every cycle. The construction of this graph depends on the integers $p$ and $\ell$, as well as on a new, ordered set of integers $D = (d_0,\ldots,d_{p-1})$.
+Studying the gadget mentioned in section~\ref{sec:gadget} led to an insight in finding new negative examples to RQ\ref{rq2}. By expanding not only the inner edges between the cycles, but also expanding the edges of the cycles to a new length, graphs could be created with longest cycles that differ in length compared to the order of the graph than those already known. Similar to graphs of the form $G_{p,\ell}$, these graphs also have no vertex longest cycle. The construction of this graph depends on the integers $p$ and $\ell$, as well as on a new, ordered set of integers $D = (d_0,\ldots,d_{p-1})$.
 
 \begin{theorem}
   \label{theorem:d-extension}
@@ -189,7 +189,7 @@ Figure~\ref{fig:g532} shows an example graph $G_{5,3,D}$ for $D=(2,2,2,2,2)$.
     \begin{tikzpicture}
     \ExtendedTubeGraph{5}{3}{2}
     \end{tikzpicture}
-    \caption{A graph $G_{p,\ell,D}$ with $p=5$,$\ell=3$,$D=(2,2,2,2,2)$}
+    \caption{A graph $G_{p,\ell,D}$ with $p=5$, $\ell=3$,$D=(2,2,2,2,2)$}
     \label{fig:g532}
 \end{figure}
 
@@ -384,7 +384,7 @@ analogous. The largest of these cycles is all cycles which avoid a subgraph pair
     \label{fig:same-side:closed}
     \end{subfigure}
 
-    \caption{A graph segment of $G_{p,\ell,D}$ with the two possibilities at $a_1$ for cycle through $H_0$, $D_{a,0}$, and $D_{a,1}$.}
+    \caption{A graph segment of $G_{p,\ell,D}$ with the two possibilities at $a_1$ for cycle through $H_0$, $D_{a,0}$, and $D_{b,0}$.}
     \label{fig:same-side}
 \end{figure}
 
@@ -412,7 +412,7 @@ C=
 \bigcup_{\substack{0\leq k\leq p-1\\[2pt] k\ \mathrm{odd}}} D_{b,k}
 \right)
 \]
-where $C$ omits all vertices $V(H_0)\setminus\{b_0\}$ and $V(D_{a,0})\setminus\{a_1\}$. For all other vertices $v \in V(G)$, a cycle of length $(p-1)\ell + \sigma$ can be constructed in the same way. Figure~\ref{fig:opposite-side:g532} shows this cycle for a graph $G_{5,3,D}$, and Figure~\ref{fig:opposite-side:g632} shows this cycle for a graph $G_{6,3,D}$ with $D=(2,2,2,2,2)$.
+where $C$ omits all vertices $V(H_0)\setminus\{b_0\}$ and $V(D_{b,0})\setminus\{b_1\}$. For all other vertices $v \in V(G)$, a cycle of length $(p-1)\ell + \sigma$ can be constructed in the same way. Figure~\ref{fig:opposite-side:g532} shows this cycle for a graph $G_{5,3,D}$, and Figure~\ref{fig:opposite-side:g632} shows this cycle for a graph $G_{6,3,D}$ with $D=(2,2,2,2,2)$.
 
 \begin{figure}
   \centering
@@ -518,8 +518,7 @@ where $C$ omits all vertices $V(H_0)\setminus\{b_0\}$ and $V(D_{a,0})\setminus\{
 \end{figure}
 
 \paragraph{Length comparison}
-We've determined there are three types of cycles with the potential of being the
-longest cycles, the length of which are $2\sigma$ for $H_i$-avoiding cycles when $p$ is even, $(p-1)(2d)+2\ell$ for same-direction cycles and $(p-1)\ell + \sigma$ for opposite-direction cycles. Only in the last case can we construct a cycle for every vertex avoiding that vertex. The opposite-side cycle is longer than the same-side cycle if
+We have determined there are three types of cycles with the potential of being the longest cycles, the length of which are $2\sigma$ for $H_i$-avoiding cycles when $p$ is even, $2(\sigma - \min(D))+2\ell$ for same-direction cycles and $(p-1)\ell + \sigma$ for opposite-direction cycles. Only in the last case can we construct a cycle for every vertex avoiding that vertex. The opposite-side cycle is longer than the same-side cycle if
 \[
 \begin{aligned}
 2(\sigma-\min(D))+2\ell
@@ -551,6 +550,7 @@ As a result, there exists a 2-connected graph $G$ of order $2\sigma + p(\ell-1)$
 
 \end{proof}
 
+\todo{Expand on this. Be more concrete on what negative examples.}
 Theorem~\ref{theorem:d-extension} provides us with new graphs that we can expand on in the same way as done in~\cite{article:zamfirescu} to find new negative values for RQ\ref{rq2}. First, observe that all graphs $G_{p,\ell,D}$ are planar if $p$ is odd. To prove the existence of new negative values, we must show we can add edges to some of these graphs to ensure minimum degree 4.
 
 \begin{theorem}
@@ -558,9 +558,9 @@ Theorem~\ref{theorem:d-extension} provides us with new graphs that we can expand
 \end{theorem}
 \begin{proof}
 The proof takes inspiration from the proof of the similar Proposition 1 in~\cite{article:zamfirescu}.
-Let $G$ be a graph $G_{p,\ell,D}$. Observe that in each $D_{a,i}$, $D_{b,i}$, and $H_i$, we may add edges as desired within each respective subgraph (but without adding edges between internal nodes of different subgraphs) without altering the fact that the intersection of all longest cycles remains empty. We denote these modified paths with additional edges as $D_{a,i}'$, $D_{b,i}'$, respectively $H_i'$.
+Let $G$ be a graph $G_{p,\ell,D}$. Observe that in each $D_{a,i}$, $D_{b,i}$, and $H_i$, we may add edges as desired within each respective subgraph (but without adding edges between internal nodes of different subgraphs) without altering the fact that the intersection of all longest cycles remains empty. We may ignore the subgraphs $D_{a,i}$, $D_{b,i}$ for which $d_i = 1$, as these have no internal vertices, and the following construction will ensure the vertices $a_i, a_{i+1}$ and $b_i, b{i+1}$ will have a degree at least 4. We denote the modified subgraphs with additional edges as $D_{a,i}'$, $D_{b,i}'$, respectively $H_i'$.
 
-Trivially, if we choose $D_{a,i}'$ and $D_{b,i}'$ to each be the path $P_{d_i}^2$, i.e. a path of length $d_i$ with an additional edge between all vertices at distance 2 as in Figure~\ref{fig:path-2}, and similarly choose $H_i'$ to be the path $P_\ell^2$, then $G$ remains planar. Observe that, for each of these subgraphs, two internal vertices, say $w$ and $w'$, have degree 3, while all other internal vertices have degree 4. These vertices $w$ and $w'$ are adjacent to an endpoint of the (modified) paths, say $x$ and $y$ respectively. Adding the edges $w'x$ and $wy$ when $d_i$ (respectively $\ell$) is odd as in Figure~\ref{fig:degree-4-opposite-side}, and adding the edge $ww'$ when $d_i$ (respectively $\ell$) is even as in Figure~\ref{fig:degree-4-same-side}, provides a graph $G$ with minimum degree 4 when $\ell,d_i \ge 5$.
+Trivially, if we choose $D_{a,i}'$ and $D_{b,i}'$ to each be the path $P_{d_i}^2$, i.e. a path of length $d_i$ with an additional edge between all vertices at distance 2 as in Figure~\ref{fig:path-2}, and similarly choose $H_i'$ to be the path $P_\ell^2$, then $G$ remains planar. Observe that, for each of these subgraphs, two internal vertices, say $w$ and $w'$, have degree 3, while all other internal vertices have degree 4. These vertices $w$ and $w'$ are adjacent to an endpoint of the (modified) paths, say $x$ and $y$ respectively. Adding the edges $w'x$ and $wy$ when $d_i$ (respectively $\ell$) is odd as in Figure~\ref{fig:degree-4-opposite-side}, and adding the edge $ww'$ when $d_i$ (respectively $\ell$) is even as in Figure~\ref{fig:degree-4-same-side}, provides a graph $G$ with minimum degree 4 when $\ell \ge 5$ and, for all $i$, $d_i = 1$ or $d_i \ge 5$.
 
 We conclude with the statement that for the resulting graph $G$, the intersection of all longest cycles is empty. Theorem~\ref{theorem:intersection-vertex-deletion} has shown that this empty intersection is equivalent to claiming the graph $G$ has a $k$-cycle in every vertex-deleted subgraph, and no larger cycle than $k$ exists in $G$. As such, we have shown that $G$ is a planar graph with minimum degree 4, with a $k$-cycle in every vertex-deleted subgraph, with no cycle larger than $k$.
 

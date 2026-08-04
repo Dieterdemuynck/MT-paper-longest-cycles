@@ -27,17 +27,17 @@ The \texttt{Nauty} package~\cite{lib:nauty} has a graph generator \texttt{geng} 
 
 % --- COMMENT: The general meaning/relevance of 2-connected graphs should be established in the Background chapter, probably in the planned \section{Graphs}. The RQ-specific explanation of why the search is restricted to 2-connected graphs can be stated briefly in Methodology. This TODO should therefore be split into a theoretical explanation in Background and a research-question-specific justification here. ---
 
-During the year we suspected that most of the generated 2-connected graphs are hamiltonian. Since a hamiltonian graph has a cycle that goes through all vertices of the graph, this would mean that the graphs of order 13 and higher would not have circumference 11. We would thus like to avoid hamiltonian graphs completely. This is why, for RQ\ref{rq1}, we instead opted to use the Uniquely Hamiltonian Graphs generator~\cite{lib:UHG}, which holds a program \texttt{GenerateUHG} that allows us to generate graphs with a specific amount of hamiltonian cycles, in the \texttt{graph6} format. By setting that amount to 0, we only get non-hamiltonian graphs, which we suspect to have a lower quantity of graphs than 2-connected graphs. For larger $n$, these suspicions seem to be confirmed, as seen in Table~\ref{tab:2con-nonhamil}.
+During the year we suspected that most of the generated 2-connected graphs are hamiltonian. Since a hamiltonian graph has a cycle that goes through all vertices of the graph, this would mean that the graphs of order 13 and higher would not have circumference 11. We would thus like to avoid hamiltonian graphs completely. This is why, for RQ\ref{rq1}, we instead opted to use the Uniquely Hamiltonian Graphs generator~\cite{lib:UHG}, which holds a program \texttt{GenerateUHG} that allows us to generate graphs with a specific amount of hamiltonian cycles, in the \texttt{graph6} format. By setting that amount to 0, we only get nonhamiltonian graphs, which we suspect to have a lower quantity of graphs than 2-connected graphs. For larger $n$, these suspicions seem to be confirmed, as seen in Table~\ref{tab:2con-nonhamil}.
 
 % --- COMMENT: This is mixed. The general explanation of Hamiltonian/non-Hamiltonian graphs and the capabilities of GenerateUHG belong in Background. The actual decision to use GenerateUHG with zero Hamiltonian cycles for RQ1 belongs in Methodology. The numerical comparison in the table is evidence supporting a methodological search-space decision, so it can remain in Methodology, although the table itself could potentially be moved if it is intended as general context rather than an experiment-specific justification. ---
 
 \begin{table}
   \centering
-  \caption{Amount of 2-connected graphs~\cite{data:integer-sequence} and of nonhamiltonian graphs~\cite{lib:UHG} per order of the graph $n$}
+  \caption{\todo{Useful graph, but also add 2-con nonhamil counts} Amount of 2-connected graphs~\cite{data:integer-sequence} and of non-hamiltonian graphs~\cite{lib:UHG} per order of the graph $n$}
   \label{tab:2con-nonhamil}
   \begin{tabular}{rrr}
     \hline\\
-    $n$ & Number of 2-connected graph & Number of nonhamiltonian graphs \\
+    $n$ & Number of 2-connected graph & Number of non-hamiltonian graphs \\
     \hline \\
     1 & 0 & 1 \\
     2 & 1 & 2 \\
@@ -107,31 +107,11 @@ The parameters used include the option \texttt{-p} to select general plane simpl
 
 % --- COMMENT: This section is partly Literature Study and partly Methodology. The existence and description of previously generated graph lists belong in Literature Study/Background. The specific fact that you use the list as an input to extend your computational search belongs in Methodology. ---
 
-During development on the second research question, we quickly noticed hamiltonian graphs are irrelevant. This is because, regardless of if a graph has a cycle of length $k$ in each of their vertex-deleted subgraphs, if the graph has a hamiltonian cycle, the statement of RQ\ref{rq2} is trivially true. A supervisor of this thesis, Jan Goedgebeur, had previously done research on nonhamiltonian 2-connected planar graphs with minimum degree 4, and had saved these graphs of up to 20 vertices~\cite{article:hamiltonian-planar}. By using this list, we could push the total amount of relevant graphs further than with only generation.
+During development on the second research question, we quickly noticed hamiltonian graphs are irrelevant. This is because, regardless of if a graph has a cycle of length $k$ in each of their vertex-deleted subgraphs, if the graph has a hamiltonian cycle, the statement of RQ\ref{rq2} is trivially true. A supervisor of this thesis, Jan Goedgebeur, had previously done research on non-hamiltonian 2-connected planar graphs with minimum degree 4, and had saved these graphs of up to 20 vertices~\cite{article:hamiltonian-planar}. By using this list, we could push the total amount of relevant graphs further than with only generation.
 
 % --- COMMENT: The first sentence and the logical explanation of why Hamiltonian graphs are irrelevant could fit in Background if it is a general consequence of the RQ's theoretical setup. The description of Goedgebeur's prior research belongs in Literature Study. The final sentence ("By using this list...") is Methodology because it explains how you actually used the prior work. ---
 
 % --- COMMENT: IMPORTANT: The planned Background section \section{Graphs} could contain a subsection on the relevant graph classes and properties used throughout the thesis: connected, 2-connected, 3-connected, planar, minimum degree, Hamiltonian, non-Hamiltonian, circumference, and possibly hypohamiltonian graphs. That would make many later methodological passages much easier to shorten. ---
-
-% --- COMMENT: The following commented-out LaTeX example is unrelated to the thesis methodology/background distinction. It can be left untouched if this is a template/example, but it does not need to be in the final chapter. ---
-
-%\subsection{An item}
-%Please don't abuse enumerations: short enumerations shouldn't use
-%``\verb|itemize|'' or ``\texttt{enumerate}'' environments.
-%So \emph{never write}: 
-%\begin{quote}
-%  The Eiffel tower has three floors:
-%  \begin{itemize}
-%  \item the first one;
-%  \item the second one;
-%  \item the third one.
-%  \end{itemize}
-%\end{quote}
-%But write:
-%\begin{quote}
-%  The Eiffel tower has three floors: the first one, the second one, and the
-%  third one.
-%\end{quote}
 
 \section{Finding the Intersection of longest k-cycles}
 \label{sec:algorithms}
@@ -276,104 +256,8 @@ The paper \textit{On a question of van Aardt et al. on destroying all longest cy
 % --- COMMENT: MOVE the description of Zamfirescu's prior work and the construction's theoretical relevance to Literature Study/Background. KEEP only the methodological statement about how the construction influenced your search space or how you used it to guide computational/manual exploration. The sentence "In this section, we will show this construction" would then no longer belong in Methodology. ---
 
 \subsection{Construction by C. T. Zamfirescu}
-\label{sec:tube-graph}
 
 % --- COMMENT: MOVE ENTIRE SUBSECTION TO LITERATURE STUDY/BACKGROUND. This is a description of a known construction from prior literature. It is not a method developed or implemented by this thesis. If the construction is later used to motivate a search or experiment, Methodology can refer back to it. ---
-
-C. T. Zamfirescu showed~\cite{article:zamfirescu} that for every pair of integers $\ell \ge 2$ and $p \ge 4$, there exists a 2-connected graph G of order $()\ell+1) p$ and circumference $(\ell+1) (p-1) + 1$ whose intersection of all longest cycles is empty. We repeat the construction of the graph $G$ used in the proof here. Note that in this thesis, we use a different convention for $\ell$ than in the paper by C. Zamfirescu.
-Take two cycles $(a_0, a_1, ..., a_{p-1})$ and $(b_0, b_1, ..., b_{p-1})$, each of length $p$, and connect $(a_i, b_i)$ for all $i$. Then, insert vertices on each edge $(a_i, b_i)$ until each becomes a path of length $\ell$ (i.e., has $\ell$ edges or $\ell+1$ vertices, including the vertices $a_i$ and $b_i$). Denote these paths from $a_i$ to $b_i$ as $H_i$. If $p$ is even, remove the edges $a_{p-1}a_0$ and $b_{p-1}b_0$, and replace them with the edges $a_{p-1}b_0$ and $b_{p-1}a_0$. We denote the graph constructed in this way as $G_{p,\ell}$. C. Zamfirescu has shown~\cite{article:zamfirescu} that the cycle $C$ with vertices
-$$
-\bigcup_{i \neq 0} V(H_i) \cup {b_0}
-$$
-and edges
-$$
-\bigcup_{i \neq 0} E(H_i)
-  \cup {(a_j,a_{j+1})}_{j \text{odd}}
-  \cup {(b_k,b_{k+1})}_{k>0 \text{even}}
-  \cup \begin{cases}
-    \emptyset\ \text{if}\ p \text{odd} \\
-    (a_{p-1},b_0)\ \text{otherwise}
-  \end{cases}
-$$
-is a longest cycle of the graph $G$ avoiding all vertices $v \in V(H_0) \setminus \{b_0\}$, and that a similar cycle can be constructed for all other vertices. Figure~\ref{fig:tube-graph-odd} shows the graph $G_{5,2}$ alongside one longest cycle in the graph, and similarly Figure~\ref{fig:tube-graph-even} shows the graph $G_{4,3}$ alongside one longest cycle.
-
-% --- COMMENT: MOVE to Literature Study/Background. This is exactly the sort of prior construction that belongs in the literature study. It may be worth placing it under a broader subsection such as "Known constructions relevant to the research questions". ---
-
-\begin{figure}
-  \centering
-  \begin{subfigure}{0.4\textwidth}
-    \centering
-    \begin{tikzpicture}
-      \TubeGraph{5}{2}
-    \end{tikzpicture}
-  \end{subfigure}
-  \begin{subfigure}{0.4\textwidth}
-    \centering
-    \begin{tikzpicture}
-      \TubeGraph{5}{2}
-      \draw[red, very thick]
-        (A1) --
-        (A2) --
-        (H2-1) --
-        (B2) --
-        (B3) --
-        (H3-1) --
-        (A3) --
-        (A4) --
-        (H4-1) --
-        (B4) --
-        (B5) --
-        (H5-1) --
-        (A5) --
-        (A1);
-
-      \foreach \v in {A1,A2,H2-1,B2,B3,H3-1,A3,A4,H4-1,B4,B5,H5-1,A5}
-        \node[vertex, draw=red] at (\v) {};
-    \end{tikzpicture}
-  \end{subfigure}
-  \caption{The graph construction $G_{p,\ell}$ by C. T. Zamfirescu~\cite{article:zamfirescu} for $p=5$ and $\ell=2$, alongside the same graph but with one longest cycle marked in red}
-  \label{fig:tube-graph-odd}
-\end{figure}
-
-% --- COMMENT: MOVE figure to Background/Literature Study together with the construction it illustrates. ---
-
-\begin{figure}
-  \centering
-  \begin{subfigure}{0.4\textwidth}
-    \centering
-    \begin{tikzpicture}
-      \TubeGraph{4}{3}
-    \end{tikzpicture}
-  \end{subfigure}
-  \begin{subfigure}{0.4\textwidth}
-    \centering
-    \begin{tikzpicture}
-      \TubeGraph{4}{3}
-      \draw[red, very thick]
-        (A1) --
-        (A2) --
-        (H2-1) --
-        (H2-2) --
-        (B2) --
-        (B3) --
-        (H3-2) --
-        (H3-1) --
-        (A3) --
-        (A4) --
-        (H4-1) --
-        (H4-2) --
-        (B4) --
-        (A1);
-
-      \foreach \v in {A1,A2,H2-1,H2-2,B2,B3,H3-2,H3-1,A3,A4,H4-1,H4-2,B4}
-        \node[vertex, draw=red] at (\v) {};
-    \end{tikzpicture}
-  \end{subfigure}
-  \caption{The graph construction $G_{p,\ell}$ by C. T. Zamfirescu~\cite{article:zamfirescu} for $p=4$ and $\ell=3$, alongside the same graph but with one longest cycle marked in red}
-  \label{fig:tube-graph-even}
-\end{figure}
-
-% --- COMMENT: MOVE figure to Background/Literature Study. ---
 
 \subsection{Studying the Gadget}
 \label{sec:gadget}
@@ -389,67 +273,6 @@ In this thesis, we look deeper into the types of cycles that can be created from
 % --- COMMENT: The description of the approach can remain in Methodology, but the claim that it "has led to new negative results" is a result/conclusion and should probably be moved to the Results chapter. ---
 
 \subsection{Almost-solution to RQ1}
-
-\label{sec:modified-petersen}
-
-% --- COMMENT: MOVE this subsection to Literature Study/Background if the modified Petersen graph is entirely a known construction from Zamfirescu's paper. If you use it as a known benchmark or as inspiration for your search, Methodology can briefly state that you included/used the construction, while the detailed construction and its theoretical properties belong in Background/Literature Study. ---
-
-While a solution for RQ\ref{rq1} is unknown, we do have an upper bound for the smallest amount of vertices in the intersection of all 11-cycle. In \cite{article:zamfirescu}, it is shown that a graph of circumference 11 can be constructed in which all but one vertex avoid all longest 11-cycles. This graph exploits the properties of the Petersen graph, which is a hypohamiltonian graph of order 10 and thus circumference 9, and extends all three edges $(v,w_i)$ incident on one vertex $v$ with one extra vertex each, denoted $x_i$, as seen in Figure~\ref{fig:petersen-divided}. This extends all cycles through this vertex $v$ by 2. We denote this graph by $P$. One can prove that as a result, this new graph of order 13 has circumference 11, with only one vertex meeting every 11-cycle~\cite{article:zamfirescu}. Note that this graph has a maximum degree of 3.
-
-% --- COMMENT: MOVE to Literature Study/Background. This is prior work and a known construction. The fact that it gives an upper bound for RQ1 is useful literature context. If this construction directly informs a search procedure in Methodology, add a short methodological paragraph there referring back to this subsection. ---
-
-\begin{figure}
-  \centering
-  \begin{tikzpicture}[scale=1, every node/.style={circle,draw,fill=white,inner sep=2pt}
-  ]
-
-  % Outer pentagon
-  \foreach \i/\a in {
-    1/90,
-    2/18,
-    3/-54,
-    4/-126,
-    5/162
-  }{
-    \node (O\i) at (\a:2) {};
-  }
-
-  % Inner star vertices
-  \foreach \i/\a in {
-    1/90,
-    2/18,
-    3/-54,
-    4/-126,
-    5/162
-  }{
-    \node (I\i) at (\a:0.9) {};
-  }
-
-  % Subdivision vertices on edges adjacent to O1
-  \node[draw,circle,fill=green!80] (S12) at ($(O1)!0.5!(O2)$) {};
-  \node[draw,circle,fill=green!80] (S15) at ($(O1)!0.5!(O5)$) {};
-  \node[draw,circle,fill=green!80] (S11) at ($(O1)!0.5!(I1)$) {};
-
-  % Outer cycle
-  \draw (O2)--(O3)--(O4)--(O5);
-  \draw (O1)--(S12)--(O2);
-  \draw (O1)--(S15)--(O5);
-  \draw (O1)--(S11)--(I1);
-
-  % Spokes
-  \foreach \i in {2,...,5}{
-    \draw (O\i)--(I\i);
-  }
-
-  % Inner star
-  \draw (I1)--(I3)--(I5)--(I2)--(I4)--(I1);
-
-  \end{tikzpicture}
-  \caption{the Petersen graph, with three edges incident on one vertex extended by one extra vertex each}
-  \label{fig:petersen-divided}
-\end{figure}
-
-% --- COMMENT: MOVE figure to Background/Literature Study with the modified Petersen construction. ---
 
 \section{Conclusion}
 \todo{Conclusion}
