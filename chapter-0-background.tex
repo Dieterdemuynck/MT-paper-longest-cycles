@@ -1,7 +1,7 @@
 \chapter{Background}
 \label{cha:background}
 
-In this chapter, we define the terminology from graph theory that is relevant to and used in this thesis. \todo{Expand on introduction}
+In this chapter, we define the terminology from graph theory that is relevant to and used in this thesis. We also show important results, observations and theorems from the literature, before continuing on to formalizing the two important research questions of this thesis. After this, we explain graph generation, giving some example generators of which some are used in this thesis.
 
 \section{Definitions}
 
@@ -29,8 +29,6 @@ In this thesis, we may refer to the number of edges incident with a vertex, as w
 \end{definition}
 
 We call such a drawing a \textbf{planar embedding} of the graph. The graph in Figure~\ref{fig:example-simple} is planar, while that in Figure~\ref{fig:example-non-planar} is not.
-
-\todo{Add figures relating to literature}
 
 \begin{figure}
     \centering
@@ -202,14 +200,13 @@ Trivially, graphs which have a cycle through all vertices of the graph have a lo
   If a graph $G$ has a cycle $C$ which contains every vertex in the graph $G$, then $C$ is called a \textbf{Hamilton} cycle of $G$, and $G$ is said to be \textbf{Hamiltonian}. A graph without a Hamilton cycle is called \textbf{nonhamiltonian}.
 \end{definition}
 
-\todo{Maybe a different section}
-As we will show in Section~\ref{sec:generators}, Hamiltonian graphs are not interesting for the research questions this thesis aims to answer. There is, however, an interesting class of nonhamiltonian graphs in which an interesting result was found in the context of this thesis.
+Since this thesis researches the intersection of longest cycles of graphs, Hamiltonian graphs are not interesting for the research questions this thesis aims to answer. Trivially, the intersection of the longest cycles in a Hamiltonian graph is simply all vertices of the graph. There is, however, an interesting class of nonhamiltonian graphs in which an interesting result was found in the context of this thesis.
 
 \begin{definition}[Hypohamiltonian graphs]
   If a graph $G$ is not Hamiltonian, but every vertex-deleted subgraph $H$ of $G$ is, then $G$ is called \textbf{hypohamiltonian}.
 \end{definition}
 
-The smallest hypohamiltonian graph is a graph on 10 vertices, and is known as the \textbf{Petersen graph}~\cite{article:van-aardt}, as seen in Figure~\ref{fig:petersen-graph}. This graph is known to ``have many special properties''~\cite{book:bondy-definitions}, which are used to construct the interesting result in Section~\ref{sec:modified-petersen} found by C. T. Zamfirescu.
+The smallest hypohamiltonian graph is a graph on 10 vertices, and is known as the \textbf{Petersen graph}~\cite{article:van-aardt}, as seen in Figure~\ref{fig:petersen-graph}. This graph is known to ``have many special properties''~\cite{book:bondy-definitions}, which are used to construct the interesting result in Section~\ref{sec:modified-petersen} found by C.\ T.\ Zamfirescu.
 
 \begin{figure}[ht]
     \centering
@@ -340,10 +337,9 @@ Informally, the parameter $\alpha(k)$ represents the fraction of vertices needed
   \label{fig:disjoint-cycles}
 \end{figure}
 
-Important for this thesis, they showed that if every $2$-connected graph of circumference $k$ contains a vertex meeting every longest cycle, then $\alpha(k)=1/k$. Consequently, determining the existence of $2$-connected graphs whose longest cycles have empty intersection is essential for determining $\alpha(k)$.
+They showed that if every $2$-connected graph of circumference $k$ contains a vertex meeting every longest cycle, then $\alpha(k)=1/k$. Consequently, determining the existence of $2$-connected graphs whose longest cycles have empty intersection is essential for determining $\alpha(k)$.
 
-\todo{Check this first statement:}
-Van Aardt et al.\ proved the existence or nonexistence of such graphs for all $k$ except for $k\in\{10,11,13,16\}$~\cite{article:van-aardt}. Zamfirescu~\cite{article:zamfirescu} subsequently constructed an infinite family answering this question for $k=10$, $13$ and $16$, leaving only the case $k=11$ unresolved. In the same paper, Zamfirescu also proved the existence of a graph with circumference $11$ and order $13$, in which all but one vertex avoids some $11$-cycle.
+Van Aardt et al.\ proved the existence or nonexistence of such graphs for all $k$ except for $k\in\{10,11,13,16\}$~\cite{article:van-aardt}. Zamfirescu~\cite{article:zamfirescu} subsequently constructed an infinite family of graphs answering this question for $k=10$, $13$ and $16$, leaving only the case $k=11$ unresolved. In the same paper, Zamfirescu also proved the existence of a graph with circumference $11$ and order $13$, in which all but one vertex avoids some $11$-cycle.
 
 \subsection{Constructions by Zamfirescu}
 
