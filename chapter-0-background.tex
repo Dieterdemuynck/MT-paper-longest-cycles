@@ -623,6 +623,8 @@ The specialized generator \texttt{plantri} generates specifically planar graphs.
 
 Similarly, \texttt{snarkhunter} is specialized for cubic graphs, which are graphs where all vertices have 3 neighbors, and snarks, which are cubic graphs which do not admit a proper $3$-edge-coloring. This generator also allows for specifying a lower bound on the girth of the graph~\cite{article:jorik-jooken}.
 
+There also exists the graph generator \texttt{generateUHG}, which can generate graph with a set number of distinct Hamilton cycles. This number can be set to 0 to generate non-Hamiltonian graphs. This generator also allows for setting an upper bound for the maximum degree, as well as restricting generation to planar graphs, among other restrictions~\cite{lib:UHG}.
+
 \section{Conclusion}
 
 This chapter has outlined the theoretical background and previous work underlying the research done in this thesis. Starting from the study of hypohamiltonian graphs by Thomassen, with this work being continued to longest cycles through the work of van Aardt et al.\ and Zamfirescu, leading to two remaining open problems. The first concerns the existence of a $2$-connected graph of circumference $11$ whose longest cycles have empty intersection, while the second asks for which values of $k$ the statement in RQ\ref{rq2} on planar graphs of minimal degree 4 holds.
