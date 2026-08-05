@@ -264,14 +264,16 @@ The definition of a graph places no restrictions on which edges must exist. For 
 The notion of connectedness can be generalized further. One motivation for a more general notion of connectivity arises in, for example, communication networks. A network should ideally remain connected after the failure of one or more computers. This motivates the notion of $k$-connectivity, which measures the resilience of a graph against vertex deletions.
 
 \begin{definition}[$k$-connected]
-  A graph $G$ is \textbf{$k$-vertex-connected} (or simply $k$-connected) if $|V(G)|>k$, and deleting any set of fewer than $k$ vertices from $G$ leaves a connected graph.
+  A graph $G$ is \textbf{$k$-vertex-connected} (or simply $k$-connected) if for every pair of distinct vertices $u,v \in V(G)$, there exist at least $k$ internally vertex-disjoint paths from $u$ to $v$.
 \end{definition}
+
+A graph with only one vertex is considered to be 0-connected and 1-connected, but not $k$-connected for any $k > 1$.
 
 \begin{definition}[Connectivity]
   The \textbf{connectivity} of a graph is the largest integer $k$ for which the graph is $k$-connected.
 \end{definition}
 
-By Menger's Theorem~\cite{article:van-aardt}, a graph is $k$-connected if and only if every pair of distinct vertices is joined by at least $k$ internally vertex-disjoint paths. The graph in Figure~\ref{fig:example-simple} is 3-connected, but not 4-connected, as removing all three vertices on any diagonal would result in a disconnected graph. This graph thus has connectivity 3. Similarly, every cycle has connectivity 2, and every path has connectivity 1, as seen in Figure~\ref{fig:cycle-and-path}~\cite{book:bondy-definitions}.
+The graph in Figure~\ref{fig:example-simple} is 3-connected, but not 4-connected, as removing all three vertices on any diagonal would result in a disconnected graph. This graph thus has connectivity 3. Similarly, every cycle has connectivity 2, and every path has connectivity 1, as seen in Figure~\ref{fig:cycle-and-path}~\cite{book:bondy-definitions}.
 
 Having defined most of the important terminology for this thesis, we continue to the background literature, before formally defining the research questions of this thesis.
 
@@ -504,6 +506,24 @@ While a 2-connected graph of circumference 11 with no vertex meeting every 11-cy
   \label{fig:petersen-divided}
 \end{figure}
 
+\subsection{Exhaustive generation of planar graphs}
+
+J.\ Goedgebeur, T.\ Gringore, and C.\ T.\ Zamfirescu~\cite{article:goedgebeur} performed exhaustive computer-assisted searches for small non-Hamiltonian planar graphs with minimum degree at least 4. Their work resulted in some key observations which could prove useful for this thesis.
+
+\begin{observation}[\cite{article:goedgebeur}]
+  \label{obs:3con-hamiltonian}
+  Every 3-connected planar graph with minimum degree at least four on at most 22 vertices is Hamiltonian.
+\end{observation}
+
+Consequently, any non-Hamiltonian planar graph on at most 22 vertices must have connectivity at most 2.
+
+\begin{observation}[\cite{article:goedgebeur}]
+  \label{obs:2con-n14}
+  The smallest non-Hamiltonian 2-connected planar graphs with minimum degree at least four have 14 vertices, and that exactly two such graphs exist. Both graphs have circumference 10.
+\end{observation}
+
+For this last observation, a graph6 representation of the non-Hamiltonian graphs up to 20 vertices were saved into a list. These graphs are reused in this thesis to reduce the computational effort required for the search related to Research Question~\ref{rq2}, which we formalize in the next section.
+
 \section{Research Questions}
 \label{sec:rq}
 
@@ -524,38 +544,87 @@ For which values of $k$ is it true that if in a planar graph $G$ with minimum de
 ~\cite{article:zamfirescu}
 \end{researchquestion}
 
-Thomassen showed~\cite{article:thomassen} that the aforementioned statement is true for $k = n - 1$, where $n$ is the order of $G$. This is because no planar hypohamiltonian graph with a minimum degree of at least 4 can exist, using Theorem~\ref{theorem:thomassen-planar-hypo-minimal}. Zamfirescu showed that it does not hold if $n = \ell p$ and $k = \ell (p - 1) + 1$, where $p \ge 5$ is odd and $\ell \ge 6$, using the construction $G_{p,\ell}$ in Section~\ref{sec:tube-graph}.
+Thomassen showed~\cite{article:thomassen} that the aforementioned statement is true for $k = n - 1$, where $n$ is the order of $G$. This is because no planar hypohamiltonian graph with a minimum degree of at least 4 can exist, using Theorem~\ref{theorem:thomassen-planar-hypo-minimal}. Zamfirescu showed that it does not hold if $n = \ell p$ and $k = \ell (p - 1) + 1$, where $p \ge 5$ is odd and $\ell \ge 6$, using the construction $G_{p,\ell}$ in Section~\ref{sec:tube-graph}. Observation~\ref{obs:2con-n14} tells us all graphs which are negative examples of RQ\ref{rq2} must have at least 14 vertices, while Observation~\ref{obs:3con-hamiltonian} tells us that graphs on 22 vertices or fewer cannot be 3-connected, and therefore must have connectivity at most 2.
 
-The aim of this thesis is to solve RQ\ref{rq1} by exhaustively generating $2$-connected graphs of a certain class or certain classes using a graph generator, and writing an algorithm which will check for a graph if the circumference equals $11$, and to find the intersection of all its (longest) $11$-cycles, and outputting all solutions and potentially interesting graphs (such as graphs with a very small intersection) and relevant values. Should no solution be found, the outputted interesting graphs could be studied to potentially find patterns that could lead to a solution, or an attempt could be made for a proof of the nonexistence of such a graph.
+We limit the graphs for RQ\ref{rq2} to 2-connected graphs. This is because one can create a disconnected graph or a graph with connectivity 1 with a $k$-cycle in every vertex-deleted subgraph, for every planar graph with minimum degree at least 4 and circumference $k$. This can be by combining two planar graphs $G$ and $H$ (where $V(G) \cap V(H) = \emptyset$) with circumference $k$ and minimum degree at least 4 into one graph, and for the 1-connected case, join two of their vertices. Figure~\ref{fig:1con-case} shows an example of this where $G$ and $H$ are the same Hamiltonian graph on 6 vertices. The red vertex in the figure connects the graph without creating new cycles.
 
-To solve RQ\ref{rq2}, a similar approach is used, namely by exhaustively generating graphs which are planar with minimum degree at least $4$, and creating an algorithm which checks the circumference $k$ of a graph and then finds if there exists a $k$-cycle in all vertex-deleted subgraphs. If the answer to this last question is yes, output these graphs (which are negative examples for RQ\ref{rq2}) and their relevant $k$ value. 
+\begin{figure}
+  \centering
+  \begin{tikzpicture}
+
+  %========================
+  % Left graph
+  %========================
+
+  % Outer triangle (points right)
+  \node[vertex] (L1) at (0, 2) {};
+  \node[vertex] (L2) at (0,-2) {};
+  \node[vertex] (L3) at (3.5,0) {};
+
+  % Inner triangle (points left)
+  \node[vertex] (l1) at (0.8,0) {};
+  \node[vertex] (l2) at (1.5,0.5) {};
+  \node[vertex] (l3) at (1.5,-0.5) {};
+
+  % Draw triangles
+  \draw (L1)--(L2)--(L3)--(L1);
+  \draw (l1)--(l2)--(l3)--(l1);
+
+  % Draw inner connections
+  \draw (l2)--(L1)--(l1);
+  \draw (l1)--(L2)--(l3);
+  \draw (l3)--(L3)--(l2);
+
+  %========================
+  % Right graph (mirror)
+  %========================
+
+  \begin{scope}[xshift=9cm,xscale=-1]
+
+  % Outer triangle
+  \node[vertex] (R1) at (0, 2) {};
+  \node[vertex] (R2) at (0,-2) {};
+  \node[vertex] (R3) at (3.5,0) {};
+
+  % Inner triangle
+  \node[vertex] (r1) at (0.8,0) {};
+  \node[vertex] (r2) at (1.5,0.5) {};
+  \node[vertex] (r3) at (1.5,-0.5) {};
+
+  % Draw triangles
+  \draw (R1)--(R2)--(R3)--(R1);
+  \draw (r1)--(r2)--(r3)--(r1);
+
+  % Draw inner connections
+  \draw (r2)--(R1)--(r1);
+  \draw (r1)--(R2)--(r3);
+  \draw (r3)--(R3)--(r2);
+
+  \end{scope}
+
+  % Draw red connection
+  \draw[red] (L3)--(R3);
+
+  \end{tikzpicture}
+  \caption{A planar graph of minimum degree 4 with connectivity $<2$ and circumference $6$ where every vertex avoids some $6$-cycle.}
+  \label{fig:1con-case}
+\end{figure}
+
+In this thesis, we use computer-assisted graph theory to attempt to solve RQ\ref{rq1}, and to find new results for RQ\ref{rq2}. More concretely, for each RQ, we generate all graphs of certain classes, and check them for the desired properties. We will go more in detail as to what graph generation is, and describe some generators that already exist.
 
 \section{Graph Generators}
 \label{sec:generators}
 
-\todo{proofread the following, paper by Goedgebeur et al., graph generation}
+A graph generator is an algorithm that computes and outputs a list of graphs of a specific class or specific properties. Most generators take in at least one parameter, commonly the order of the graphs to be generated, and output all graphs that are pairwise non-isomorphic, belonging to a specified graph class. By combining an existing graph generator which exhaustively generates all graphs with a certain property (such as 2-connected graphs on 13 nodes), and combining this with a program which checks these graphs for a second property (such as having circumference 11 with an empty 11-cycle intersection), one can prove the existence (or nonexistence) of a graph with both properties without designing and implementing an entirely new graph generator~\cite{article:jorik-jooken}.
 
-\todo{This section was moved from methodology, check if all content still accurate and complete}
+Different generators are designed for different graph classes. The \texttt{nauty} package contains many programs and tools for computer-assisted graph theory, including some generators. A widely used general-purpose generator is \texttt{geng}, which generates all pairwise non-isomorphic graphs for a specified order. The number of graphs for this class goes up rapidly for increasing order of the graph, as for 13 nodes there are $50\,502\,031\,367\,952$ generated graphs. That is why adding constraints to generation, or using specialized generators, is preferred. Besides the number of vertices, \texttt{geng} supports restrictions on the number of edges, and minimum and maximum degree. It also allows restricting output to connected or 2-connected graphs, bipartite graphs, 3-cycle-free graphs, and several other graph classes. The \texttt{nauty} package also contains the program \texttt{pickg}, which can take generated graphs as input, and output only those graphs which satisfy additional properties, such as 2-connected graphs~\cite{article:jorik-jooken}~\cite{lib:nauty}.
 
-Computer-assisted graph theory has become 
+The specialized generator \texttt{plantri} generates specifically planar graphs. The program directly generates non-isomorphic planar graphs and supports several subclasses, including triangulations, quadrangulations, cubic and quartic planar graphs. Interesting for this thesis, \texttt{plantri} also allows restrictions on parameters such as minimum connectivity, minimum degree and the number of edges. There is one drawback, namely that for general planar graphs, generated graphs are considered non-isomorphic with respect to the embedding on a sphere, which results in some isomorphic graphs to be generated when generating graphs which are 2-connected or 1-connected~\cite{article:jorik-jooken}~\cite{lib:plantri}. 
 
-In order to exhaustively check each graph from a class of graphs for a specific set of properties, one needs a way to generate these graphs in a way they can be certain no graph was skipped.
+Similarly, \texttt{snarkhunter} is specialized for cubic graphs, which are graphs where all vertices have 3 neighbors, and snarks, which are cubic graphs which do not admit a proper $3$-edge-coloring. This generator also allows for specifying a lower bound on the girth of the graph~\cite{article:jorik-jooken}.
 
-% --- COMMENT: MOVE THIS TODO/concept to Background. The definition of a graph generator belongs in the theoretical background. ---
+\section{Conclusion}
 
-\todo{More examples of generators, and their intended graph classes (algemene grafen geng (nauty), kubische grafen snarkhunter, planaire grafen plantri)}
+This chapter has outlined the theoretical background and previous work underlying the research done in this thesis. Starting from the study of hypohamiltonian graphs by Thomassen, with this work being continued to longest cycles through the work of van Aardt et al.\ and Zamfirescu, leading to two remaining open problems. The first concerns the existence of a $2$-connected graph of circumference $11$ whose longest cycles have empty intersection, while the second asks for which values of $k$ the statement in RQ\ref{rq2} on planar graphs of minimal degree 4 holds.
 
-% --- COMMENT: MOVE THIS TODO to Background. This directly corresponds to the Background TODO "maybe a section about the different generators that exist, citing JJ". This is where the broader survey of generators should go. You can discuss Nauty/geng, snarkhunter, plantri, and other relevant generators here. Methodology should not become a catalogue of available generators. ---
-
-Efficient but exhaustive graph generation is a difficult problem to solve. A graph generator needs to be exhaustive (i.e. generate every graph in a certain category), while also avoiding generating isomorphic graphs. If not much care is put into generating each graph once, the same graph can easily be generated multiple times as isomorphic graphs, resulting in redundant computations. Many graph generators have already been made, each of which already took a lot of research~\cite{article:jorik-jooken}. That is why, rather than making an attempt at our own graph generator specific for this problem, we use existing graph generators in this thesis.
-
-% --- COMMENT: MOVE TO BACKGROUND, with possible small revision. The first three sentences are general theoretical/background motivation for graph generation and isomorphism avoidance. The final sentence is the methodological decision ("we use existing graph generators in this thesis") and can remain in Methodology, but should probably be rewritten there after the move as a short transition: the Background explains the available generators; Methodology explains which ones were selected for this research and why. ---
-
-\section{Graphs}
-
-\todo{maybe a section on all relevant graphs to this paper}
-
-
-\todo{Van Aardt: no hypohamil n=12 (c=11)}
-
-\todo{Add all theoretical background here from other chapters}
+The discussed results also motivate the computational approach adopted in this thesis. Previous work has established graph classes and lower bounds that substantially reduce the search space, with specialized exhaustive graph generation making it feasible to investigate these large classes of candidate graphs. The next chapter describes the graph classes, generators, and algorithms used to address the two research questions.
