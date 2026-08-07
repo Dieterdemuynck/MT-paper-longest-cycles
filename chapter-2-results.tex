@@ -18,9 +18,9 @@
 
 The smallest intersection found in any generated graph during execution had an intersection of one vertex. While these graphs are not solutions directly, they may give an insight to a potential solution. We already know of a graph on 13 vertices $P$ with an 11-cycle intersection of 1. This graph has a maximum degree of 3, as shown in Section~\ref{sec:modified-petersen}. During generation, only one graph was found with an 11-cycle intersection of 1. We expect this graph to be isomorphic to $P$, and a diagram of this result as in Figure~\ref{fig:d3n13i1} confirms this.
 
-Increasing the upper bound for the maximal degree to 4 gives two new graphs with intersection 1 distinct from the known graph with a single vertex intersection, shown in Figure~\ref{fig:d4n13i1}. Increasing this upper bound to 5 gives six new graphs, shown in Figure~\ref{fig:d5n13i1}. The figures show that the new graphs on 13 nodes are the graph $P$ with one or more additional edges, all incident on the vertex $v$.
+Increasing the upper bound for the maximum degree to 4 gives two new graphs with intersection 1 distinct from the known graph with a single vertex intersection, shown in Figure~\ref{fig:d4n13i1}. Increasing this upper bound to 5 gives six new graphs, shown in Figure~\ref{fig:d5n13i1}. The figures show that the new graphs on 13 nodes are the graph $P$ with one or more additional edges, all incident on the vertex $v$.
 
-Additionally, increasing the order of the graph to 14 at maximal degree 4 gives us one new graph with intersection 1, shown in Figure~\ref{fig:d4n14i1}. This figure shows that this is the graph $P$ with a duplicated subdivided edge, i.e. the path $(v, x_1', w_1)$ was inserted into the graph.
+Additionally, increasing the order of the graph to 14 at maximum degree 4 gives us one new graph with intersection 1, shown in Figure~\ref{fig:d4n14i1}. This figure shows that this is the graph $P$ with a duplicated subdivided edge, i.e. the path $(v, x_1', w_1)$ was inserted into the graph.
 
 
 
@@ -73,7 +73,7 @@ Additionally, increasing the order of the graph to 14 at maximal degree 4 gives 
   \draw (I1)--(I3)--(I5)--(I2)--(I4)--(I1);
 
   \end{tikzpicture}
-  \caption{Graph on 13 nodes with maximal degree 3, with longest-cycle-intersection 1}
+  \caption{Graph on 13 nodes with maximum degree 3, with longest cycle intersection 1.}
   \label{fig:d3n13i1}
 \end{figure}
 
@@ -183,7 +183,7 @@ Additionally, increasing the order of the graph to 14 at maximal degree 4 gives 
 
   \end{tikzpicture}
 
-  \caption{Graphs on 13 nodes with maximal degree 4, with longest-cycle-intersection 1}
+  \caption{Graphs on 13 nodes with maximum degree 4, with longest cycle intersection 1.}
   \label{fig:d4n13i1}
 \end{figure}
 
@@ -499,7 +499,7 @@ Additionally, increasing the order of the graph to 14 at maximal degree 4 gives 
 
   \end{tikzpicture}
 
-  \caption{Graphs on 13 nodes with maximal degree 5, with longest-cycle-intersection 1}
+  \caption{Graphs on 13 nodes with maximum degree 5, with longest cycle intersection 1.}
   \label{fig:d5n13i1}
 \end{figure}
 
@@ -554,7 +554,7 @@ Additionally, increasing the order of the graph to 14 at maximal degree 4 gives 
   \draw (I1)--(I3)--(I5)--(I2)--(I4)--(I1);
 
   \end{tikzpicture}
-  \caption{Graph on 14 nodes with maximal degree 4, with longest-cycle-intersection 1}
+  \caption{Graph on 14 nodes with maximum degree 4, with longest cycle intersection 1.}
   \label{fig:d4n14i1}
 \end{figure}
 
@@ -574,7 +574,7 @@ Additionally, since adding edges also does not remove any existing cycles, all $
 To conclude that $v$ lies in every $11$-cycle of the final graph, it therefore suffices to show that no new $11$-cycle avoiding $v$ is created. In addition, to ensure that the circumference remains $11$, it is enough to prove that no cycle of length greater than $11$ is introduced by the added edges and vertices. Finally, we must also verify that the graph remains $2$-connected after addition of the paths $(v, x_{i,j}, w_i)$.
 
 \paragraph{Adding an edge $(v,y)$}
-We proceed by induction on the number of edges of the form $(v,y)$ with $y\in Y$ that have been added. Suppose $G'$ is a graph constructed by adding $0 \le k < |Y|$ distinct edges $(v,y')$ for $y' \in Y$ to $P$. Also assume that $G'$ is 2-connected with circumference 11 and an 11-cycle intersection equal to ${v}$. Now consider adding the new edge where $(v,y)\notin E(G')$ for $y \in Y$,creating a new graph $G''$.
+We proceed by induction on the number of edges of the form $(v,y)$ with $y\in Y$ that have been added. Suppose $G'$ is a graph constructed by adding $0 \le k < |Y|$ distinct edges $(v,y')$ for $y' \in Y$ to $P$. Also assume that $G'$ is 2-connected with circumference 11 and an 11-cycle intersection equal to ${v}$. Now consider adding the new edge where $(v,y)\notin E(G')$ for $y \in Y$, creating a new graph $G''$.
 
 First, consider a cycle $C$ in $G''$ containing the newly added edge $(v,y)$. Since $C$ contains $(v,y)$, it can use at most one further edge incident with $v$. In particular, $C$ can contain at most one of the three vertices $x_1,x_2,x_3$. This is the case because, for each $i\in\{1,2,3\}$, $\{v,w_i\}$ is a vertex-cut separating $x_i$ from the rest of the graph. Thus, any cycle containing $x_i$ must enter through $v$ and leave through $w_i$. A cycle containing $(v,y)$ can contain at most one of the three paths
 \[
@@ -584,7 +584,7 @@ Consequently, it follows that $C$ avoids at least two of the three vertices $x_1
 
 Secondly, by definition, $C$ must contain the vertex $v$. Additionally, any cycle $C'$ not containing the edge $(v,y)$ is also a cycle of the graph $G'$, where we know the intersection of all 11-cycles is $\{v\}$. Thus, the intersection of all 11-cycles in $G''$ remains $\{v\}$, and the circumference of $G''$ is 11. Lastly, adding edges does not remove any existing paths, so by definition, the graph $G''$ is also 2-connected.
 
-We know that $P$ is a 2-connected graph of circumference 11, where the 11-cycle intersection equals $\{v\}$. By induction, we've shown that one can add any number $\le n-4$ of distinct edges $(v,y)$ with $y \in Y$ to $P$ such that the resulting graph $P'$ is 2-connected, has circumference 11, and has $v$ as the only vertex in the intersection of all 11-cycles.
+We know that $P$ is a 2-connected graph of circumference 11, where the 11-cycle intersection equals $\{v\}$. By induction, we've shown that one can add any number $\le 9$ of distinct edges $(v,y)$ with $y \in Y$ to $P$ such that the resulting graph $P'$ is 2-connected, has circumference 11, and has $v$ as the only vertex in the intersection of all 11-cycles.
 
 \paragraph{Adding a path $(v, x_{i,j}, w_i)$}
 Take any graph $P'$ obtained from $P$ by adding any number of distinct

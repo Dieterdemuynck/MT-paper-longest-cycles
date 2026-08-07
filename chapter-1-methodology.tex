@@ -1,6 +1,6 @@
 \chapter{Methodology}
 \label{cha:methodology}
-\todo{methodology introduction. To write in this chapter: algorithms used, tests that have been written, language used and why, Makefile maybe?}
+\todo{methodology introduction. To write in this chapter: algorithms used, optimizations, tests that have been written, language used and why, Makefile maybe?}
 % A chapter is a logical unit. It normally starts with an introduction, which you are reading now. The last topic of the chapter holds the conclusion.
 In this chapter, we explain in detail what graph generators we used, the algorithms written for the research, the relevant graphs from previous research, the programming language the algorithms were written in and why, and the tests performed to make sure the programs are correctly written.
 
@@ -26,8 +26,6 @@ Since the goal of this thesis is to exhaustively check all graphs of a specific 
 The \texttt{Nauty} package~\cite{lib:nauty} has a graph generator \texttt{geng} which can ``generate non-ismorphic graphs very quickly''~\cite{lib:nauty}, including specifically 2-connected graphs. It can also output its graphs in the \texttt{graph6} format, which is a compact ASCII string representation of graphs. This creates a useful graph generator for RQ\ref{rq1}.
 
 % --- COMMENT: The first two sentences belong in Background: they describe Nauty/geng and graph6 generally. The final sentence is methodological and should remain in Methodology, but it should be expanded to explain why these properties matter specifically for RQ1. If Nauty/geng is not actually used in the final pipeline for RQ1, be especially careful: this may instead belong entirely in Background as a considered-but-rejected alternative. ---
-
-\todo{Add: Why 2-connected? (Well, it's the question we're trying to answer, no?)}
 
 % --- COMMENT: The general meaning/relevance of 2-connected graphs should be established in the Background chapter, probably in the planned \section{Graphs}. The RQ-specific explanation of why the search is restricted to 2-connected graphs can be stated briefly in Methodology. This TODO should therefore be split into a theoretical explanation in Background and a research-question-specific justification here. ---
 

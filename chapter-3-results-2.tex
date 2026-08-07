@@ -10,11 +10,11 @@
 
 \section{New Values for RQ2}
 
-Studying the gadget mentioned in section~\ref{sec:gadget} led to an insight in finding new negative examples to RQ\ref{rq2}. By expanding not only the inner edges between the cycles, but also expanding the edges of the cycles to a new length, graphs could be created with longest cycles that differ in length compared to the order of the graph than those already known. Similar to graphs of the form $G_{p,\ell}$, these graphs also have no vertex longest cycle. The construction of this graph depends on the integers $p$ and $\ell$, as well as on a new, ordered set of integers $D = (d_0,\ldots,d_{p-1})$.
+Studying the gadget mentioned in section~\ref{sec:gadget} led to an insight in finding new negative examples to RQ\ref{rq2}. By expanding not only the inner edges between the cycles, but also expanding the edges of the cycles to a new length, graphs could be created with longest cycles that differ in length compared to the order of the graph than those already known. Similar to graphs of the form $G_{p,\ell}$, these graphs also have no vertex meeting every longest cycle. The construction of this graph depends on the integers $p$ and $\ell$, as well as on a new, ordered set of integers $D = [d_0,\ldots,d_{p-1}]$.
 
 \begin{theorem}
   \label{theorem:d-extension}
-Take any integers $p \ge 4$, $\ell \ge 2$, and integers $(d_0,\ldots,d_{p-1}) = D$ where $d_i \ge 1$ for all $i$. Let $\sigma = \sum_{i=0}^{p-1}d_i$. Then, if $\sigma \le (p-3)\ell + 2\min(D)$, there exists a 2-connected graph $G$ of order~$2\sigma + p(\ell-1)$ and circumference~$(p-1)\ell+\sigma$, whose intersection of all longest cycles is empty.
+Take any integers $p \ge 4$, $\ell \ge 2$, and integers $[d_0,\ldots,d_{p-1}] = D$ where $d_i \ge 1$ for all $i$. Let $\sigma = \sum_{i=0}^{p-1}d_i$. Then, if $\sigma \le (p-3)\ell + 2\min(D)$, there exists a 2-connected graph $G$ of order~$2\sigma + p(\ell-1)$ and circumference~$(p-1)\ell+\sigma$, whose intersection of all longest cycles is empty.
 \end{theorem}
 \begin{proof}
 The proof takes inspiration from the proof of the similar Theorem 1 in~\cite{article:zamfirescu}. We will first construct a graph $G$, after which we will determine the types of cycles $G$ can have, alongside their length, and show that the intersection of the cycles of one type is empty. Lastly, we will compare the lengths of these cycles, and show that the empty-intersection cycles become the longest cycles per the condition.
@@ -182,14 +182,14 @@ and
 \[
 D_{b,-1}=D_{a,p-1}, \qquad D_{b,p}=D_{a,0}.
 \]
-Figure~\ref{fig:g532} shows an example graph $G_{5,3,D}$ for $D=(2,2,2,2,2)$.
+Figure~\ref{fig:g532} shows an example graph $G_{5,3,D}$ for $D=[2,2,2,2,2]$.
 
 \begin{figure}
     \centering
     \begin{tikzpicture}
     \ExtendedTubeGraph{5}{3}{2}
     \end{tikzpicture}
-    \caption{A graph $G_{p,\ell,D}$ with $p=5$, $\ell=3$,$D=(2,2,2,2,2)$}
+    \caption{A graph $G_{p,\ell,D}$ with $p=5$, $\ell=3$,$D=[2,2,2,2,2]$.}
     \label{fig:g532}
 \end{figure}
 
@@ -412,7 +412,7 @@ C=
 \bigcup_{\substack{0\leq k\leq p-1\\[2pt] k\ \mathrm{odd}}} D_{b,k}
 \right)
 \]
-where $C$ omits all vertices $V(H_0)\setminus\{b_0\}$ and $V(D_{b,0})\setminus\{b_1\}$. For all other vertices $v \in V(G)$, a cycle of length $(p-1)\ell + \sigma$ can be constructed in the same way. Figure~\ref{fig:opposite-side:g532} shows this cycle for a graph $G_{5,3,D}$, and Figure~\ref{fig:opposite-side:g632} shows this cycle for a graph $G_{6,3,D}$ with $D=(2,2,2,2,2)$.
+where $C$ omits all vertices $V(H_0)\setminus\{b_0\}$ and $V(D_{b,0})\setminus\{b_1\}$. For all other vertices $v \in V(G)$, a cycle of length $(p-1)\ell + \sigma$ can be constructed in the same way. Figure~\ref{fig:opposite-side:g532} shows this cycle for a graph $G_{5,3,D}$, and Figure~\ref{fig:opposite-side:g632} shows this cycle for a graph $G_{6,3,D}$ with $D=[2,2,2,2,2]$.
 
 \begin{figure}
   \centering
@@ -458,7 +458,7 @@ where $C$ omits all vertices $V(H_0)\setminus\{b_0\}$ and $V(D_{b,0})\setminus\{
       (A1);
 
   \end{tikzpicture}
-  \caption{A longest opposite-direction cycle marked red in a graph $G_{5,3,D}$ with $D=(2,2,2,2,2)$.}
+  \caption{A longest opposite-direction cycle marked red in a graph $G_{5,3,D}$ with $D=[2,2,2,2,2]$.}
   \label{fig:opposite-side:g532}
 \end{figure}
 
@@ -513,7 +513,7 @@ where $C$ omits all vertices $V(H_0)\setminus\{b_0\}$ and $V(D_{b,0})\setminus\{
       (A1);
 
   \end{tikzpicture}
-  \caption{A longest opposite-direction cycle marked red in a graph $G_{6,3,D}$ with $D=(2,2,2,2,2)$.}
+  \caption{A longest opposite-direction cycle marked red in a graph $G_{6,3,D}$ with $D=[2,2,2,2,2]$.}
   \label{fig:opposite-side:g632}
 \end{figure}
 
@@ -554,7 +554,7 @@ As a result, there exists a 2-connected graph $G$ of order $2\sigma + p(\ell-1)$
 Theorem~\ref{theorem:d-extension} provides us with new graphs that we can expand on in the same way as done in~\cite{article:zamfirescu} to find new negative values for RQ\ref{rq2}. First, observe that all graphs $G_{p,\ell,D}$ are planar if $p$ is odd. To prove the existence of new negative values, we must show we can add edges to some of these graphs to ensure minimum degree 4.
 
 \begin{theorem}
-  Take integers $p\ge5$ odd, $\ell\ge5$, and integers $(d_0,\dots,d_{p-1})=D$ where $d_i = 1$ or $d_i\ge5$ with $\sigma=\sum_{i=0}^{p-1}d_i$. If $\sigma \le (p-3)\ell + 2\min(D)$, there exists a 2-connected, planar graph of minimum degree~4 with order~$2\sigma + p(\ell-1)$ and circumference~$k=(p-1)\ell + \sigma$, in which every vertex-deleted subgraph contains a $k$-cycle.
+  Take integers $p\ge5$ odd, $\ell\ge5$, and integers $[d_0,\dots,d_{p-1}]=D$ where $d_i = 1$ or $d_i\ge5$ with $\sigma=\sum_{i=0}^{p-1}d_i$. If $\sigma \le (p-3)\ell + 2\min(D)$, there exists a 2-connected, planar graph of minimum degree~4 with order~$2\sigma + p(\ell-1)$ and circumference~$k=(p-1)\ell + \sigma$, in which every vertex-deleted subgraph contains a $k$-cycle.
 \end{theorem}
 \begin{proof}
 The proof takes inspiration from the proof of the similar Proposition 1 in~\cite{article:zamfirescu}.
