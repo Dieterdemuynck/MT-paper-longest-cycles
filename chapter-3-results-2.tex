@@ -26,12 +26,76 @@ These tests give adequate confirmation that Algorithm~\ref{alg:find-all-k-inters
 
 \section{Computational results for RQ2}
 
+Two pipelines were used for the second research question. One of these pipelines used \texttt{plantri} to generate 2-connected planar graphs with minimum degree at least 4, while the other pipeline used a list of graphs provided to us for this thesis of non-Hamiltonian 2-connected planar graphs with minimum degree at least 4. We will once again begin with the time these pipelines took, to show that the list provided, as mentioned in Section~\ref{sec:generators-used}, greatly improved the size of graph class we can make definitive statements on.
+
 \subsection{Timings}
 \label{sec:2-timing}
 
-\todo{Number of results, timing}
+Table~\ref{tab:timing-planar-m4} shows the time in seconds for the pipeline using \texttt{plantri} per vertex count, alongside the generation time by \texttt{plantri} itself and the CPU time of the program implementing Algorithm~\ref{alg:find-all-k-intersection}. Based on this growth in time for growing order of the graphs, we conclude that it is likely infeasible to generate graphs of order 20 or higher using this pipeline.
 
-\subsection{}
+% Planar graphs
+\begin{table}[ht]
+\centering
+\caption{Total time of the pipeline on generating 2-connected planar graphs with minimum degree at least 4.}
+\label{tab:timing-planar-m4}
+\begin{tabular}{rrrr}
+\toprule
+$n$ & Total time (s) & \texttt{plantri} CPU time (s) & Program CPU time (s) \\
+\midrule
+13 & 0 & 0.02 & 0.018 \\
+14 & 0 & 0.24 & 0.414 \\
+15 & 10 & 2.65 & 9.593 \\
+16 & 309 & 31.07 & 300.739 \\
+17 & 7046 & 358.74 & 6935.290 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Table~\ref{tab:timing-nonhamil-up-to-19} shows the time the pipeline using the list took in seconds for graphs up to 19 vertices. The file for graphs on 20 vertices was split into 5 parts of roughly equal size. Table~\ref{tab:timing-nonhamil-20} shows the time for this pipeline on these five files for graphs on 20 vertices. 
+
+% Non-Hamiltonian graphs up to 19 vertices
+\begin{table}[ht]
+\centering
+\caption{Total time of the pipeline on the list of non-Hamiltonian graphs up to 19 vertices.}
+\label{tab:timing-nonhamil-up-to-19}
+\begin{tabular}{rrr}
+\toprule
+$n$ & Total time (s) & Program CPU time (s) \\
+\midrule
+14 & 0 & 0.002 \\
+15 & 0 & 0.007 \\
+16 & 0 & 0.185 \\
+17 & 4 & 3.944 \\
+18 & 109 & 109.156 \\
+19 & 3787 & 3780.220 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% Non-Hamiltonian graphs on 20 vertices
+\begin{table}[ht]
+\centering
+\caption{Total time of the pipeline on the list of non-Hamiltonian graphs on 20 vertices.}
+\label{tab:timing-nonhamil-20}
+\begin{tabular}{rrr}
+\toprule
+Part & Total time (s) & Program CPU time (s) \\
+\midrule
+0 & 17007 & 17001.300 \\
+1 & 17959 & 17953.800 \\
+2 & 15531 & 15525.800 \\
+3 & 15424 & 15417.900 \\
+4 & 18029 & 18020.400 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Results and observations for RQ\ref{rq2}}
+
+The pipeline using the list of non-Hamiltonian, 2-connected planar graphs with minimum degree at least 4 allowed computations to happen on graphs of up to 20 vertices. Per number of vertices, a table can be found in Appendix~\ref{app:rq2} of number of graphs per circumference, including per circumference the number of graphs per intersection of all longest cycles. This excludes those graphs which have a circumference equal to $n(G)-1$, though the number of graphs with this circumference is the same as the number of graphs for which the program terminated early. These numbers are also documented in Appendix~\ref{app:rq2}. This brings us to the following observation.
+\begin{observation}
+    If a 2-connected planar graph on at most 20 vertices has a $k$-cycle in every vertex-deleted subgraph, then the graph contains a cycle larger than $k$.
+\end{observation}
 
 \section{New Values for RQ2}
 
@@ -575,7 +639,6 @@ As a result, there exists a 2-connected graph $G$ of order $2\sigma + p(\ell-1)$
 
 \end{proof}
 
-\todo{Expand on this. Be more concrete on what negative examples.}
 Theorem~\ref{theorem:d-extension} provides us with new graphs that we can expand on in the same way as done in~\cite{article:zamfirescu} to find new negative values for RQ\ref{rq2}. First, observe that all graphs $G_{p,\ell,D}$ are planar if $p$ is odd. To prove the existence of new negative values, we must show we can add edges to some of these graphs to ensure minimum degree 4.
 
 \begin{theorem}
@@ -686,8 +749,6 @@ We conclude with the statement that for the resulting graph $G$, the intersectio
 \end{figure}
 
 \end{proof}
-
-\todo{example graphs with new values}
 
 \section{Conclusion}
 \todo{conclusion}

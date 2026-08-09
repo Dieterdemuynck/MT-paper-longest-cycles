@@ -22,12 +22,89 @@ These tests give adequate confirmation that Algorithm~\ref{alg:find-k-intersecti
 
 \section{Computational Results}
 
-\todo{Number of results, timing, plotting the 1-vertex solutions}
+In Section~\ref{sec:generators-used}, we discussed the generation pipelines used to investigate the first research question. Combining these with our own program which implements Algorithm~\ref{alg:find-k-intersection}, these pipelines are thus as follows.
+\begin{verbatim}
+  generateUHG <n> H0 D<d> | pickg -c2 | algorithm1
+  geng -CD<d> <n> | algorithm1
+  plantri <n> -gpc2 | algorithm1
+\end{verbatim}
+Since the pipeline using \texttt{generateUHG} and the pipeline using \texttt{geng} generate graph classes from which we can draw the same conclusions, we continue to the time all pipelines took for certain input values, such that we can compare these two pipelines and choose one pipeline to continue with our computations.
 
 \subsection{Timing}
 \label{sec:1-timing}
 
-\subsection{Number of results}
+We timed the generation pipelines described in Section~\ref{sec:generators-used}, including the execution of our own program, using a bash shell script per pipeline. Since the pipeline including \texttt{geng} and the pipeline including \texttt{generateUHG} generate equivalent graph classes for our problem (where \texttt{generateUHG} does not generate the uninteresting Hamiltonian graphs), we compared the timings of these pipelines for the value pairs $(n, d)$ they were both run on. This comparison can be seen in Table~\ref{tab:timing-comparison}, including the ratio
+$$\frac{\text{Time of \texttt{generateUHG} pipeline}}{\text{Time of \texttt{geng} pipeline}}.
+$$ 
+This table shows that the pipeline using \texttt{generateUHG} is generally significantly slower than the pipeline using \texttt{geng}. For that reason, the rest of the computations are performed using the \texttt{geng} pipeline.
+
+\begin{table}[ht]
+\centering
+\caption{Total execution time in seconds for the \texttt{geng} and \texttt{non\_hamil} pipelines.}
+\label{tab:timing-comparison}
+\begin{tabular}{rrr r r}
+\toprule
+$n$ & $d$ & \texttt{geng} (s) & \texttt{non\_hamil} (s) & Ratio \\
+\midrule
+13 & 3 & 1.000 & 1.000 & 1.00 \\
+13 & 5 & 13782.000 & 52080.000 & 3.78 \\
+14 & 3 & 1.000 & 6.000 & 6.00 \\
+14 & 4 & 1132.000 & 5366.000 & 4.74 \\
+15 & 3 & 3.000 & 24.000 & 8.00 \\
+15 & 4 & 13548.000 & 70723.000 & 5.22 \\
+16 & 3 & 15.000 & 88.000 & 5.87 \\
+17 & 3 & 50.000 & 455.000 & 9.10 \\
+18 & 3 & 308.000 & 2185.000 & 7.09 \\
+19 & 3 & 1029.000 & 10031.000 & 9.75 \\
+20 & 3 & 5406.000 & 40611.000 & 7.51 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Table~\ref{tab:geng-timings} shows the execution time of the pipeline, the CPU time of the program \texttt{geng}, and the CPU time of the program of Algorithm~\ref{alg:find-k-intersection}. These timings show that the biggest bottleneck of the pipeline was the generation of the graphs, rather than the program which checks the properties of the generated graphs, as the runtime of the checker program was in all cases shorter than the runtime of the generator program.
+
+\begin{table}[ht]
+\centering
+\caption{Timing results for the \texttt{geng} pipeline.}
+\label{tab:geng-timings}
+\begin{tabular}{rrr r r}
+\toprule
+$n$ & $d$ & Total time (s) & \texttt{geng} (s) & Own program (s) \\
+\midrule
+13 & 3 & 1 & 0.21 & 0.017275 \\
+13 & 4 & 60 & 60.01 & 24.0928 \\
+13 & 5 & 13782 & 13117.60 & 8454.63 \\
+13 & 6 & 395131 & 368777.01 & 293254 \\
+14 & 3 & 1 & 0.85 & 0.056949 \\
+14 & 4 & 1132 & 1122.01 & 458.899 \\
+14 & 5 & 387606 & 370839.93 & 235184 \\
+15 & 3 & 3 & 3.63 & 0.259130 \\
+15 & 4 & 13548 & 13481.51 & 4379.9 \\
+16 & 3 & 15 & 14.51 & 1.01858 \\
+17 & 3 & 50 & 49.96 & 4.132770 \\
+18 & 3 & 308 & 306.48 & 22.9002 \\
+19 & 3 & 1029 & 1029.27 & 81.2793 \\
+20 & 3 & 5406 & 5404.94 & 381.937 \\
+21 & 3 & 23353 & 23348.83 & 1624.82 \\
+22 & 3 & 168044 & 167761.55 & 11774.1 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Lastly, the pipeline using \texttt{plantri} was run on graphs of 13 vertices, and had a total runtime of $96\,759$ seconds, where generation took $26607.19$ seconds.
+
+\subsection{Results and observations for RQ\ref{rq1}}
+
+As shown in the previous sections, we generated and checked all 2-connected graphs on 13 vertices with maximum degree at most 6, on 14 vertices with maximum degree at most 5, on 15 vertices with maximum degree at most 4, and on 16 to 22 vertices with maximum degree at most 3. For each of these, the number of graphs which have circumference 11 can be found in Appendix~\ref{app:A}, as well as the number of graphs per the number of vertices in the intersection of all 11-cycles. This brings us to the following observation.
+\begin{observation}
+  All 2-connected graphs with circumference 11 on at most 22 vertices with maximum degree at most 3 have at least one vertex meeting every 11-cycle.
+\end{observation}
+We also observe that the same is true for graphs on at most 15 vertices with maximum degree at most 4, on at most 14 vertices with maximum degree at most 5, and on at most 13 vertices with maximum degree at most 6.
+
+Additionally, we also generated and checked all 2-connected planar graphs of 13 vertices. The number of planar graphs generated with circumference 11 and for these the number of graphs per number of vertices in the intersection of all 11-cycles can be found in Appendix~\ref{app:plantri}. These intersections bring us to the following observation.
+\begin{observation}
+  All 2-connected planar graphs with circumference 11 on 13 vertices have at least four vertices meeting every 11-cycle.
+\end{observation}
 
 \subsection{Graphs with intersection 1}
 
@@ -35,9 +112,7 @@ The smallest intersection found in any generated graph during execution had an i
 
 Increasing the upper bound for the maximum degree to 4 gives two new graphs with intersection 1 distinct from the known graph with a single vertex intersection, shown in Figure~\ref{fig:d4n13i1}. Increasing this upper bound to 5 gives six new graphs, shown in Figure~\ref{fig:d5n13i1}. The figures show that the new graphs on 13 nodes are the graph $P$ with one or more additional edges, all incident on the vertex $v$.
 
-Additionally, increasing the order of the graph to 14 at maximum degree 4 gives us one new graph with intersection 1, shown in Figure~\ref{fig:d4n14i1}. This figure shows that this is the graph $P$ with a duplicated subdivided edge, i.e. the path $(v, x_1', w_1)$ was inserted into the graph.
-
-
+Additionally, increasing the order of the graph to 14 at maximum degree 4 gives us one new graph with intersection 1, shown in Figure~\ref{fig:d4n14i1}. This figure shows that this is the graph $P$ with a duplicated edge with an inserted vertex, i.e. the path $(v, x_1', w_1)$ was inserted into the graph.
 
 \begin{figure}
   \centering
@@ -573,6 +648,8 @@ Additionally, increasing the order of the graph to 14 at maximum degree 4 gives 
   \label{fig:d4n14i1}
 \end{figure}
 
+These observations led us to assume there exists a 2-connected graph with circumference 11 of any order greater than or equal to 13, with only one vertex in the intersection of all 11-cycles. We formalize this as following theorem, which we also immediately prove.
+
 \begin{theorem}
 For every integer $n \ge 13$ and every $d \in\{n-10,\ldots,n-1\}$, there exists a $2$-connected graph $G$ of order $n$, circumference $11$, maximum degree $\Delta(G) = d$, and minimum degree $\delta(G) = 2$, such that exactly one vertex meets every longest cycle.
 \end{theorem}
@@ -619,3 +696,7 @@ We know that $P'$ is a 2-connected graph, with circumference 11, with an 11-cycl
 Starting with $P$, we may add any number of vertices $x_{i,j}$ for each $i\in\{1,2,3\}$, and any number of edges $(v,y)$ with $y\in Y$, while preserving $2$-connectivity, circumference 11, and the 11-cycle intersection $\{v\}$. Observe that in $P$, the maximum degree is 3, and $v$ has a degree of 3. Also observe that every addition of an edge or path as before increases the degree of $v$ and one other vertex by exactly 1. All vertices $x_i$ and the inserted vertices $x_{i,j}$ all have degree 2. As a result, $v$ must have the maximum degree of all vertices. There are 9 vertices in $Y$, and adding a path as before increases the order of the graph by 1. Thus, we conclude that a graph $G$ can be constructed with order $r + 13$ for all $r \ge 0$, and maximum degree $\Delta(G) = n-10+k$ for all $k \in \{0,\dots,9\}$, with minimum degree 2, by adding $r$ distinct paths $(v,x_{i,j},w_i)$ and adding $k$ distinct edges $(v,y)$ with $y \in Y$, to $P$, where $G$ is 2-connected, has circumference 11, and has an 11-cycle intersection $\{v\}$.
 
 \end{proof}
+
+\section{Conclusion}
+
+In this Chapter, we conclude that there is no 2-connected graph of circumference 11 with no vertex meeting every 11-cycle for graphs of order at most $n$ and maximum degree at most $d$ for the pairs $(n,d)\in\{(13,6),(14,5),(15,4),(22,3)\}$, and that all 2-connected planar graph of circumference 11 and order 13 must have at least 4 vertices meeting every cycle. We also find that there is a 2-connected graph of circumference 11 of any order greater than or equal to 13, for which the intersection of all 11-cycles is only one vertex.
