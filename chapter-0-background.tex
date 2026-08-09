@@ -9,14 +9,131 @@ All the following definitions are based on the book \textit{Graph Theory} by Adr
 
 % Graph explanation
 \begin{definition}[Graph]
-  A \textbf{graph} $G$ is a mathematical structure represented by an ordered pair $(V(G), E(G))$ consisting of a set of \textbf{vertices} $V(G)$ (singular: vertex) and a (multi-)set of \textbf{edges} $E(G)$ which are unordered pairs of vertices\footnote{This definition is different from~\cite{book:bondy-definitions}, which defines edges as abstract objects with an \textit{incidence function} which maps each edge to an unordered pair.} $(v,w) \in V(G) \times V(G)$.
+  A \textbf{graph} $G$ is a mathematical structure represented by an ordered pair $(V(G), E(G))$ consisting of a set of \textbf{vertices} $V(G)$ (singular: vertex) and a (multi-)set of \textbf{edges} $E(G)$ which are unordered pairs of vertices\footnote{This definition is different from~\cite{book:bondy-definitions}, which defines edges as abstract objects with an \textit{incidence function} which maps each edge to an unordered pair of vertices.} $(v,w) \in V(G) \times V(G)$.
 \end{definition}
 
-Graphs are often represented graphically with circles representing vertices, and lines ending at circles to represent edges between two vertices, such as in Figure~\ref{fig:example}. We say a graph is \textbf{simple} when there are no edges $(v,v)$ and there is at most one edge between any two vertices. In the rest of this thesis, \emph{graph} is used to refer to simple graphs. We say that an edge $(u, v)$ \textbf{joins} the two vertices $u$ and $v$, and is \textbf{incident} on each of the vertices $u$ and $v$. Lastly, we say two vertices are \textbf{adjacent} if there is an edge which joins them. The number of vertices of a graph is an important property commonly used to characterize its size. The following definition formalizes this notion.
+Graphs are often represented graphically with circles representing vertices, and lines ending at circles to represent edges between two vertices, such as in Figure~\ref{fig:example-simple}. This graph is also \textbf{simple}, meaning that there are no edges $(v,v)$ and there is at most one edge between any two vertices. The graph in Figure~\ref{fig:example-non-planar} is not simple. In the rest of this thesis, \emph{graph} is used to refer to simple graphs. We say that an edge $(u, v)$ \textbf{joins} the two vertices $u$ and $v$, and is \textbf{incident} on each of the vertices $u$ and $v$. Lastly, we say two vertices are \textbf{adjacent} if there is an edge which joins them. The number of vertices of a graph is an important property commonly used to characterize its size. The following definition formalizes this notion.
+
+\begin{figure}
+\centering
+% --- Original graph ---
+\begin{subfigure}{0.35\textwidth}
+\centering
+\resizebox{\linewidth}{!}{
+\begin{tikzpicture}[
+every node/.style={
+circle,
+draw,
+fill=white,
+inner sep=2pt,
+font=\small
+}]
+\path[use as bounding box] (-0.5,-0.5) rectangle (2.5,2.5);
+\node (A) at (0,0) {$A$};
+\node (B) at (2,0) {$B$};
+\node (C) at (2,2) {$C$};
+\node (D) at (0,2) {$D$};
+\node (E) at (1,1) {$E$};
+
+\draw (A) -- (B) -- (C) -- (D) -- (A);
+\draw (A) -- (E);
+\draw (B) -- (E);
+\draw (C) -- (E);
+\draw (D) -- (E);
+\end{tikzpicture}
+}
+
+\caption{A simple graph.}
+\label{fig:example-simple}
+\end{subfigure}
+\qquad
+% --- Non-planar graph ---
+\begin{subfigure}{0.35\textwidth}
+\centering
+\resizebox{\linewidth}{!}{
+\begin{tikzpicture}[
+  every node/.style={
+    circle,
+    draw,
+    fill=white,
+    inner sep=2pt,
+    font=\small
+}]
+\path[use as bounding box] (-0.5,-0.5) rectangle (2.5,2.5);
+\node (A) at (0,0)  {$A$};
+\node (B) at (2,0)  {$B$};
+\node (C) at (2,2)  {$C$};
+\node (D) at (0,2)  {$D$};
+\node (E) at (1,1)  {$E$};
+
+% Only the cycle highlighted
+\draw (A) -- (B) -- (C) -- (D) -- (A);
+\draw (A) -- (E);
+\draw (B) -- (E);
+\draw (C) -- (E);
+\draw (D) -- (E);
+
+\draw (D) to[out=120, in=150, looseness=20] (D);
+\draw (D) to[out=-120, in=120, looseness=1] (A);
+
+% Curved outer edges
+\draw[out=-30, in=-60, looseness=2] (A) to (C);
+\draw[out=60, in=30, looseness=2] (B) to (D);
+
+\end{tikzpicture}
+}
+
+\caption{A graph that is not simple.}
+\label{fig:example-non-planar}
+\end{subfigure}
+\caption{Graphical representation of two graphs, each on 5 vertices.}
+\label{fig:example}
+\end{figure}
 
 \begin{definition}[Order]
   The \textbf{order} of a graph $G$, denoted $n(G)$, is the number of vertices $|V(G)|$.
 \end{definition}
+
+There are multiple data structures to represent graphs. Two examples of these are the \textbf{adjacency list} and the \textbf{adjacency matrix}. In an adjacency list, one keeps a list of adjacent vertices for every vertex in the graph. These lists are then stored in another list. An adjacency matrix of a graph $G$ is an $n(G) \times n(G)$ matrix $A_G := (a_{uv})$, where $a_{uv} \in \mathbb{N}$ (with $0 \in \mathbb{N}$) represents the number of edges between the vertices $u$ and $v$. For simple graphs, this is $1$ if there is an edge, and $0$ if not. Figure~\ref{fig:adjacency} shows an adjacency list and an adjacency matrix for the graph in Figure~\ref{fig:example-simple}.
+
+\begin{figure}
+\centering
+
+\begin{minipage}{0.35\textwidth}
+\centering
+\textbf{Adjacency list}
+\[
+\begin{array}{c|l}
+\text{Vertex} & \text{Adjacent vertices}\\
+\hline
+A & B,D,E\\
+B & A,C,E\\
+C & B,D,E\\
+D & A,C,E\\
+E & A,B,C,D
+\end{array}
+\]
+\end{minipage}
+\qquad
+\begin{minipage}{0.4\textwidth}
+\centering
+\textbf{Adjacency matrix}
+\[
+\begin{array}{c|ccccc}
+ & A&B&C&D&E\\
+\hline
+A&0&1&0&1&1\\
+B&1&0&1&0&1\\
+C&0&1&0&1&1\\
+D&1&0&1&0&1\\
+E&1&1&1&1&0
+\end{array}
+\]
+\end{minipage}
+
+\caption{An adjacency list and an adjacency matrix of the graph in Figure~\ref{fig:example-simple}.}
+\label{fig:adjacency}
+\end{figure}
 
 In this thesis, we may refer to the number of edges incident with a vertex, as well as the minimum and maximum such numbers in a graph. These notions are defined as follows.
 
@@ -29,68 +146,6 @@ In this thesis, we may refer to the number of edges incident with a vertex, as w
 \end{definition}
 
 We call such a drawing a \textbf{planar embedding} of the graph. The graph in Figure~\ref{fig:example-simple} is planar, while that in Figure~\ref{fig:example-non-planar} is not.
-
-\begin{figure}
-    \centering
-    % --- Original graph ---
-    \begin{subfigure}{0.35\textwidth}
-    \centering
-    \resizebox{\linewidth}{!}{
-    \begin{tikzpicture}[every node/.style={circle, draw, fill=white, inner sep=4pt}]
-    \path[use as bounding box] (-0.5,-0.5) rectangle (2.5,2.5);
-    \node (A) at (0,0)  {};
-    \node (B) at (2,0)  {};
-    \node (C) at (2,2)  {};
-    \node (D) at (0,2)  {};
-    \node (E) at (1,1)  {};
-
-    \draw (A) -- (B) -- (C) -- (D) -- (A);
-    \draw (A) -- (E);
-    \draw (B) -- (E);
-    \draw (C) -- (E);
-    \draw (D) -- (E);
-    \end{tikzpicture}
-    }
-
-    \caption{A simple planar graph.}
-    \label{fig:example-simple}
-    \end{subfigure}
-    \qquad
-    % --- Non-planar graph ---
-    \begin{subfigure}{0.35\textwidth}
-    \centering
-    \resizebox{\linewidth}{!}{
-    \begin{tikzpicture}[every node/.style={circle, draw, fill=white, inner sep=4pt}]
-    \path[use as bounding box] (-0.5,-0.5) rectangle (2.5,2.5);
-    \node (A) at (0,0)  {};
-    \node (B) at (2,0)  {};
-    \node (C) at (2,2)  {};
-    \node (D) at (0,2)  {};
-    \node (E) at (1,1)  {};
-
-    % Only the cycle highlighted
-    \draw (A) -- (B) -- (C) -- (D) -- (A);
-    \draw (A) -- (E);
-    \draw (B) -- (E);
-    \draw (C) -- (E);
-    \draw (D) -- (E);
-
-    \draw (D) to[out=120, in=150, looseness=20] (D);
-    \draw (D) to[out=-120, in=120, looseness=1] (A);
-
-    % Curved outer edges
-    \draw[out=-30, in=-60, looseness=2] (A) to (C);
-    \draw[out=60, in=30, looseness=2] (B) to (D);
-
-    \end{tikzpicture}
-    }
-
-    \caption{A non-planar graph.}
-    \label{fig:example-non-planar}
-    \end{subfigure}
-    \caption{Graphical representation of two graphs, each on 5 vertices.}
-    \label{fig:example}
-\end{figure}
 
 \begin{definition}[Subgraph]
   A \textbf{subgraph} $F$ of a graph $G$ is a graph for which $V(F) \subseteq V(G)$ and $E(F) \subseteq E(G)$, and the edges $E(F)$ only contain vertices in $V(F)$.
@@ -439,6 +494,10 @@ is a longest cycle of the graph $G$ avoiding all vertices $v \in V(H_0) \setminu
   \label{fig:tube-graph-even}
 \end{figure}
 
+\subsubsection{Additional construction to planar and minimum degree 4}
+
+\todo{Explanation on planar minimum degree 4.}
+
 \subsubsection{Single vertex intersection for $k=11$}
 \label{sec:modified-petersen}
 
@@ -508,16 +567,16 @@ While a 2-connected graph of circumference 11 with no vertex meeting every 11-cy
 
 \subsection{Exhaustive generation of planar graphs}
 
-J.\ Goedgebeur, T.\ Gringore, and C.\ T.\ Zamfirescu~\cite{article:goedgebeur} performed exhaustive com\-puter-assisted searches for small non-Hamiltonian planar graphs with minimum degree at least 4. Their work resulted in some key observations which could prove useful for this thesis.
+J.\ Goedgebeur, T.\ Gringore, and C.\ T.\ Zamfirescu~\cite{article:hamiltonian-planar} performed exhaustive com\-puter-assisted searches for small non-Hamiltonian planar graphs with minimum degree at least 4. Their work resulted in some key observations which could prove useful for this thesis.
 
-\begin{observation}[\cite{article:goedgebeur}]
+\begin{observation}[\cite{article:hamiltonian-planar}]
   \label{obs:3con-hamiltonian}
   Every 3-connected planar graph with minimum degree at least 4 on at most 22 vertices is Hamiltonian.
 \end{observation}
 
 Consequently, any non-Hamiltonian planar graph with minimum degree at least 4 on at most 22 vertices must have connectivity at most 2.
 
-\begin{observation}[\cite{article:goedgebeur}]
+\begin{observation}[\cite{article:hamiltonian-planar}]
   \label{obs:2con-n14}
   The smallest non-Hamiltonian 2-connected planar graphs with minimum degree at least four have 14 vertices, and exactly two such graphs exist. Both graphs have circumference 10.
 \end{observation}
@@ -623,7 +682,7 @@ The specialized generator \texttt{plantri}~\cite{lib:plantri} generates specific
 
 Similarly, \texttt{snarkhunter} is specialized for cubic graphs, which are graphs where all vertices have 3 neighbors, and snarks, which are cubic graphs which do not admit a proper $3$-edge-coloring. This generator also allows for specifying a lower bound on the girth of the graph~\cite{article:jorik-jooken}.
 
-There also exists the graph generator \texttt{generateUHG}, which can generate graph with a set number of distinct Hamilton cycles. This number can be set to 0 to generate non-Hamiltonian graphs. This generator also allows for setting an upper bound for the maximum degree, as well as restricting generation to planar graphs, among other restrictions~\cite{lib:UHG}.
+There also exists the graph generator \texttt{GenerateUHG}, which can generate graph with a set number of distinct Hamilton cycles. This number can be set to 0 to generate non-Hamiltonian graphs. This generator also allows for setting an upper bound for the maximum degree, as well as restricting generation to planar graphs, among other restrictions~\cite{lib:UHG}.
 
 Besides graph generators, there also exist databases of graphs storing a select number of graphs. These databases often also store the invariants of each graph, and allow for searching the database for graphs adhering to (a set of) these invariants. Four examples of graph databases are \textit{DiscreteZOO}, \textit{PHOEG}, \textit{Encyclopedia of Graphs}, and \textit{House of Graphs}~\cite{article:jorik-jooken}.
 
