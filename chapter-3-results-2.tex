@@ -1,8 +1,28 @@
-\chapter{Results of RQ2}
+\chapter{Results for RQ2}
 \label{cha:results-2}
 \todo{Adjust labeling}
 
 \todo{intro}
+
+\section{Correctness tests for Algorithm~\ref{alg:find-all-k-intersection}}
+
+To ensure that Algorithm~\ref{alg:find-all-k-intersection} works as intended and that its implementation is correct, we perform several correctness tests using known graphs. Since this algorithm is closely related to Algorithm~\ref{alg:find-k-intersection}, we use several of the same test graphs from Section~\ref{sec:1-correct}, with the expected results being the circumference of the graph and the longest-cycle intersection. For the following tests, we turn off the functionality of breaking early when during DFS on a graph $G$ a cycle is found of length $n(G)-1$ or larger.
+
+First, we test the algorithm using a list of individual cycles on 3 to 30 vertices. We again for this test enable a setting in the program which outputs all graphs, instead of those with a longest-cycle intersection of at most 1 vertex. The program correctly identifies the circumference of every input graph and the intersection of the longest cycles as all vertices. The \texttt{graph6} string of the graph with circumference 30 in the output \texttt{CSV} file was put into the graph drawing function of the House of Graphs~\cite{data:houseofgraphs}, and this confirm that the output is the expected cycle on 30 vertices.
+
+The program correctly identifies the Petersen graph as having circumference 9 and an empty longest-cycle intersection. Consequently, it is correctly marked as a ``solution'' in the output \texttt{CSV} file. The modified Petersen graph, obtained by inserting a vertex on each of the three edges incident to one vertex $v$, is also correctly identified as having circumference 11 and a longest-cycle intersection consisting of the single vertex $v$. It is correctly marked as a ``single-vertex intersection'' in the output \texttt{CSV} file.
+
+Additionally, for the graphs $G_{4,2}$, $G_{5,2}$, and $G_{7,3}$, the program correctly identifies each graph as having the expected circumference 10, 13, and 25, and an empty intersection of its longest cycles. After replacing all $H_i$ in each graph with a complete graph, i.e. a graph in which every pair of distinct vertices is adjacent, the program produces the same results, as expected.
+
+We also tested the program on the three lists of graphs from the House of Graphs~\cite{data:houseofgraphs} of 2-connected graphs on at most 32 vertices with circumference $c=10$ (533 graphs), $c=11$ (265 graphs), and $c=12$ (495 graphs). Since the second algorithm computes the circumference rather than taking $k$ as an input parameter, we expect the program to identify circumference 10 for every graph in the first list, circumference 11 for every graph in the second list, and circumference 12 for every graph in the third list. The program correctly produces these circumferences for all graphs in the respective lists. The corresponding longest-cycle intersections are also computed correctly.
+
+Lastly, from Observation~\ref{obs:2con-n14} we know that there exists no 2-connected, non-Hamiltonian planar graph with minimum degree 4 on 13 vertices, and that there are only two such graphs on 14 vertices, each with circumference 10. We re-enable the functionality of halting enumeration early when cycles of length $n-1$ or larger are found for this test. If we run the generation pipeline mentioned in Section~\ref{sec:generators-used}, namely
+\begin{verbatim}
+    plantri <n> -gpm4c2x
+\end{verbatim}
+with \verb|<n>| set to 13, we expect to see that the number of graphs on which the DFS was halted early is equal to the number of graphs generated or checked. Similarly, with \verb|<n>| set to 14, we expect to see the same result, except for exactly 2 graphs for which we should see that these have circumference 10. This is exactly what we observe: 2800 graphs were generated and terminated early for $n=13$, and 34215 graphs were generated, of which 34213 terminated early, with 2 graphs of circumference 10 for $n=14$.
+
+These tests give adequate confirmation that Algorithm~\ref{alg:find-all-k-intersection} was correctly designed and implemented, and functions as intended.
 
 \section{Generated graphs for RQ2}
 

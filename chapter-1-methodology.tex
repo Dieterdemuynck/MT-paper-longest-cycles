@@ -16,7 +16,7 @@ All algorithms are implemented using \texttt{C++}, and all implementations and p
 \section{Generators used}
 \label{sec:generators-used}
 
-\subsection{Research Question \ref{rq1}: 2-connected, circumference 11, empty 11-cycles}[Research Question \ref{rq1}]
+\subsection{Research Question \ref{rq1}: 2-connected, circumference 11, empty 11-cycles}
 
 For the first research question, we use the generator \texttt{geng} from the \texttt{Nauty} package, since it is known to generate pairwise non-isomorphic graphs ``very quickly''~\cite{lib:nauty}, and can be set to generate specifically 2-connected graphs using the option \texttt{-C}. During the year, as seen in Table~\ref{tab:2con-nonhamil-2con}, we realized it was likely that most 2-connected graphs are Hamiltonian\
 \footnote{The counts for the non-Hamiltonian 2-connected graphs are generated using the pipeline \texttt{./library/bin/generateUHG n H0} \texttt{|} \texttt{./library/bin/countg -c2}, which generates non-Ha\-mil\-to\-nian graphs, and then counts the number of graphs which are 2-connected}.
@@ -110,7 +110,7 @@ Here, \texttt{<n>} stands for the order, and \texttt{<d>} stands for the upper b
 \end{table}
 
 
-\subsection{Research Question \ref{rq2}: on planar 2-connected graphs with minimum degree 4}[Research Question \ref{rq2}]
+\subsection{Research Question \ref{rq2}: on planar 2-connected graphs with minimum degree 4}
 
 \begin{samepage}
 For clarity, we repeat the second research question here. ``For which values of $k$ is it true that if in a planar graph $G$ with minimum degree at least $4$ all vertex-deleted subgraphs contain a cycle of length $k$, then $G$ contains a cycle of length greater than $k$?''
@@ -380,7 +380,7 @@ These computations allow us to, in only a constant number of bitwise operations,
 
 Outputting all graphs with circumference and/or longest cycle intersection would result in a tremendous amount of unnecessary data. Since we know of a graph of circumference 11, with an 11-cycle intersection of one vertex, i.e. the modified Petersen graph from Section~\ref{sec:modified-petersen}, we decided to output specifically those graphs which have circumference 11 and an 11-cycle intersection of at most one vertex for the first algorithm on RQ\ref{rq1}, and similarly we output specifically those graphs which have circumference less than $n(G)-1$ where the longest cycle intersection includes at most one vertex. This allows us to detect solutions to RQ\ref{rq1} (or graphs that are almost solutions, but still have one vertex in the relevant intersection), and similarly negative examples for RQ\ref{rq2} (or almost negative examples).
 
-We output this data in the \texttt{CSV} format, including a header, where each output graph is in the \texttt{graph6} format, alongside potentially useful information including the final intersection bitset, the number of vertices in this bitset, and in the case of the second algorithm, the circumference of the graph.
+We output this data in the \texttt{CSV} format, including a header, where each output graph is in the \texttt{graph6} format, alongside potentially useful information including the final intersection bitset, the number of vertices in this bitset, and in the case of the second algorithm, the circumference of the graph. This information also includes a tag, marking graphs with empty intersections with the tag ``solution'', and marking graphs with a single vertex in the $k$-cycle intersection (respectively longest-cycle intersection) with ``single-vertex intersection''.
 
 Lastly, when all graphs have been processed, the program outputs the user CPU time (using the \texttt{getrusage(...)} function), alongside the number of graphs processed, and statistical information such as the number of graphs with an intersection size of $i$ for each $i$ in the case of the first algorithm on RQ\ref{rq1}. For RQ\ref{rq2}, this statistical information includes the total number of graphs with circumference $k$ for all found $k$, and per circumference, the number of graphs with intersection size $i$ for all found $i$.
 

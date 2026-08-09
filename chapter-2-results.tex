@@ -1,12 +1,26 @@
-\chapter{Results}
+\chapter{Results for RQ1}
 \label{cha:results}
-\todo{Results from running experiments}
 
-\todo{intro}
+In this chapter, we discuss the correctness tests performed and their results on the algorithm designed for research question \ref{rq1}, as well as the results of running the three different pipelines from Section~\ref{sec:generators-used} and the observations gained from them. We also shortly discuss the time each pipeline took for each of the parameters, and how these influenced the choice of which pipeline to use to generate graphs of larger orders or maximum degrees. Lastly, based on the results found, we state and proof a new theorem expanding on the results found in Section~\ref{sec:modified-petersen}.
+
+\section{Correctness tests for Algorithm~\ref{alg:find-k-intersection}}
+\label{sec:1-correct}
+
+To ensure the designed algorithm works as intended, and is implemented correctly, several correctness tests were performed. We have tested the algorithm using multiple different (lists of) known graphs as input. These graphs include a list of all cycles on 3 vertices up to 30 vertices, the Petersen graph, the modified Petersen graph from Section~\ref{sec:modified-petersen}, some graphs of the form $G_{p,\ell}$ from Section~\ref{sec:tube-graph}, and lists of graphs of a set circumference obtained from House of Graphs~\cite{data:houseofgraphs}. Using a configuration file, we can also slightly adapt the implementation to output all graphs, allowing us to see the intersection size detected of graphs that normally have a $k$-cycle intersection of more than one vertex. All \texttt{graph6} strings for graphs mentioned were created using the graph drawing function of House of Graphs~\cite{data:houseofgraphs}.
+
+For the following, we enable the program to output all graphs of circumference $k$. A list of individual cycles on 3 vertices up to 30 vertices was given as input to the program, which was configured to output all graphs of circumference $k$. We test the program on this list for $k\in\{3,10,11,28,30\}$. The program correctly identifies the number of graphs with circumference smaller than the parameter $k$ (0, 7, 8, 25, and 27 respectively), it identifies and outputs the cycle of length $k$ to have circumference $k$ and a $k$-cycle intersection of all $k$ vertices, and the program also outputs the correct number of graphs larger than $k$ (27, 20, 19, 2, and 0). For $k=30$, we input the \texttt{graph6} string from the output \texttt{CSV} file into House of Graphs'~\cite{data:houseofgraphs} graph drawing function, and confirm that this is the expected cycle on 30 vertices.
+
+Since the Petersen graph is a hypohamiltonian graph of order 10~\cite{article:van-aardt}, we expect the program (with $k$ set to 9) to correctly identify this graph as a graph of circumference 9 with an empty 9-cycle intersection, marking it as a ``solution'' in the output \texttt{CSV} file. This happens as expected, and does not happen when $k$ is set to 8 or 10, again as expected.
+
+The construction by C.\ T.\ Zamfirescu starting from the Petersen graph, by inserting a vertex on each of the three edges incident to one vertex $v$, has order 13 and circumference 11, with only one vertex $v$ in the 11-cycle intersection. For $k$ set to 11, the program correctly outputs the graph marked as a ``single-vertex intersection'', and has the correct intersection of one vertex, $v$.
+
+The other construction by C.\ T.\ Zamfirescu of the form $G_{p,\ell}$ has, for $p\ge4$ and $\ell\ge2$, order $p(\ell+1)$ and circumference $(p-1)(\ell+1)+1$, and an empty longest-cycle intersection. For $G_\{4,2\}$, $G_\{5,2\}$, and $G_\{7,3\}$, this graph has circumference 10, 13, and 25 respectively. The program correctly identifies the graph as having an empty $k$-cycle intersection with circumference $k$ for each respective graph and circumference. Since we know from Section~\ref{sec:tube-graph} that arbitrary edges can be added within each individual $H_i$, we also test these graphs where each $H_i$ subgraph is a complete graph (that is, a graph in which every two distinct vertices are adjacent). The result remains the same, as expected.
+
+Lastly, three lists of graphs were downloaded from House of Graphs~\cite{data:houseofgraphs} for testing. These are a list of 2-connected graphs on at most 32 vertices with circumference $c$, with $c=10$ (533 graphs), $c=11$ (265 graphs), and $c=12$ (495 graphs). Setting $k=11$ in the program should result in all graphs being considered less than $k$ for the first list, equal to $k$ for the second, and larger than $k$ for the third. This is exactly what we observe.
+
+These tests give adequate confirmation that Algorithm~\ref{alg:find-k-intersection} was correctly designed and implemented, and functions as intended.
 
 \section{Computational Results}
-
-\subsection{Generated graphs for RQ1}
 
 \todo{Number of results, timing, plotting the 1-vertex solutions}
 
