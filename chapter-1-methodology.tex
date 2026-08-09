@@ -1,7 +1,7 @@
 \chapter{Methodology}
 \label{cha:methodology}
 
-Using the information in Chapter~\ref{cha:background}, we will investigate each of the research questions by exhaustively generating all pairwise non-isomorphic graphs belonging to a specified graph class, potentially filter these graphs according to the relevant properties, and analyze the remaining graphs using algorithms developed as part of this thesis. In the case of RQ\ref{rq1}, this method could prove the existence of a 2-connected graph with circumference $11$ and empty $11$-cycle intersection, or establish the nonexistence of such a graph within the generated graph class(es). In the case of RQ\ref{rq2}, this could bring forth an example graph for a value $k$ where the graph is $2$-connected, planar, of minimum degree $4$, and has a $k$-cycle in every vertex-deleted subgraph and no larger cycle in the graph itself. Alternatively, this method could show no such graph exists within the generated class(es).
+Using the information in Chapter~\ref{cha:background}, we will investigate each of the research questions by exhaustively generating all pairwise non-isomorphic graphs belonging to a specified graph class, potentially filter these graphs according to the relevant properties, and analyze the remaining graphs using algorithms developed as part of this thesis. In the case of RQ\ref{rq1}, this method could establish the existence of a 2-connected graph with circumference $11$ and empty $11$-cycle intersection, or the nonexistence of such a graph within the generated graph class(es). In the case of RQ\ref{rq2}, this could bring forth an example graph for a value $k$ where the graph is $2$-connected, planar, of minimum degree $4$, and has a $k$-cycle in every vertex-deleted subgraph and no larger cycle in the graph itself. Alternatively, this method could show no such graph exists within the generated class(es).
 
 In this chapter, we explain in detail the computational framework used, what graph generators and tools were used, and the designed algorithms and the optimizations for each of the research questions, as well as the correctness tests performed to ensure the algorithms function as intended. We also explain a theoretical method used to find new results.
 
@@ -14,6 +14,7 @@ Since we will use multiple programs and processes to solve this problem, we use 
 All algorithms are implemented using \texttt{C++}, and all implementations and packages are compiled using \texttt{g++} version \texttt{13.3.0}. The computations are run on a CPU model \texttt{Intel® Core™ Ultra 5 125U}, using the operating system \texttt{Linux Mint 22.3} with kernel \texttt{7.0.0-28-generic}. \texttt{Nauty} version \texttt{2.9.3} is used, and \texttt{plantri} version \texttt{5.5}.
 
 \section{Generators used}
+\label{sec:generators-used}
 
 \subsection{Research Question \ref{rq1}: 2-connected, circumference 11, empty 11-cycles}[Research Question \ref{rq1}]
 
@@ -23,7 +24,7 @@ For that reason, we also utilized the generator \texttt{GenerateUHG}~\cite{lib:U
 
 The total number of 2-connected graphs of order 13 or higher, whether non-Hamiltonian or not, still proved to be too large a number to feasibly generate and check all graphs of that class, as seen in Section~\ref{sec:1-timing}. Both \texttt{geng} and \texttt{GenerateUHG} have options to reduce the generated graphs by setting an upper bound of the maximum degree of the generated graphs. For \texttt{geng}, this is the option \texttt{-D<x>}, while for \texttt{GenerateUHG} this is simply \texttt{D<x>}, where \texttt{<x>} is this upper bound. To make generation feasible, the following generation schema was used with respect to the maximum degree. We generate all graphs with maximum degree at most 3 of order 13, increasing the order by 1 if computation was still done in a reasonable time. Based on these timings, we similarly increased the upper bound on the maximum degree.
 
-One reasoning for using this schema is that $G_{4,2}$, $G_{5,2}$, and $G_{6,2}$ from Section~\ref{sec:tube-graph}, which are solutions to the question by van Aardt et al.\ for circumference $k \in \{10, 13, 16\}$ respectively, all have maximum degree 3, and an order equal to their circumference $+ 2$. Perhaps a solution for circumference $11$, should it exist, is similar to these graphs, perhaps with some additional edges and/or vertices.
+One reasoning for using this schema is that $G_{4,2}$, $G_{5,2}$, and $G_{6,2}$ from Section~\ref{sec:tube-graph}, which are solutions to the question by van Aardt et al.\ for circumference $k \in \{10, 13, 16\}$ respectively, all have maximum degree 3, and an order equal to their circumference $+ 2$. Perhaps a solution for circumference $11$, should it exist, is similar to these graphs, perhaps with some additional edges and/or vertices. Therefore, as a heuristic choice, we search through these graphs using this generation schema.
 
 Lastly, an attempt using \texttt{plantri}~\cite{lib:plantri} was also used. Since $G_{5,2}$ is planar, and the number of planar 2-connected graphs is much smaller, as seen in Table\ref{tab:2con-planar}, we also generate all planar graphs of order 13 which are 2-connected. The generator \texttt{plantri} supports the options \texttt{-p} to generate general planar graphs (rather than the default of triangulations~\cite{lib:plantri}), \texttt{-c2} to generate 2-connected planar graphs (this also sets the minimum degree to at least 2, from the default of 3), and \texttt{-g} to force the output to be in the \texttt{graph6} format. As mentioned in Section~\ref{sec:generators}, there may be some isomorphic 2-connected graphs as the graphs are only pairwise non-isomorphic with respect to the embedding on a sphere.
 
@@ -161,7 +162,7 @@ We generalize the problem for RQ\ref{rq1} to checking if a graph has circumferen
 
 \subsubsection{Enumeration of all cycles}
 
-The approach used in this thesis to enumerate all cycles of a graph $G$ is a depth-first search over the vertices. The algorithm starts from each vertex $v_{\text{start}} \in V(G)$ in turn. For each starting vertex, $v_{\text{start}}$ is added to the current path $P=[v_{\text{start}}]$, and a set of its unvisited neighbors $A(v_{\text{start}})$ is initialized. The following steps are then repeated until $P$ is empty.
+The approach used in this thesis to enumerate all cycles of a graph $G$ is a depth-first search (DFS) over the vertices. The algorithm starts from each vertex $v_{\text{start}} \in V(G)$ in turn. For each starting vertex, $v_{\text{start}}$ is added to the current path $P=[v_{\text{start}}]$, and a set of its unvisited neighbors $A(v_{\text{start}})$ is initialized. The following steps are then repeated until $P$ is empty.
 
 First, if the last vertex $v_{\text{last}}$ in $P$ has no unvisited neighbors, i.e., $A(v_{\text{last}})=\emptyset$, then $v_{\text{last}}$ is removed from $P$. Otherwise, an unvisited neighbor $v_{\text{next}} \in A(v_{\text{last}})$ is selected as the next candidate vertex. This candidate may be the starting vertex $v_{\text{start}}$.
 
@@ -176,7 +177,7 @@ The algorithm described above is not yet efficient, as each cycle is enumerated 
 
 This ordering allows us to require that the starting vertex of a cycle is its minimum vertex. During the search, a new vertex is only considered as a candidate if it is larger than the starting vertex. This ensures that every cycle is only considered from its minimum vertex, reducing the number of enumerations from $2k$ to $2$ for a cycle of length $k$.
 
-Additionally, the vertex ordering can be used to restrict the search to only one of the two possible directions. We do this by requiring there must be a fixed order between first and last vertex of the cycle, excluding the starting vertex. For example, if the first vertex is required to be smaller in order than the last vertex, cycles encountered in the opposite direction are ignored. This reduces the number of enumerations from two to one, meaning that every cycle is enumerated exactly once.
+Additionally, the vertex ordering could be used to restrict the search to only one of the two possible directions. This could be done by requiring a fixed order between the first and last vertex of the cycle, excluding the starting vertex. For example, if the first vertex were required to be smaller in order than the last vertex, cycles encountered in the opposite direction could be ignored. This would reduce the number of enumerations from two to one.
 
 \subsubsection{Halting cycle enumeration early}
 
@@ -188,172 +189,292 @@ Additionally, we can also stop enumeration early if during enumeration we know t
 
 During enumeration, we must also compute the intersection of all $k$-cycles. Set the initial intersection $I$ equal to all vertices of the graph $V(G)$ at the start of enumeration. Whenever a $k$-cycle $C$ is found, set $I$ equal to the intersection of the current intersection and the vertices of the $k$-cycle $I_{\text{new}} = I \cap V(C)$. The result at the end of the enumeration will be the intersection of all $k$-cycles if there are any, or all vertices otherwise. If there are no $k$-cycles, then the computed intersection will remain all vertices of the graph $V(G)$.
 
-% --- COMMENT: KEEP IN METHODOLOGY. ---
+In the context of RQ\ref{rq1}, we can assume $k$ to be less than the order of the graph, in which case an intersection equal to $V(G)$ also confirms that no $k$-cycle was present. If enumeration did not halt early, we also know that there was no cycle longer than $k$, and thus an intersection equal to $V(G)$ at the end of enumeration means that the circumference must be less than $k$.
+
+\subsubsection{Final notes and algorithm for RQ\ref{rq1}}
+
+Although the vertex ordering can theoretically be used to enumerate each cycle in only one direction instead of both, this optimization is not used in the final implementation. Applying this optimization would require checking the ordering of the first and last vertices whenever the starting vertex is encountered. However, encountering the starting vertex does not necessarily mean that a cycle of length at least 3 has been found: the current path must first be checked to ensure that it contains at least three vertices, otherwise an out-of-bounds exception may be thrown. Thus, while the computational cost of the additional ordering check itself is expected to be small, it would introduce another conditional check whenever a cycle is encountered. We chose not to use this optimization and instead allow each cycle to be enumerated twice, once in each direction. Our suspicion is that most cycles will fail on both if-statements in the final algorithm, replacing two comparisons (length, ordering) with two other comparisons ($>k$, $=k$) as seen in the final algorithm. Secondly, ignoring direction could lead to finding cycles larger than $k$ earlier, and halting enumeration earlier on graphs with a circumference larger than $k$.
+
+Combining the base DFS algorithm with the methods using vertex ordering, early halting of enumeration, and computing the intersection of all $k$-cycles brings us to the final algorithm for RQ\ref{rq1}, namely Algorithm~\ref{alg:find-k-intersection}.
 
 \begin{algorithm}
 \caption{\textsc{FindIntersectionK}$(G,k,\prec)$}
 \label{alg:find-k-intersection}
 
 \begin{algorithmic}[1]
-\Require Graph $G$, integer $|V(G)|>k>2$, and a total ordering on $V$
-\Ensure intersection of all $k$-cycles $\textit{intersection}$ and circumference $c(G)=k$
+\Require Graph $G$, integer $|V(G)|>k>2$, and a total ordering $\prec$ on $V(G)$
+\Ensure Whether $c(G)<k$, $c(G)=k$, or $c(G)>k$, and the intersection of all $k$-cycles
 
 \State $\textit{intersection} \gets V(G)$
 \ForAll{$s \in V(G)$ ascending}
-\State $\textit{path} \gets [s]$
-\While{$\textit{path}$ is not empty}
-    \State $u \gets$ the last vertex in $\textit{path}$
-    \If{no unvisited neighbor of $u$}
-        \State remove $u$ from $\textit{path}$
-        \Comment Including its visited neighbors
-        \State \textbf{continue}
+    \If{fewer than $k$ vertices remain at or above $s$ in the ordering}
+        \State \textbf{break}
     \EndIf
-    \State {$v \gets$ an unvisited vertex, and unvisited neighbor of $u$}
-    \State mark $v$ as visited neighbor of $u$
-    \If{$v=s$}
-        \State $\ell \gets |\textit{path}|$
-        \If{$\ell > k$}
-            \State \Return $\text{LARGER\_THAN\_K}$
+    \State $\textit{path} \gets [s]$
+    \State $A(s) \gets \{v \in N(s) : s \prec v\} \cup \{s\}$
+
+    \While{$\textit{path}$ is not empty}
+        \State $u \gets$ the last vertex in $\textit{path}$
+
+        \If{$A(u)=\emptyset$}
+            \State remove $u$ from $\textit{path}$
+            \State \textbf{continue}
         \EndIf
-        \If{$\ell = k$}
-            \State $\textit{intersection} \gets
-            \textit{intersection} \cap \textit{path}$
+
+        \State $v \gets$ an arbitrary vertex from $A(u)$
+        \State remove $v$ from $A(u)$
+
+        \If{$v=s$}
+            \State $\ell \gets |\textit{path}|$
+            \If{$\ell > k$}
+                \State \Return $\text{LARGER\_THAN\_K}$
+            \EndIf
+            \If{$\ell = k$}
+                \State $\textit{intersection} \gets
+                \textit{intersection} \cap \textit{path}$
+            \EndIf
+            \State \textbf{continue}
         \EndIf
-        \State \textbf{continue}
-    \EndIf
-    \If{$s \prec v$}
+
         \State add $v$ to $\textit{path}$
-    \EndIf
-\EndWhile
+        \State $A(v) \gets
+        (N(v) \setminus V(\textit{path})) \cup \{s\}$
+        \State remove from $A(v)$ all vertices $w$ such that $w \prec s$
+    \EndWhile
 \EndFor
 
-\If{$\textit{intersection} = V(G)$}
+\If{$\textit{intersection}=V(G)$}
     \State \Return $\text{SMALLER\_THAN\_K}$
 \EndIf
 \State \Return $\text{EQUAL\_TO\_K}$
 \end{algorithmic}
 \end{algorithm}
 
-% --- COMMENT: KEEP IN METHODOLOGY. This is the central algorithm and should remain here. ---
+\subsection{Checking vertex-deleted subgraphs for k-cycles}
 
-\section{Checking vertex-deleted subgraphs for k-cycles}
+This section introduces the algorithm for RQ\ref{rq2}. We mentioned in Section\ref{sec:generators-used} that we generate or input planar 2-connected graphs with minimum degree 4. Our method is to check if any of these graphs, with a respective value $k$, is a negative example of the following question.
 
-% --- COMMENT: KEEP IN METHODOLOGY. ---
+\begin{samepage}
+``If in a planar graph $G$ with minimum degree at least $4$ all vertex-deleted subgraphs contain a cycle of length $k$, then $G$ contains a cycle of length greater than $k$?''
+\end{samepage}
 
-\todo{Add RQ2 again for clarity}
-
-% --- COMMENT: KEEP IN METHODOLOGY. ---
-
-This section introduces the algorithm for RQ\ref{rq2}. The approach is similar to RQ\ref{rq1}: we generate planar graphs with minimum degree 4, and check for each graph if in every vertex-deleted subgraph there exists a $k$-cycle, that there then is a cycle larger than $k$. Trivially, if a vertex-deleted subgraph of a graph $G$ has a $k$-cycle, then the graph $G$ itself also has a $k$-cycle. As a result, for a graph $G$ can only be a negative example of RQ\ref{rq2}, there must be a $k$-cycle in every vertex-deleted subgraph of $G$ and $G$ must also have circumference $k$. From this, we decided to focus our algorithm on finding negative examples, as we can assume all other graphs to be positive examples.
-% --- COMMENT: KEEP IN METHODOLOGY. This explains the computational strategy for RQ2. However, the definitions of vertex-deleted subgraphs, circumference, and relevant graph properties should be available in Background. ---
+Trivially, if a vertex-deleted subgraph of a graph $G$ has a $k$-cycle, then the graph $G$ itself also has a $k$-cycle. As a result, for a graph $G$ to be a negative example of RQ\ref{rq2}, there must be a $k$-cycle in every vertex-deleted subgraph of $G$ and $G$ must also have circumference $k$. Intuitively, one can see that a $k$-cycle existing in every vertex-deleted subgraph may also imply that the intersection of all $k$-cycles is empty. We formalize and proof these statements with the following theorem.
 
 \begin{theorem}
   \label{theorem:intersection-vertex-deletion}
-  A graph $G$ has a $k$-cycle in every vertex-deleted subgraph, and no cycle larger than $k$ in $g$ if and only if the intersection of the vertices of all $k$-cycles in the graph is empty, and $G$ has circumference $k$.
+  A graph $G$ has a $k$-cycle in every vertex-deleted subgraph, and there is no cycle larger than $k$ in $G$ if and only if the intersection of the vertices of all $k$-cycles in the graph is empty, and $G$ has circumference $k$.
 \end{theorem}
 
 \begin{proof}
-  Assume $G$ has a $k$-cycle in every vertex-deleted subgraph, and no cycle larger than $k$ exists in $G$. $G$ must have at least one $k$-cycle, denoted $C$, and therefore must have circumference $k$. The intersection of all $k$-cycles must be at most the vertices $V(C) \subset V(G)$. Per the assumption, for every vertex $v_i \in V(G)$ there must be a $k$-cycle $C_i'$ in $G$ avoiding the vertex $v_i$, including those vertices $v_i \in V(C)$. As a result, the intersection of all $k$-cycles is at most
+  Assume $G$ has a $k$-cycle in every vertex-deleted subgraph, and no cycle larger than $k$ exists in $G$. $G$ must have at least one $k$-cycle, denoted $C$, and therefore must have circumference $k$. The intersection of all $k$-cycles must be at most the vertices $V(C)$. Per the assumption, for every vertex $v_i \in V(G)$ there must be a $k$-cycle $C_i'$ in $G$ avoiding the vertex $v_i$, including those vertices $v_i \in V(C)$. As a result, the intersection of all $k$-cycles is at most
   $$
   \bigcap_{i} C_i' \cap C = \emptyset
   $$
   and thus the intersection of all $k$-cycles must be empty.
 
-  Now assume $G$ has circumference $k$ and the intersection of all $k$-cycles is empty. $G$ cannot be hamiltonian, as otherwise the intersection of the vertices of all $k$-cycles must be the vertices $V(G)$. $G$ must have at least one $k$-cycle $C$, which avoids all vertices $v_{\text{out}} \in V(G) \setminus V(C)$. Additionally, since the intersection of all $k$-cycles is empty, there must be a $k$-cycle for every vertex $v_{\text{in}} \in V(C)$ which avoids $v_{\text{in}}$. As a result, there exists a $k$-cycle avoiding every vertex $v \in V(C) \cup (V(G) \setminus V(C)) = V(G)$, and therefore every vertex-deleted subgraph of $G$ has a $k$-cycle.
+  Now assume $G$ has circumference $k$ and the intersection of all $k$-cycles is empty. $G$ cannot be Hamiltonian, as otherwise the intersection of the vertices of all $k$-cycles must be the vertices $V(G)$. $G$ must have at least one $k$-cycle $C$, which avoids all vertices $v_{\text{out}} \in V(G) \setminus V(C)$. Additionally, since the intersection of all $k$-cycles is empty, there must be a $k$-cycle for every vertex $v_{\text{in}} \in V(C)$ which avoids $v_{\text{in}}$. As a result, there exists a $k$-cycle avoiding every vertex $v \in V(C) \cup (V(G) \setminus V(C)) = V(G)$, and therefore every vertex-deleted subgraph of $G$ has a $k$-cycle.
 
-  We conclude that for a graph $G$, $G$ has a $k$-cycle in every vertex-deleted subgraph and has circumference $k$ if and only if the intersection of the vertices of all $k$-cycles in the graph is empty.
+  We conclude that for a graph $G$, $G$ has a $k$-cycle in every vertex-deleted subgraph and $G$ has no cycle larger than $k$ if and only if the intersection of the vertices of all $k$-cycles in the graph is empty, and $G$ has circumference $k$.
 \end{proof}
 
-% --- COMMENT: KEEP IN METHODOLOGY if this theorem is specifically the mathematical justification for the implemented algorithm. However, if the Literature Study chapter is intended to contain the theoretical development behind the research questions, the theorem could be moved to Background/Theory and Methodology could simply state that the algorithm exploits this equivalence. My preference: keep it here if you proved it yourself and use it directly to justify the implementation. ---
+Using this theorem, we can reuse Algorithm~\ref{alg:find-k-intersection}, with some adaptations. Instead of checking for cycles of a fixed length $k$ and computing their intersection, we compute the intersection of all cycles having the maximum length found so far. Whenever a longer cycle is found, we reset the intersection to the vertices of this new cycle. We then continue the enumeration, intersecting the current intersection with every subsequently found cycle of the same length and resetting it whenever a longer cycle is found. By keeping track of the length of the longest cycle, we consequently also compute the circumference of the graph.
 
-This result allows us to reuse most of Algorithm~\ref{alg:find-k-intersection}. To adapt it to RQ\ref{rq2}, instead of keeping track of the intersection of all $k$-cycles for an arbitrary value $k$, we must keep track of the intersection of the longest currently found cycles of the graph. This means that during execution, if a longer cycle is found than the current length of the longest cycles found, instead of halting early, we simply set the intersection of the longest cycles to the vertices of that new cycle.
+\subsubsection{Halting early and optimizations}
 
-% --- COMMENT: KEEP IN METHODOLOGY. This describes the adaptation of the algorithm for RQ2. ---
+In this second algorithm, we can still halt enumeration early when certain cycles are found. As seen in Section~\ref{sec:thomassen-theorems}, Thomassen has shown~\cite{article:thomassen} that for every planar graph with minimum degree 4 of order $n$, if the graph has an $(n-1)$-cycle in every vertex-deleted subgraph, it must also be Hamiltonian. This means we can still halt the algorithm early, namely when a cycle is found of length $n-1$ or $n$.
 
-Thomassen has shown~\cite{article:thomassen} that for every planar graph with minimum degree 4 of order $n$, if the graph has an $(n-1)$-cycle in every vertex-deleted subgraph, it must also be hamiltonian. This mean we can still halt the algorithm early, namely when a cycle is found of length $n-1$ or $n$.
+Additionally, the graphs we generate or input into the algorithm are 2-connected. Since 2-connected graphs have at least 3 vertices, and there must exist 2 vertex-disjoint paths between any two distinct vertices, we know that every 2-connected graph contains a cycle~\cite{book:bondy-definitions}. Therefore, we can assume the circumference of all input graphs to have circumference at least 3. This also means we can stop enumerating when the choice of a (minimum) starting vertex leaves less than 3 vertices left.
 
-% --- COMMENT: The cited theorem itself belongs naturally in Background/Literature Study as prior theoretical work. The methodological consequence ("we can still halt the algorithm early") belongs here. Consider citing the theorem in Background and briefly invoking it here. ---
+\subsubsection{Final algorithm for RQ\ref{rq2}}
 
-\subsection{Studying the Gadget}
+Adapting Algorithm~\ref{alg:find-k-intersection} by letting $k$, which starts at the value $3$, update on every longer cycle discovery, and additionally setting intersection to this cycle, and halting early on cycles of length at least $n-1$, brings us to the final algorithm for RQ\ref{rq2}, namely Algorithm~\ref{alg:find-all-k-intersection}.
+
+\begin{algorithm}
+\caption{\textsc{FindIntersectionAllK}$(G,\prec)$}
+\label{alg:find-all-k-intersection}
+
+\begin{algorithmic}[1]
+\Require 2-connected Graph $G$ with $|V(G)|>2$, and a total ordering $\prec$ on $V(G)$
+\Ensure The circumference $c(G)$, the intersection of all cycles of length $c(G)$, and whether this intersection is empty
+
+\State $\textit{circumference} \gets 3$
+\State $\textit{intersection} \gets V(G)$
+
+\ForAll{$s \in V(G)$ ascending}
+    \If{fewer than $3$ vertices remain at or above $s$ in the ordering}
+        \State \textbf{break}
+    \EndIf
+    \State $\textit{path} \gets [s]$
+    \State $A(s) \gets \{v \in N(s) : s \preceq v\}$
+
+    \While{$\textit{path}$ is not empty}
+        \State $u \gets$ the last vertex in $\textit{path}$
+
+        \If{$A(u)=\emptyset$}
+            \State remove $u$ from $\textit{path}$
+            \State \textbf{continue}
+        \EndIf
+
+        \State $v \gets$ an arbitrary vertex from $A(u)$
+        \State remove $v$ from $A(u)$
+
+        \If{$v=s$}
+            \State $\ell \gets |\textit{path}|$
+
+            \If{$\ell > \textit{circumference}$}
+                \State $\textit{circumference} \gets \ell$
+                \State $\textit{intersection} \gets \textit{path}$
+            \ElsIf{$\ell = \textit{circumference}$}
+                \State $\textit{intersection} \gets
+                \textit{intersection} \cap \textit{path}$
+            \EndIf
+
+            \If{$\textit{circumference} \geq |V(G)|-1$}
+                \State \Return $\textit{circumference},\textit{intersection},\text{MAYBE\_HYPO\_HAMIL}$
+            \EndIf
+
+            \State \textbf{continue}
+        \EndIf
+
+        \State add $v$ to $\textit{path}$
+        \State $A(v) \gets
+        (N(v) \setminus V(\textit{path})) \cup \{s\}$
+        \State remove from $A(v)$ all vertices $w$ such that $w \prec s$
+    \EndWhile
+\EndFor
+
+\If{$\textit{intersection}=\emptyset$}
+    \State \Return $\textit{circumference},\textit{intersection},\text{EMPTY\_CIRC}$
+\EndIf
+\State \Return $\textit{circumference},\textit{intersection},\text{NON\_EMPTY\_CIRC}$
+\end{algorithmic}
+\end{algorithm}
+
+\subsection{Optimizations and representation}
+
+In order to check the largest number of graphs possible in a feasible amount of time, we not only need an efficient algorithm, but also an efficient implementation of said algorithm. For that reason, we implement both algorithms in \texttt{C++}.
+
+In this implementation, we translated every inputted graph from a \texttt{graph6} string to a representation similar to that of an adjacency matrix. Since we don't expect the graphs to be larger than 64 vertices, we keep an array of \texttt{uint64\_t} values, which we interpret as a set of bits. The $i$th bit at index $j$ represents whether vertex $j$ has vertex $i$ as its neighbor. For example, at index 1, the least significant bit of the \texttt{uint64\_t} value represents whether vertex 0 is a neighbor of vertex 1. This representation brings with it a few possibilities for optimization, namely for computing the allowed, unvisited neighbors of a candidate next vertex during the DFS, and for selecting a vertex from this set. This is because this bitset representation allows for computing \textit{bitmasks}.
+
+\subsubsection{Computing allowed neighbors}
+
+For each starting vertex, we can easily compute a bitmask of all allowed vertices (that is the vertices which are at least as high in order as the starting vertex). Since the vertices are integers $0$ to $n(G)-1$, this bitmask is equal to the value where all bits are set, bitshifted to the left by $v_\{\text{start}\}$. This computation is done only once for each starting vertex.
+
+We can also add an additional bitset \textit{visited}, which represents the vertices in the current path, excluding the starting vertex. This adds one additional bitwise operation for every vertex appended to the path, and one for every vertex removed from the path.
+
+These two values allow computing the allowed, unvisited neighbors of any vertex $v$ using only three bitwise operations as follows. Take the bitset of neighbors of $v$, a \texttt{uint64\_t} value. We compute the intersection of these neighbors with the \textit{allowed} bitmask. Then, we take the inverse of the \textit{visited} bitset, and take the intersection again of the previous result with this inverted bitmask.
+
+\subsubsection{Computing a candidate next vertex}
+
+A candidate vertex can be selected directly from the computed allowed neighbors bitset. Our algorithm first checks if this bitset is empty, i.e. the \texttt{uint64\_t} value equals 0, and if this is true, it removes the vertex from the path before continuing to the next iteration. Thus, when computing a candidate next vertex, the allowed neighbors bitset must have at least one bit set true.
+
+We extract the least significant set bit using the operation $x \mathbin{\&} -x$, remove this bit from the allowed neighbors bitset, and obtain the corresponding vertex index using the \texttt{C++} function \texttt{\_\_builtin\_ctzll}, which counts the trailing zeroes.
+
+\subsubsection{Computing the intersection}
+
+Using the \textit{visited} bitset from before, we can update the intersection of all found $k$-cycles by taking the intersection of the current intersection, and the bitwise `or' of the visited bitset with the bit of the starting vertex.
+
+These computations allow us to, in only a constant number of bitwise operations, find a valid next vertex that has not yet been visited and is larger than (or equal to) the minimum vertex, without scanning all neighbors of the last vertex in the path including those already visited or not allowed, and for each of these, scanning all vertices in the path to see if a candidate vertex has already been visited.
+
+\section{Output of the programs}
+
+Outputting all graphs with circumference and/or longest cycle intersection would result in a tremendous amount of unnecessary data. Since we know of a graph of circumference 11, with an 11-cycle intersection of one vertex, i.e. the modified Petersen graph from Section~\ref{sec:modified-petersen}, we decided to output specifically those graphs which have circumference 11 and an 11-cycle intersection of at most one vertex for the first algorithm on RQ\ref{rq1}, and similarly we output specifically those graphs which have circumference less than $n(G)-1$ where the longest cycle intersection includes at most one vertex. This allows us to detect solutions to RQ\ref{rq1} (or graphs that are almost solutions, but still have one vertex in the relevant intersection), and similarly negative examples for RQ\ref{rq2} (or almost negative examples).
+
+We output this data in the \texttt{CSV} format, including a header, where each output graph is in the \texttt{graph6} format, alongside potentially useful information including the final intersection bitset, the number of vertices in this bitset, and in the case of the second algorithm, the circumference of the graph.
+
+Lastly, when all graphs have been processed, the program outputs the user CPU time (using the \texttt{getrusage(...)} function), alongside the number of graphs processed, and statistical information such as the number of graphs with an intersection size of $i$ for each $i$ in the case of the first algorithm on RQ\ref{rq1}. For RQ\ref{rq2}, this statistical information includes the total number of graphs with circumference $k$ for all found $k$, and per circumference, the number of graphs with intersection size $i$ for all found $i$.
+
+\section{Studying the Gadget}
 \label{sec:gadget}
 
-% --- COMMENT: This subsection should probably MOVE to Background/Literature Study if it primarily explains the known construction and its structural properties. If the "studying the gadget" work is genuinely a research method developed in this thesis, retain a shortened version in Methodology describing the procedure you used to investigate the gadget. The results/insights discovered from this study should then be presented in Results/Analysis rather than Methodology. ---
+The construction by C.\ T.\ Zamfirescu from Section~\ref{sec:tube-graph} starts off from two identical cycles with respective vertices connected, as seen in Figure~\ref{fig:base-tube}. This graph is then modified, resulting in graphs with the desired properties. Studying this base graph, which we call a gadget, and seeing what properties it has and how modifying it results in the desired graphs could lead to new insights as to how to modify it differently to find new results for RQ\ref{rq2}.
 
-The construction by C. T. Zamfirescu starts off from two identical cycles with respective vertices connected. This graph is then modified, resulting in graphs with the desired properties. Studying this base graph, which we call a gadget, and seeing what properties it has and how modifying it results in the desired graphs could lead to new insights as to how to modify it differently to find new results for RQ\ref{rq2}.
+\begin{figure}[ht]
+  \centering
 
-% --- COMMENT: Likely Background/Literature Study if this is explaining the known construction. If it describes your research strategy, keep only the methodological part ("we study the base graph and modifications") in Methodology. ---
+  % Two pentagons
+  \begin{subfigure}{0.35\textwidth}
+  \centering
+  \begin{tikzpicture}[scale=1]
+    % Outer pentagon
+    \node[vertex] (a0) at (90:1.4) {};
+    \node[vertex] (a1) at (18:1.4) {};
+    \node[vertex] (a2) at (-54:1.4) {};
+    \node[vertex] (a3) at (-126:1.4) {};
+    \node[vertex] (a4) at (162:1.4) {};
+
+    % Inner pentagon
+    \node[vertex] (b0) at (90:0.8) {};
+    \node[vertex] (b1) at (18:0.8) {};
+    \node[vertex] (b2) at (-54:0.8) {};
+    \node[vertex] (b3) at (-126:0.8) {};
+    \node[vertex] (b4) at (162:0.8) {};
+
+    % Outer cycle
+    \draw (a0) -- (a1) -- (a2) -- (a3) -- (a4) -- (a0);
+
+    % Inner cycle
+    \draw (b0) -- (b1) -- (b2) -- (b3) -- (b4) -- (b0);
+
+    % Corresponding vertices
+    \draw (a0) -- (b0);
+    \draw (a1) -- (b1);
+    \draw (a2) -- (b2);
+    \draw (a3) -- (b3);
+    \draw (a4) -- (b4);
+  \end{tikzpicture}
+  \caption{$p=5$ odd.}
+  \end{subfigure}
+  % Two hexagons
+  \begin{subfigure}{0.35\textwidth}
+  \centering
+  \begin{tikzpicture}[scale=1]
+    % Outer hexagon
+    \node[vertex] (c0) at (120:1.4) {};
+    \node[vertex] (c1) at (60:1.4) {};
+    \node[vertex] (c2) at (0:1.4) {};
+    \node[vertex] (c3) at (-60:1.4) {};
+    \node[vertex] (c4) at (-120:1.4) {};
+    \node[vertex] (c5) at (180:1.4) {};
+
+    % Inner hexagon
+    \node[vertex] (d0) at (120:0.8) {};
+    \node[vertex] (d1) at (60:0.8) {};
+    \node[vertex] (d2) at (0:0.8) {};
+    \node[vertex] (d3) at (-60:0.8) {};
+    \node[vertex] (d4) at (-120:0.8) {};
+    \node[vertex] (d5) at (180:0.8) {};
+
+    % Outer cycle, excluding top edge
+    \draw (c0) -- (c5) -- (c4) -- (c3) -- (c2) -- (c1);
+
+    % Inner cycle, excluding top edge
+    \draw (d0) -- (d5) -- (d4) -- (d3) -- (d2) -- (d1);
+
+    % Crossed connections at the top
+    \draw (d0) -- (c1);
+    \draw (c0) -- (d1);
+
+    % Remaining corresponding vertices
+    \draw (c0) -- (d0);
+    \draw (c1) -- (d1);
+    \draw (c2) -- (d2);
+    \draw (c3) -- (d3);
+    \draw (c4) -- (d4);
+    \draw (c5) -- (d5);
+  \end{tikzpicture}
+  \caption{$p=6$ even.}
+  \end{subfigure}
+  \caption{Two examples of the gadget used by C.\ T.\ Zamfirescu in~\cite{article:zamfirescu}.}
+  \label{fig:base-tube}
+\end{figure}
 
 In this thesis, we look deeper into the types of cycles that can be created from this gadget, and how inserting vertices on their edges changes the length of these cycles. It is this approach that has led to new negative results to the question of RQ\ref{rq2}.
 
-% --- COMMENT: The description of the approach can remain in Methodology, but the claim that it "has led to new negative results" is a result/conclusion and should probably be moved to the Results chapter. ---
-
-\todo{Correctness tests, including tests on House of Graphs database}
-
 \section{Conclusion}
-\todo{Conclusion}
-The final section of the chapter gives an overview of the important results
-of this chapter. This implies that the introductory chapter and the
-concluding chapter don't need a conclusion.
 
-% --- COMMENT: KEEP/REWORK IN METHODOLOGY. This is a chapter conclusion, although the current text is placeholder/template text and does not actually summarize this chapter. It should eventually summarize the methodology: selected graph generators and parameters, computational pipelines, algorithms, and validation/testing. ---
+In this chapter, we presented the computational and theoretical methodology used to investigate both research questions. For RQ\ref{rq1}, we considered 2-connected graphs and developed a cycle-enumeration algorithm that determines whether the circumference of a graph is smaller than, equal to, or larger than a given value $k$, while simultaneously computing the intersection of all $k$-cycles. To make exhaustive computation feasible, we use graph generators and tools from the \texttt{Nauty} package, the \texttt{plantri} package, and \texttt{GenerateUHG} with several restrictions on the generated graph classes and implemented the analysis program of these graphs in \texttt{C++}. We further optimized the cycle enumeration using a vertex ordering, early termination conditions, and a bitset-based graph representation.
 
-\begin{figure}
-  \centering
-  \label{fig:pipeline-1}
-  \begin{tikzpicture}[node distance=4cm, auto]
-  \node[draw, rectangle] (gen) {GenerateUHG};
-  \node[draw, rectangle, right of=gen] (filter) {pickg};
-  \node[draw, rectangle, right of=filter] (analysis) {van\_aardt\_intersect};
+For RQ\ref{rq2}, we reduced the required property to the same cycle-intersection problem. In particular, we showed that a graph has a $k$-cycle in every vertex-deleted subgraph and has no cycle longer than $k$ if and only if its circumference is $k$ and the intersection of all its $k$-cycles is empty. This allows the cycle-enumeration algorithm for RQ\ref{rq1} to be reused and adapted to determine the circumference and longest-cycle intersection of each generated graph. Observations from Chapter~\ref{cha:background} allowed for limiting our search in the context of RQ\ref{rq2} to planar graphs with minimum degree at least 4 with connectivity \textit{exactly} 2 without loss of generality, starting from order 14 and up.
 
-  \draw[->] (gen) -- node {graph6} (filter);
-  \draw[->] (filter) -- node {graph6} (analysis);
-  \draw[->] (analysis) -- node {CSV} ++(3,0);
-  \end{tikzpicture}
-  \caption{The pipeline for RQ\ref{rq1}}
-\end{figure}
-
-% --- COMMENT: KEEP IN METHODOLOGY. This is an actual description of the computational pipeline. It should probably be introduced in General Structure and/or referenced from the generator-selection subsection. ---
-
-\begin{figure}
-  \centering
-  \label{fig:pipeline-2}
-  \begin{tikzpicture}[node distance=4cm, auto]
-  \node[draw, rectangle] (gen) {plantri};
-  \node[draw, rectangle, right of=gen] (analysis) {k\_val\_check};
-
-  \draw[->] (gen) -- node {graph6} (analysis);
-  \draw[->] (analysis) -- node {CSV} ++(3,0);
-  \end{tikzpicture}
-  \caption{The pipeline for RQ\ref{rq2}}
-\end{figure}
-
-% --- COMMENT: KEEP IN METHODOLOGY. This is an actual computational pipeline. ---
-
-% --- COMMENT: OVERALL STRUCTURAL RECOMMENDATION:
-% The Background/Literature Study chapter should probably absorb:
-%   1. General definition and purpose of graph generators.
-%   2. Overview of relevant generator packages and the graph classes they generate.
-%   3. General discussion of graph isomorphism and graph6, if needed.
-%   4. Definitions/properties of all relevant graph classes: connected, 2-connected, 3-connected, planar, minimum degree, Hamiltonian, non-Hamiltonian, hypohamiltonian, circumference, etc.
-%   5. The prior result about 3-connected planar graphs of minimum degree 4 up to 22 vertices.
-%   6. Prior work and known graph lists from Goedgebeur.
-%   7. Zamfirescu's construction and its figures.
-%   8. The gadget and known constructions derived from it, insofar as they are prior/theoretical background.
-%   9. The modified Petersen construction and its significance for RQ1.
-%  The Methodology chapter should then contain:
-%   1. General computational pipeline.
-%   2. Which generators were selected for each RQ and why.
-%   3. Exact generator parameters and filtering steps.
-%   4. How existing graph lists were incorporated into the search.
-%   5. The cycle-intersection algorithm.
-%   6. The RQ2 algorithm and its adaptation from RQ1.
-%   7. Algorithmic optimizations and data structures.
-%   8. Implementation language and implementation choices.
-%   9. Correctness tests and validation.
-%  This would align well with the intended Background TODO:
-%     \todo{Add all theoretical background here from other chapters}
-%     \section{Generators}
-%     \todo{maybe a section about the different generators that exist, citing JJ}
-%     \section{Graphs}
-%     \todo{maybe a section on all relevant graphs to this paper}
-%  In particular, the Background chapter can establish the "menu" of available generators and the relevant graph-theoretic concepts, while Methodology says: "Given this landscape, we selected X for RQ1 and Y for RQ2, configured them as follows, and connected them to our algorithms in these pipelines." This avoids duplicating the same explanations in both chapters.
+Finally, we introduced a complementary theoretical approach based on the gadget underlying the construction of Zamfirescu. By studying the cycles of this gadget and how subdividing its edges changes their lengths, we obtain a way of constructing and analyzing new negative examples of graphs for RQ\ref{rq2}. The computational and theoretical approaches together form the basis for the results presented in the following chapters.
