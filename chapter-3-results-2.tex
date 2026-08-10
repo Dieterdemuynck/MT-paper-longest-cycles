@@ -94,6 +94,7 @@ Part & Total time (s) & Program CPU time (s) \\
 
 The pipeline using the list of non-Hamiltonian, 2-connected planar graphs with minimum degree at least 4 allowed computations to happen on graphs of up to 20 vertices. Per number of vertices, a table can be found in Appendix~\ref{app:rq2} of number of graphs per circumference, including per circumference the number of graphs per intersection of all longest cycles. This excludes those graphs which have a circumference equal to $n(G)-1$, though the number of graphs with this circumference is the same as the number of graphs for which the program terminated early. These numbers are also documented in Appendix~\ref{app:rq2}. This brings us to the following observation.
 \begin{observation}
+    \label{obs:planar-20-nothing}
     If a 2-connected planar graph on at most 20 vertices has a $k$-cycle in every vertex-deleted subgraph, then the graph contains a cycle larger than $k$.
 \end{observation}
 
@@ -642,6 +643,7 @@ As a result, there exists a 2-connected graph $G$ of order $2\sigma + p(\ell-1)$
 Theorem~\ref{theorem:d-extension} provides us with new graphs that we can expand on in the same way as done in~\cite{article:zamfirescu} to find new negative values for RQ\ref{rq2}. First, observe that all graphs $G_{p,\ell,D}$ are planar if $p$ is odd. To prove the existence of new negative values, we must show we can add edges to some of these graphs to ensure minimum degree 4.
 
 \begin{theorem}
+  \label{theorem:new-vals-rq2}
   Take integers $p\ge5$ odd, $\ell\ge5$, and integers $[d_0,\dots,d_{p-1}]=D$ where $d_i = 1$ or $d_i\ge5$ with $\sigma=\sum_{i=0}^{p-1}d_i$. If $\sigma \le (p-3)\ell + 2\min(D)$, there exists a 2-connected, planar graph of minimum degree~4 with order~$2\sigma + p(\ell-1)$ and circumference~$k=(p-1)\ell + \sigma$, in which every vertex-deleted subgraph contains a $k$-cycle.
 \end{theorem}
 \begin{proof}

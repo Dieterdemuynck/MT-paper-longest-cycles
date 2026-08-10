@@ -280,47 +280,20 @@ I would also like to thank all the people of the Wina Theatre group (Winatoneel)
 
 I also thank my good friend Ruben Anseeuw for the assistance and emotional support throughout the year. I will never forget how we were both congratulating each other on the results we found simultaneously, only to find out we both discovered (nearly) the same graph as our most interesting results.
 
-Lastly, I want to thank my mother Pascale Casteleyn for the incredible emotional support, especially during the final hours of this thesis. Without her, it would not have been possible to finish this task.
+Lastly, I want to thank my parents, specially my mother Pascale Casteleyn, for the incredible emotional support, especially during the final hours of this thesis. Without her, it would not have been possible to finish this task.
 \end{preface}
 
 \tableofcontents*
 
 \begin{abstract}
-  !!!TODO!!! This \texttt{abstract} environment provides a summary of the work, which may or may not be extensive.
-The intention is that this should be limited to 1 page.
+This thesis studies the intersection of longest cycles in graphs, continuing a line of research initiated by van Aardt et al.\ and extended by Carol T.\ Zamfirescu. Van Aardt et al.\ introduced the parameter $\alpha(k)$, the smallest fraction of vertices whose removal destroys all cycles of length $k$ in every graph of circumference $k$, and showed if for a value $k$ there exists a 2-connected graph of circumference $k$ in which no single vertex meets every longest cycle, then this value could be directly determined as $\alpha(k) = \frac{1}{k}$. This question was resolved for all $k$ except $k \in \{10, 11, 13, 16\}$. Zamfirescu subsequently settled the cases $k = 10, 13, 16$, leaving $k = 11$ as the only open case. This thesis investigates this remaining case (RQ\ref{rq1}). Independently, Zamfirescu asked a related question (RQ\ref{rq2}): for which values of $k$ does the existence of a $k$-cycle in every vertex-deleted subgraph of a planar graph of minimum degree at least 4 require the graph to contain a longer cycle?
 
-  \lipsum[1]
+We approach both questions using computer-assisted graph theory. We design and implement a bitset-optimized depth-first cycle-enumeration algorithm that computes a graph's circumference together with the intersection of its longest (or fixed-length) cycles. These algorithms are combined with the generators \texttt{geng}, \texttt{GenerateUHG}, and \texttt{plantri}, and a list of pre-generated graphs, to exhaustively search restricted classes of 2-connected graphs.
+
+For RQ\ref{rq1}, exhaustive search finds no counterexample among 2-connected graphs of order up to 22 with maximum degree at most 3, nor for the further (order, upper bound for maximum degree) combinations of $(13,6)$, $(14,5)$, and $(15,4)$, nor among planar 2-connected graphs of order 13, the last of which have at least four vertices meeting every 11-cycle. RQ\ref{rq1} therefore remains open. Based on the results however, we generalize this into an infinite family (Theorem~\ref{theorem:single-vertex-intersection}). for every order $n \ge 13$, there exists a 2-connected graph of circumference 11 in which exactly one vertex meets every (longest) 11-cycle.
+
+For RQ\ref{rq2}, exhaustive search over 2-connected planar graphs of minimum degree at least 4, extended with a supplied graph list to order 20, finds no negative example: the statement of RQ2 holds for every graph checked. In parallel, we generalize the gadget underlying Zamfirescu's construction $G_{p,\ell}$ into a new family $G_{p,\ell,D}$ which finds new values $k$ for specific orders $n$ which are negative examples to the question RQ\ref{rq2}~(Theorem~\ref{theorem:new-vals-rq2}).
 \end{abstract}
-
-% A list of figures and tables is optional
-%\listoffigures
-%\listoftables
-% If there are only a few figures and tables, it is better to use the following:
-% \listoffiguresandtables
-% The list of symbols is also optional.
-% This list must be created manually, e.g. as follows:
-% \chapter{List of abbreviations and symbols}
-% \section*{abbreviations}
-% \begin{flushleft}
-%   \renewcommand{\arraystretch}{1.1}
-%   \begin{tabularx}{\textwidth}{@{}p{12mm}X@{}}
-%     LoG   & Laplacian-of-Gaussian \\
-%     MSE   & Mean Square error \\
-%     PSNR  & Peak Signal-to-Noise ratio \\
-%   \end{tabularx}
-% \end{flushleft}
-% \section*{Symbols}
-% \begin{flushleft}
-%   \renewcommand{\arraystretch}{1.1}
-%   \begin{tabularx}{\textwidth}{@{}p{12mm}X@{}}
-%     42    & ``The Answer to the Ultimate Question of Life, the Universe,
-%             and Everything'' volgens de \cite{h2g2} \\
-%     $c$   & Speed of light \\
-%     $E$   & Energy \\
-%     $m$   & Mass \\
-%     $\pi$ & The number pi \\
-%   \end{tabularx}
-% \end{flushleft}
 
 % Now comes the main text
 \mainmatter
